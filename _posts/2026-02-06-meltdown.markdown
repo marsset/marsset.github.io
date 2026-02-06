@@ -1,0 +1,75 @@
+---
+title:  "Meltdown"
+date:  2026-02-06 17:00:00 +0800
+tags: security
+classes: wide
+layout: single
+---
+
+<!-- intro -->
+Meltdown [^meltdown] allows an attacker to read kernel memory on an affected CPU like
+Intel x86.
+
+[^meltdown]: Lipp, M., Gruss, D., Schwarz, M., Bidner, D., Maurice, C., & Mangard, S. (2018). Meltdown: Reading kernel memory from user space. In Proceedings of the 27th USENIX Security Symposium (USENIX Security ’18).
+
+<!-- cache time difference -->
+Cache time difference is a powerful tool. The latency of a memory access varies
+depending on which layer of cache hierarchy it hits. For instances, on my Apple
+M4 L1 cache takes 0.69 ns, L2 cache takes 6.17 ns and main memory 122.45 ns. Cache
+time difference
+not only can be used to reverse engineer the cache size [^gpu-bench],
+but also as a side channel attack tool to leak secrets.
+
+[^gpu-bench]: To decide gpu cache size https://github.com/RRZE-HPC/gpu-benches
+
+[^flush-reload]: Yarom, Y., & Falkner, K. (2014). FLUSH+RELOAD: A High Resolution, Low Noise, L3 Cache Side-Channel Attack. In 23rd USENIX Security Symposium (USENIX Security ’14) (pp. 719–732). USENIX Association.
+
+<!-- explain how meltdown works in code -->
+
+Take the following code from [meltdown poc][meltdown-poc] as an example, it leaks
+a kernel secret byte into cache.
+
+[meltdown-poc]: https://github.com/isec-tugraz/meltdown
+
+```c
+#define meltdown_nonull                                                        \
+  asm volatile("1:\n"                                                          \
+               "movzx (%%rcx), %%rax\n"                                        \
+               "shl $12, %%rax\n"                                              \
+               "jz 1b\n"                                                       \
+               "movq (%%rbx,%%rax,1), %%rbx\n"                                 \
+               :                                                               \
+               : "c"(phys), "b"(mem)                                           \
+               : "rax");
+
+```
+
+1. variable `phys` stores the address of a secret byte in kernel that you want to
+read.
+1. `"c"(phys), "b"(mem)` means variable `phys` is stored in register `%%rcx` and
+variable `mem` is stored in register `%%rbx`.
+1. `(%%rcx)` means to read the value at address `%%rcx`, which is the secret byte.
+`movzx (%%rcx), %%rax` moves the secret byte into register `%%rax`.
+1. `shl $12, %%rax` left shift `%%rax` by 12, which is to multiple the secret by 4096
+(4KB).
+1. `jz 1b` means jump if zero to the backwards label `1`. It retries the loop labeled
+by `1` when `%%rax` is zero, which is the retry logic described in paper section 5.2.
+(Ignore it in below for simplicity)
+1. `movq (%%rbx,%%rax,1), %%rbx` move the memory at address `%%rbx + %%rax * 1` into
+`%%rbx`, which means `mem = mem[secret_byte * 4096]`.
+
+If the CPU perform the permission check in time, like Apple Scilion, the unprivileged
+`movzx (%%rcx), %%rax` will fail immediately and thus prevent Meltdown, but
+in CPU like Intel x86, the subsequent instructions can be executed out-of-order as
+long as their dependent operands are ready and then rollback if permission check
+failed. Even though rollbacked, the side-effect on cache is not rollbacked. So `mem[secret * 4096]` is already cached.
+
+Now the attacker can leverage flush/reload [^flush-reload] technique to read the
+secret out. Each round it flush out all `mem[i * 4096]` for all i from 0 to 255 out of
+cache, then perform
+the above `meltdown_nonull` to make only `mem[secret * 4096]` cached, then reload
+all i from 0 to 255. Only `i=secret` will response with a shorter time while other `i`s
+will response with a longer time. As a result we can tell what secret is.
+
+4096 here is to ensure each `i` owns an unique cache line.
+
