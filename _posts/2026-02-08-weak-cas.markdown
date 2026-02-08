@@ -1,0 +1,29 @@
+---
+title:  "Weak CAS"
+date:  2026-02-08 15:00:00 +0800
+tags: concurrency
+classes: wide
+layout: single
+---
+
+Compare-and-set (CAS) and load-link/store-conditional (LL/SC) are two flavors of CPU
+instructions for atomic read-modify-write operations. CPUs may provide either or both
+of them.
+
+In C++, `compare_exchange_strong` (Strong CAS) is compiled into CAS instruction if exists, otherwise it uses what CPU gives to mimic the behavior, and
+`compare_exchange_weak` (Weak CAS) is compiled into LL/SC if exists, otherwise it uses
+what CPU gives to mimic the behavior.
+
+A study [^measurement] shows LL/SC outperforms CAS consistently in a range of ARM
+CPUs.
+CAS is also subjected to ABA problem if naively implemented while LL/SC is much better
+[^ABA].
+It may explain why `compare_exchange_weak` is preferred in [jemalloc][weak-jemalloc].
+
+[^measurement]: Bastos Cordeiro de Jesus, RJ & Weiland, M 2023, A study on the performance implications of AArch64 Atomics. in ISC High Performance 2023. Springer, pp. 279-296, ISC High Performance 2023, Hamburg, Germany, 21/05/23.
+
+[^ABA]: https://blog.memzero.de/cas-llsc-aba/
+
+[weak-jemalloc]: https://github.com/search?q=repo%3Ajemalloc%2Fjemalloc%20compare_exchange_weak&type=code
+
+

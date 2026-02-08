@@ -26,9 +26,6 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://marsset.github.io/" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  marsset
 
-# Build settings
-remote_theme: "mmistakes/minimal-mistakes@4.27.3"
-
 markdown: kramdown
 highlighter: rouge
 
