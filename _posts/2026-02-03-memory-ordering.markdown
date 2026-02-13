@@ -104,10 +104,21 @@ are half fences. Regarding the implementation, compiler and CPU will respect tag
 semantics.
 
 Since mordern lock is built on top of acquire/release, so they need to pass a memory
-location during intialization.
+location during intialization for synchronization.
 
 The acquire/release gives the programmer a precise way to control memory ordering in the
 background of compiler reordering and CPU out-of-order execution.
 
 
-[^Kourosh]: Memory Consistency and Event Ordering in Scalable Shared-Memory Multiprocessors
+[^Kourosh]: Gharachorloo, K., Lenoski, D., Laudon, J., Gibbons, P. B., Gupta, A., & Hennessy, J. L. (1990). Memory consistency and event ordering in scalable shared-memory multiprocessors. In Proceedings of the 17th Annual International Symposium on Computer Architecture (ISCA), pp. 15–26.
+
+Can we have the best of both worlds? C++'s answer is DRF-SC [^DRF-SC], which means as long
+as your
+program is data racing free, no matter how the underlying runtime reorder, the semantics
+is guranteed to be sequential consistent. The C++ program with
+data racing is UB(undefined behavior), thus our first example's behavior is undefined,
+while our second example's behavoir is well defined. In C++ you can still easily write UB
+programs. As a contrast, Rust can ensure data racing free in the compile time (as long as
+you write in Rust safe), which offers a great advantage.
+
+[^DRF-SC]: S. V. Adve. Designing Memory Consistency Models for SharedMemory Multiprocessors. PhD thesis, University of WisconsinMadison, 1993.

@@ -6,7 +6,7 @@ classes: wide
 layout: single
 ---
 
-Compare-and-set (CAS) and load-link/store-conditional (LL/SC) are two flavors of CPU
+Compare-and-swap (CAS) and load-link/store-conditional (LL/SC) are two flavors of CPU
 instructions for atomic read-modify-write operations. CPUs may provide either or both
 of them.
 
