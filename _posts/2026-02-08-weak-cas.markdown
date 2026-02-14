@@ -1,6 +1,8 @@
 ---
 title:  "Weak CAS"
 date:  2026-02-08 15:00:00 +0800
+categories:
+  - concurrency
 tags: concurrency
 classes: wide
 layout: single

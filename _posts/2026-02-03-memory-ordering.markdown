@@ -1,6 +1,8 @@
 ---
 title:  "Memory Ordering"
 date:  2026-02-03 11:33:53 +0800
+categories:
+  - concurrency
 tags: memory
 classes: wide
 layout: single
