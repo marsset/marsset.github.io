@@ -66,6 +66,7 @@ $$
 As the following show, we can observe the prefix are the same and we don't need to recompute them every time:
 
 $$
+\scriptsize
 \frac{\partial J}{\partial W_i^k} =
 \underbrace{
 \frac{\partial J}{\partial F_n} *
@@ -78,6 +79,7 @@ $$
 $$
 
 $$
+\scriptsize
 \frac{\partial J}{\partial W_{i-1}^k} =
 \underbrace{
 \frac{\partial J}{\partial F_n} *
