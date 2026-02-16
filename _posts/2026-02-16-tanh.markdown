@@ -1,0 +1,82 @@
+---
+title:  "tanh"
+date:  2026-02-16 10:00:00 +0800
+categories:
+  - AI
+tags: AI
+classes: wide
+layout: single
+use_math: true
+---
+
+Why tanh is defined as following?
+
+$$
+\tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}
+$$
+
+### What's hyperbola?
+
+A hyperbola is the set of all points where the absolute difference of distances to two fixed points (foci) is constant.
+
+$$
+\lVert PF_1 - PF_2 \rVert = constant
+$$
+
+base on this definition and after a tedious algebraic expansion and elimination, you can obtain a nice analytic form.
+
+$$
+\frac{x^2}{a^2} - \frac{y^2}{b^2} = 1
+$$
+
+For example, this is the graph of unit hyperbola $x^2 -y^2 = 1$.
+
+<iframe class="desmos" style="max-width: 300px" src="https://www.desmos.com/calculator/hxeazutic6?embed"></iframe>
+
+### What's hyperbolic function?
+
+In 1748 [^intro-infinite] Euler discovered the famous Euler's formula:
+
+$$
+e^{ix} = \cos x + i \sin x
+$$
+
+, which can be proved by power series:
+
+$$
+\begin{aligned}
+e^x &= \sum_{n=0}^{\infty} \frac{x^n}{n!} \\[6pt]
+\cos x &= \sum_{n=0}^{\infty} (-1)^n \frac{x^{2n}}{(2n)!} \\[6pt]
+\sin x &= \sum_{n=0}^{\infty} (-1)^n \frac{x^{2n+1}}{(2n+1)!}
+\end{aligned}
+$$
+
+, from Euler's formula, we can derive the exponential definition of $\sin$ and $\cos$.
+
+$$
+\begin{aligned}
+\cos x &= \frac{e^{ix} + e^{-ix}}{2} \\[6pt]
+\sin x &= \frac{e^{ix} - e^{-ix}}{2i}
+\end{aligned}
+$$
+
+, from which it's easy to see
+$\cos^2 \theta + \sin^2 \theta = 1$, so point $(\cos \theta,\ \sin \theta)$  is on the unit circle $x^2 + y^2 = 1$, hence match our geometric intuition.
+
+
+In modern math, hyperbolic functions are usually directly defined in exponential form similar to above.
+
+$$
+\begin{aligned}
+\cosh x &= \frac{e^x + e^{-x}}{2} \\[6pt]
+\sinh x &= \frac{e^x - e^{-x}}{2} \\[6pt]
+\tanh x &= \frac{\sinh x}{\cosh x}
+= \frac{e^x - e^{-x}}{e^x + e^{-x}}
+\end{aligned}
+$$
+
+with this explict definition, it is easy to verify that $\cosh^2 \phi - \sinh^2 \phi = 1$, so point $(\cosh \phi,\ \sinh \phi)$  is on the unit hyperbola $x^2 - y^2 = 1$, hence the name $\sinh$ for hyperbolic sine.
+
+It's also easy to verify that $\sinh$ and $\cosh$ is the solution to ODE $y'' = y$, so are any combination of these two, i.e. $y = A \cosh \phi + B \sinh \phi$.
+
+[^intro-infinite]: Euler, L. (1748). Introductio in analysin infinitorum. Volume 1 (I. Bruce, Trans. & Annot.). Online at 17centurymaths.com

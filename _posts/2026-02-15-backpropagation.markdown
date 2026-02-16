@@ -1,5 +1,5 @@
 ---
-title:  "BackPropagation"
+title:  "Backpropagation"
 date:  2026-02-15 17:00:00 +0800
 categories:
   - AI
