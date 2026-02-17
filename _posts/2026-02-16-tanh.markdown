@@ -12,7 +12,7 @@ use_math: true
 Why tanh is defined as following?
 
 $$
-\tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}
+\tanh(\phi) = \frac{e^\phi - e^{-\phi}}{e^\phi + e^{-\phi}}
 $$
 
 A hyperbola is the set of all points where the absolute difference of distances to two fixed points (foci) is constant.
@@ -70,9 +70,9 @@ pass the intial value that $\cosh(0) = 1, \sinh(0) = 0$, we can obtain the value
 
 $$
 \begin{aligned}
-\cosh x &= \frac{e^x + e^{-x}}{2} \\[6pt]
-\sinh x &= \frac{e^x - e^{-x}}{2} \\[6pt]
-\tanh x &= \frac{\sinh x}{\cosh x}
-= \frac{e^x - e^{-x}}{e^x + e^{-x}}
+\cosh \phi &= \frac{e^\phi + e^{-\phi}}{2} \\[6pt]
+\sinh \phi &= \frac{e^\phi - e^{-\phi}}{2} \\[6pt]
+\tanh \phi &= \frac{\sinh \phi}{\cosh \phi}
+= \frac{e^\phi - e^{-\phi}}{e^\phi + e^{-\phi}}
 \end{aligned}
 $$
