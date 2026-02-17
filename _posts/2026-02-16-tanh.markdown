@@ -15,8 +15,6 @@ $$
 \tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}
 $$
 
-### What's hyperbola?
-
 A hyperbola is the set of all points where the absolute difference of distances to two fixed points (foci) is constant.
 
 $$
@@ -29,42 +27,46 @@ $$
 \frac{x^2}{a^2} - \frac{y^2}{b^2} = 1
 $$
 
-For example, this is the graph of unit hyperbola $x^2 -y^2 = 1$.
-
-<iframe class="desmos" style="max-width: 300px" src="https://www.desmos.com/calculator/hxeazutic6?embed"></iframe>
-
-### What's hyperbolic function?
-
-In 1748 [^intro-infinite] Euler discovered the famous Euler's formula:
+Just like to define trigonometry over unit circle,
+hyperbolic function can be defined over unit hyperbola.
 
 $$
-e^{ix} = \cos x + i \sin x
+x^2 - y^2 = 1 \tag{1}
 $$
 
-, which can be proved by power series:
+The following picture shows the point $(\cosh \phi,\ \sinh \phi)$ on unit hyperbola,
+where $\phi$ is hyperbolic angle and the area of red sector represent $\phi/2$.
+
+![Hyperbola](/assets/image/Hyperbolic_functions.png){: .align-center }
+
+<!-- <iframe class="desmos" style="max-width: 300px" src="https://www.desmos.com/calculator/hxeazutic6?embed"></iframe> -->
+
+Since an infinitesimal change to the
+red area is
 
 $$
-\begin{aligned}
-e^x &= \sum_{n=0}^{\infty} \frac{x^n}{n!} \\[6pt]
-\cos x &= \sum_{n=0}^{\infty} (-1)^n \frac{x^{2n}}{(2n)!} \\[6pt]
-\sin x &= \sum_{n=0}^{\infty} (-1)^n \frac{x^{2n+1}}{(2n+1)!}
-\end{aligned}
+dA = \frac{1}{2}\left( x\,dy - y\,dx \right) \tag{2}
 $$
 
-, from Euler's formula, we can derive the exponential definition of $\sin$ and $\cos$.
+If we differentiate equation (1) by $\phi$ and divide equation(2) by $d\phi$,
+then we can see $\cosh \phi$ and $\sinh \phi$ are the solutions to the system of two ODEs.
 
 $$
-\begin{aligned}
-\cos x &= \frac{e^{ix} + e^{-ix}}{2} \\[6pt]
-\sin x &= \frac{e^{ix} - e^{-ix}}{2i}
-\end{aligned}
+\begin{cases}
+x x' - y y' = 0 \\
+1 = x y' - y x'
+\end{cases}
 $$
 
-, from which it's easy to see
-$\cos^2 \theta + \sin^2 \theta = 1$, so point $(\cos \theta,\ \sin \theta)$  is on the unit circle $x^2 + y^2 = 1$, hence match our geometric intuition.
+after algebraic eliminations it gives us $x' = y, y' = x$, in other words, $y'' = y$, which is a
+linear homogeneous constant-coefficient second-order ODE. To solve it, try $y = e^{rt}$ to calculate its characteristic equation, which is $r^2 = 1$, so the
+general solution is:
 
+$$
+y(t) = C_1 e^t + C_2 e^{-t}
+$$
 
-In modern math, hyperbolic functions are usually directly defined in exponential form similar to above.
+pass the intial value that $\cosh(0) = 1, \sinh(0) = 0$, we can obtain the value to be
 
 $$
 \begin{aligned}
@@ -74,9 +76,3 @@ $$
 = \frac{e^x - e^{-x}}{e^x + e^{-x}}
 \end{aligned}
 $$
-
-with this explict definition, it is easy to verify that $\cosh^2 \phi - \sinh^2 \phi = 1$, so point $(\cosh \phi,\ \sinh \phi)$  is on the unit hyperbola $x^2 - y^2 = 1$, hence the name $\sinh$ for hyperbolic sine.
-
-It's also easy to verify that $\sinh$ and $\cosh$ is the solution to ODE $y'' = y$, so are any combination of these two, i.e. $y = A \cosh \phi + B \sinh \phi$.
-
-[^intro-infinite]: Euler, L. (1748). Introductio in analysin infinitorum. Volume 1 (I. Bruce, Trans. & Annot.). Online at 17centurymaths.com

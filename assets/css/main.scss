@@ -15,8 +15,8 @@ search: false
 }
 
 // desmos iframe
-iframe.desmos {
-  max-width: 500px;   // control desktop width
+.align-center, iframe.desmos {
+  max-width: 300px;   // control desktop width
   width: 80%;
   aspect-ratio: 1 / 1;  // change this to match original ratio
   border: 0;
