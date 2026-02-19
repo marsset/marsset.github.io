@@ -37,7 +37,7 @@ $$
 The following picture shows the point $(\cosh \phi,\ \sinh \phi)$ on unit hyperbola,
 where $\phi$ is hyperbolic angle and the area of red sector represent $\phi/2$.
 
-![Hyperbola](/assets/image/Hyperbolic_functions.png){: .align-center }
+![Hyperbola](/assets/image/Hyperbolic_functions.jpg){: .align-center }
 
 <!-- <iframe class="desmos" style="max-width: 300px" src="https://www.desmos.com/calculator/hxeazutic6?embed"></iframe> -->
 
