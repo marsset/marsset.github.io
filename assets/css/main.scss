@@ -10,13 +10,15 @@ search: false
 
 // https://github.com/mmistakes/minimal-mistakes/issues/1322
 .archive, article.page {
-    float: left;
     width: 100%;
+    max-width: 900px;
+    float: none;
+    margin: 2rem auto;
 }
 
 // desmos iframe
 .align-center, iframe.desmos {
-  width: 80%;
+  width: 100%;
   max-width: 600px;
   height: auto;
   border: 0;

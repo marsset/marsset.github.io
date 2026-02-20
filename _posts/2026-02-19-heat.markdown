@@ -25,7 +25,7 @@ $$
 We pick a cube as the subject and let it go to infinitesimal, and build the invariant equation between two ways to calculate energy, just like bookkeeping the total money in your bank account and all the transactions come-and-go. Thanks to law of conservation of energy.
 
 <!-- https://www.geogebra.org/3d/aqtcvbbx -->
-![](/assets/image/divergence.png){: .align-center style="width:100%;" }
+![](/assets/image/divergence.png){: .align-center }
 
 Fristly let's track how much energy flows out of our cube. The cube has 6 faces and the energy flowed through each face is:
 
@@ -53,6 +53,7 @@ $$
 and the total energy flowed out is:
 
 $$
+\small
 d\, \mathbf{E} =
 \left(
 \frac{\partial q_x}{\partial x}
