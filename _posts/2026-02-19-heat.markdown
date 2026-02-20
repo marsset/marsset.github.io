@@ -1,0 +1,105 @@
+---
+title:  "heat equation"
+date:  2026-02-19 10:00:00 +0800
+categories:
+  - math
+tags: math
+classes: wide
+layout: single
+use_math: true
+---
+
+$$
+\frac{\partial u}{\partial t} = \kappa \Delta u \tag{0}
+$$
+
+### How is it derived?
+
+Fourier found empirically the heat flux density ($W/m^2$) is proportional to the negative temperature
+gradient ($K/m$),
+
+$$
+q = -k\nabla u
+$$
+
+We pick a cube as the subject and let it go to infinitesimal, and build the invariant equation between two ways to calculate energy, just like bookkeeping the total money in your bank account and all the transactions come-and-go. Thanks to law of conservation of energy.
+
+<!-- https://www.geogebra.org/3d/aqtcvbbx -->
+![](/assets/image/divergence.png){: .align-center style="width:100%;" }
+
+Fristly let's track how much energy flows out of our cube. The cube has 6 faces and the energy flowed through each face is:
+
+<!-- unfortunately \vec has some display issues on ios.-->
+
+$$
+\overrightarrow{q} \cdot \overrightarrow{n}\, dA\, dt
+$$
+
+Focus on the x-axis, we can see the $q_y$ and $q_z$ don't matter since they diappear after times by 0,
+thus energy flowed out in x-direction is:
+
+$$
+\begin{align*}
+d\, \mathbf{E_x}
+&=
+(q_{x + dx} - q_x)\, dA\, dt \\[6pt]
+&=
+\frac{q_{x + dx} - q_x}{dx}\, dx\, dy\, dz\, dt \\[6pt]
+&=
+\frac{\partial q_x}{\partial x}\, dV\, dt
+\end{align*}
+$$
+
+and the total energy flowed out is:
+
+$$
+d\, \mathbf{E} =
+\left(
+\frac{\partial q_x}{\partial x}
++
+\frac{\partial q_y}{\partial y}
++
+\frac{\partial q_z}{\partial z}
+\right)
+dV\, dt \tag{1}
+$$
+
+which can be simplifed with divergence notation:
+
+$$
+\begin{align*}
+\nabla \cdot \mathbf{q}
+&=
+\left(
+\frac{\partial}{\partial x},
+\frac{\partial}{\partial y},
+\frac{\partial}{\partial z}
+\right)
+\cdot
+(q_x, q_y, q_z) \\[6pt]
+&=
+\frac{\partial q_x}{\partial x}
++
+\frac{\partial q_y}{\partial y}
++
+\frac{\partial q_z}{\partial z}
+\end{align*}
+$$
+
+Secondly, the increased heat energy can be also expressed via specific heat capacity
+
+$$
+d\, \mathbf{E} = \rho c \frac{\partial u}{\partial t}\, dV \, dt \tag{2}
+$$
+
+Based on equation (1) and (2), we have:
+
+$$
+\rho c \frac{\partial u}{\partial t}
+=
+- \nabla \cdot \mathbf{q}
+$$
+
+If you assume the specific heat capacity $c$ is constant, then you can obtain equation (0),
+in which $\kappa = \frac{k}{\rho c}$ and
+$\Delta u = \nabla \cdot (\nabla u)$ (Laplace operator).

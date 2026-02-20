@@ -2,8 +2,8 @@
 title:  "attractor"
 date:  2026-02-17 10:00:00 +0800
 categories:
-  - AI
-tags: AI
+  - math
+tags: math
 classes: wide
 layout: single
 use_math: true
@@ -21,7 +21,7 @@ z' = xy - \beta z
 \end{cases}
 $$
 
-![Lorenz](/assets/image/A_Trajectory_Through_Phase_Space_in_a_Lorenz_Attractor.gif){: .align-center }
+![Lorenz](/assets/image/A_Trajectory_Through_Phase_Space_in_a_Lorenz_Attractor.gif){: .align-center style="max-width: 300px"}
 <p style="text-align:center; font-size: 0.7em;">
  when $\rho = 28$, $\sigma = 10$, and $\beta = \frac{8}{3}$ (from wikipedia)
 </p>
@@ -36,7 +36,7 @@ $$
 , after crossing $r \approx 3.56995$, it enters chaos.
 
 <p align="center">
-<img src="/assets/image/Logistic_Bifurcation_map_High_Resolution.png"  style="width:100%;">
+<img src="/assets/image/Logistic_Bifurcation_map_High_Resolution.png"  class="align-center">
 </p>
 
 <div style="width:100%; margin: 0.7em auto; text-align:center; font-size: 0.7em">
@@ -61,7 +61,7 @@ $$
 
 
 <p align="center">
-<img src="/assets/image/Verhulst-Mandelbrot-Bifurcation.jpg"  style="width:100%;">
+<img src="/assets/image/Verhulst-Mandelbrot-Bifurcation.jpg"  class="align-center">
 </p>
 <div style="width:100%; margin: 0.7em auto; text-align:center; font-size: 0.7em">
 Correspondence between the Mandelbrot set and the bifurcation diagram of the quadratic map(from wikipedia)
@@ -75,7 +75,7 @@ $$
 
 
 <p align="center">
-<img src="/assets/image/Ikeda_map_a=1_b=0.9_k=0.4_p=6.jpg"  style="width:100%;">
+<img src="/assets/image/Ikeda_map_a=1_b=0.9_k=0.4_p=6.jpg" class="align-center">
 </p>
 <div style="width:100%; margin: 0.7em auto; text-align:center; font-size: 0.7em">
 Ikeda attractor for parameters a=1, b=0.9, k=0.4 and p=6. (from wikipedia)
