@@ -105,35 +105,3 @@ If you assume the specific heat capacity $c$ is constant, then you can obtain eq
 in which $\kappa = \frac{k}{\rho c}$ and
 $\Delta u = \nabla \cdot (\nabla u)$ (Laplace operator).
 
-### How to solve it?
-
-Firstly, equation (0) is linear, which means it follows the principle of superposition. If $u_1$ and $u_2$ are two solutions, then any linear combination $c_1 u_1 + c_2 u_2$ is also a solution.
-
-Secondly, in 1D, here are some special solutions
-
-$$
-u(x,t) = e^{-\kappa n^2 t}\sin(nx)
-$$
-
-$$
-u(x,t)
-=
-\frac{1}{\sqrt{4\pi \kappa t}}
-\exp\!\left(
--\frac{x^2}{4\kappa t}
-\right)
-$$
-
-Here is fourier series. Intuitively speaking, it projects function $f$ over an infinite orthogonal basis $e^{inx}$ and $c_n$ is the inner product $\langle f, e^{inx} \rangle$.
-
-$$
-f(x) = \sum_{n=-\infty}^{\infty}
-c_n e^{inx}
-$$
-
-$$
-c_n =
-\frac{1}{2\pi}
-\int_{-\pi}^{\pi}
-f(x)e^{-inx}\,dx
-$$
