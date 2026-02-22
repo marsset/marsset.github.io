@@ -25,3 +25,33 @@ search: false
   display: block;       // removes inline spacing issues
   margin: 2rem auto;
 }
+
+/* Initialize counter */
+body {
+  counter-reset: problem-counter;
+}
+
+/* Each problem increases counter */
+.problem {
+  counter-increment: problem-counter;
+  position: relative;
+  margin: 1.5em 0;
+  padding: 0.5em 1em;
+  border-left: 3px solid #888;
+}
+
+/* Auto-generate title */
+.problem::before {
+  content: "Problem " counter(problem-counter) ".";
+  font-style: italic;
+  display: block;
+  margin-bottom: 0.5em;
+}
+
+/* QED box */
+.problem::after {
+  content: "□";
+  display: block;
+  text-align: right;
+  margin-top: 1em;
+}

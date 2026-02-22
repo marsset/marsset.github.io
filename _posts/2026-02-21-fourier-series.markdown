@@ -34,7 +34,7 @@ Intuitively speaking, it projects function $f$ over an infinite orthogonal basis
 
 ### Why is it right?
 
-The rightness mainly is about convergency, which means to show the partial sum of the series approach
+The rightness is mainly about convergency, which means to show the partial sum of the series approach
 the original function at limit.
 
 $$
@@ -49,7 +49,10 @@ S_N f(x) \to f(x)
 \quad \text{as } N \to \infty
 $$
 
-Dirichlet's approach [^dirichlet-kernel] is to rewrite the partial sum as the convolution as below:
+
+Dirichlet's approach [^dirichlet-kernel] is to rewrite the partial sum as the convolution form, which
+basically exchanges two layer sum order and thus converts from frequency domain into time domain:
+
 
 $$
 S_N f(x)
@@ -70,7 +73,7 @@ D_N(x)
 {\sin(x/2)}
 $$
 
-$D_N$ goes to diac function at limits, which gives the answer.
+$D_N$ goes to dirac function $\delta(x)$ at limit, which gives the answer.
 
 [^wikipeida]: https://en.wikipedia.org/wiki/Convergence_of_Fourier_series
 
