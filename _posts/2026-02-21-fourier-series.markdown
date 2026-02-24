@@ -7,6 +7,7 @@ tags: math
 classes: wide
 layout: single
 use_math: true
+excerpt: fourier series, dirichlet kernel, fourier transform
 ---
 
 Here is fourier series expansion of a periodic function $f$:
@@ -75,8 +76,55 @@ $$
 
 $D_N$ goes to dirac function $\delta(x)$ at limit, which gives the answer.
 
-[^wikipeida]: https://en.wikipedia.org/wiki/Convergence_of_Fourier_series
+
+### Edge cases
+
+Here is an animation of to simulate a square wave with fourier series which demostrates Gibbs phenomenon.
+
+![square_wave](/assets/image/Fourier_series_for_square_wave.gif){: .align-center }
+
+### What's Fourier transform
+
+Fourier transform reveals us frequency domain information.
+
+$$
+\hat{f}(\omega)
+=
+\int_{-\infty}^{\infty}
+f(x)\, e^{-i \omega x}\, dx
+$$
+
+and convert it back,
+
+$$
+f(x)
+=
+\frac{1}{2\pi}
+\int_{-\infty}^{\infty}
+\hat{f}(\omega)\, e^{i \omega x}\, d\omega
+$$
+
+Here is the frequency of a violin melody:
+
+![violin](/assets/image/violin_frequency.png){: .align-center }
+
+Here is a spectrum of light emitted by the blue flame of a butane torch.
+
+![spectrum](/assets/image/Spectrum_of_blue_flame.png){: .align-center }
+
+Here is a MRI image, which underlying using fourier transform.
+
+![mri](/assets/image/mri.jpeg){: .align-center }
+
+Here is a 4d radar point cloud photo(from [qamcom](https://www.qamcom.com/thesis-4d-imaging-radar/))
+ for driverless car, which also uses fourier transform.
+
+![mri](/assets/image/4d-radar-point-cloud.webp){: .align-center }
+
+### why asymmetric?
+
+Notice there is a $\frac{1}{2\pi}$ in the reverse transform which breaks the symmetric. This is called non-unitary. [^riemann]
 
 [^dirichlet-kernel]: Dirichlet, G. L. (1829). On the convergency of the trigonometrical series which serves to represent an arbitrary function between given limits (R. Fujisawa, Trans. 1885). Crelle’s Journal, 4, 249–266. [english](https://www.jstage.jst.go.jp/article/subutsukiji1885b/3/3/3_3_249/_pdf/-char/ja), [french](https://arxiv.org/pdf/0806.1294)
 
-[^riemann]: Riemann, G. F. B. (1854/2004). On the representation of a function by a trigonometric series. In: Bernhard Riemann, Collected Papers (Transl. R. Baker, C. Christenson & H. Orde), Kendrick Press, Heber City, UT.
+[^riemann]: Riemann, G. F. B. (1854). On the representation of a function by a trigonometric series. In: Bernhard Riemann, Collected Papers (Transl. R. Baker, C. Christenson & H. Orde 2004), Kendrick Press, Heber City, UT. [english](https://www.math.purdue.edu/~kdatchev/428/r12.pdf)
