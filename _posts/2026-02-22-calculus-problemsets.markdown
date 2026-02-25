@@ -121,3 +121,44 @@ $$
 $$
 
 </div>
+
+<div class="problem" markdown="1">
+
+[Prime Number Theorem](https://en.wikipedia.org/wiki/Prime_number_theorem): Let $\pi(x)$ denote the number of primes less than or equal to $x$. Then
+
+$$
+\pi(x) \sim \frac{x}{\log x}
+\quad \text{as } x \to \infty
+$$
+
+</div>
+
+
+<div class="problem" markdown="1">
+
+$$
+\sum_{k=n+1}^{\infty} \frac{1}{k^2}
+<
+\frac{1}{n}
+$$
+
+The proof is to compare it with the integral $\int \frac{1}{x^2}\,dx$
+</div>
+
+
+<div class="problem" markdown="1">
+
+$$
+\frac{
+\begin{aligned}
+&F(x+\alpha+\beta)
+- F(x+\alpha-\beta) \\
+&- F(x-\alpha+\beta)
++ F(x-\alpha-\beta)
+\end{aligned}
+}{4\alpha\beta}
+$$
+
+This is a second order two parameter [difference quotient](https://en.wikipedia.org/wiki/Difference_quotient). It eliminates constant terms, linear terms and keeps only second-order interaction.
+
+</div>
