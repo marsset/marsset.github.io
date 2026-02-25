@@ -7,6 +7,8 @@ tags: math
 classes: wide
 layout: single
 use_math: true
+excerpt: >
+ Attractors are beautiful.
 ---
 
 Attractors are beautiful [^chaos-james].

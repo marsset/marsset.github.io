@@ -6,6 +6,7 @@ categories:
 tags: memory
 classes: wide
 layout: single
+excerpt: memory ordering, memory model, sequential consistency, release/acquire.
 ---
 <!-- Intro memory order concept -->
 One view of a program is to treat it as a bunch of memory accesses (load & store).

@@ -6,6 +6,7 @@ categories:
 tags: concurrency
 classes: wide
 layout: single
+excerpt: ll/sc, aba, cas
 ---
 
 Compare-and-swap (CAS) and load-link/store-conditional (LL/SC) are two flavors of CPU

@@ -6,6 +6,8 @@ categories:
 tags: security
 classes: wide
 layout: single
+excerpt: >
+ cache time difference is an interesting side channel atatck, and out-of-order leaks suprisely.
 ---
 
 <!-- intro -->

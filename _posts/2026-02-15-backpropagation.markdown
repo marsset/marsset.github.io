@@ -7,6 +7,7 @@ tags: ai
 classes: wide
 layout: single
 use_math: true
+excerpt: back propagation is dynamic programing.
 ---
 Backpropagation is a technique propsed in 1986 [^bp] to train a feedforward neural network
 (i.e. no feedback).

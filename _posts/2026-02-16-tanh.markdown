@@ -7,6 +7,7 @@ tags: math
 classes: wide
 layout: single
 use_math: true
+excerpt: how tanh is defined?
 ---
 
 Why tanh is defined as following?

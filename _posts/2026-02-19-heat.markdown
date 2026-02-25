@@ -7,6 +7,8 @@ tags: math
 classes: wide
 layout: single
 use_math: true
+excerpt: >
+  derive the heat equation.
 ---
 
 $$
