@@ -1,0 +1,168 @@
+---
+title:  "central limit theorem"
+date:  2026-09-27 10:00:00 +0800
+categories:
+  - math
+tags: math
+classes: wide
+layout: single
+use_math: true
+excerpt: >
+  state and prove the Lindeberg–Lévy central limit theorem.
+---
+
+### Statement
+
+**Theorem (Lindeberg–Lévy CLT).** Let $X_1, X_2, \dots$ be independent and identically distributed (i.i.d.) random variables with
+
+$$
+\mathbb{E}[X_1] = \mu, \qquad \operatorname{Var}(X_1) = \sigma^2, \qquad 0 < \sigma^2 < \infty .
+$$
+
+Let $$\bar{X}_n = \frac{1}{n}\sum_{k=1}^{n} X_k$$ be the sample mean. Then
+
+$$
+\sqrt{n}\,\left(\bar{X}_n - \mu\right) \xrightarrow{\;d\;} \mathcal{N}(0, \sigma^2) \qquad (n \to \infty),
+$$
+
+that is, for every $x \in \mathbb{R}$,
+
+$$
+\lim_{n\to\infty} \mathbb{P}\left( \frac{S_n - n\mu}{\sigma\sqrt{n}} \le x \right)
+= \Phi(x) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{x} e^{-u^2/2}\, du,
+\qquad S_n = \sum_{k=1}^{n} X_k .
+$$
+
+Here $\xrightarrow{d}$ denotes convergence in distribution: $Z_n \xrightarrow{d} Z$ means $F_{Z_n}(x) \to F_Z(x)$ at every point $x$ where $F_Z$ is continuous. Since $\Phi$ is continuous everywhere, the limit holds for every $x$.
+
+Note that only the first two moments are assumed. Nothing is required about the shape of the distribution of $X_1$: it may be discrete, skewed, or have no third moment at all.
+
+### Proof
+
+The proof goes through characteristic functions. For a random variable $Y$, its characteristic function is
+
+$$
+\varphi_Y(t) = \mathbb{E}\left[e^{itY}\right], \qquad t \in \mathbb{R}.
+$$
+
+It always exists since $\lvert e^{itY} \rvert = 1$, and $\lvert \varphi_Y(t) \rvert \le 1$. We will use three standard facts.
+
+1. **Independence turns sums into products.** If $Y_1, \dots, Y_n$ are independent, then $\varphi_{Y_1 + \cdots + Y_n}(t) = \prod_{k=1}^{n} \varphi_{Y_k}(t)$. Also $\varphi_{aY}(t) = \varphi_Y(at)$.
+2. **The Gaussian.** If $Z \sim \mathcal{N}(0,1)$, then $\varphi_Z(t) = e^{-t^2/2}$.
+3. **Lévy's continuity theorem.** $Z_n \xrightarrow{d} Z$ if and only if $\varphi_{Z_n}(t) \to \varphi_Z(t)$ for every $t \in \mathbb{R}$.
+
+So the whole proof reduces to showing that a certain sequence of characteristic functions converges pointwise to $e^{-t^2/2}$.
+
+#### Step 0: standardize
+
+Let $Y_k = (X_k - \mu)/\sigma$. The $Y_k$ are i.i.d. with $\mathbb{E}[Y_1] = 0$ and $\mathbb{E}[Y_1^2] = 1$, and
+
+$$
+Z_n := \frac{S_n - n\mu}{\sigma\sqrt{n}} = \frac{Y_1 + \cdots + Y_n}{\sqrt{n}} .
+$$
+
+Write $\varphi = \varphi_{Y_1}$. By fact 1,
+
+$$
+\varphi_{Z_n}(t) = \left[ \varphi\!\left( \frac{t}{\sqrt{n}} \right) \right]^n . \tag{1}
+$$
+
+We need to show $(1) \to e^{-t^2/2}$ for each fixed $t$.
+
+#### Step 1: a Taylor bound for $e^{ix}$
+
+**Lemma 1.** For every real $x$,
+
+$$
+\left\lvert e^{ix} - \left(1 + ix - \frac{x^2}{2}\right) \right\rvert \le \min\left( \frac{\lvert x\rvert^3}{6},\; x^2 \right).
+$$
+
+*Proof.* Taylor's theorem with integral remainder, applied to $f(x) = e^{ix}$ (whose $k$-th derivative is $i^k e^{ix}$), gives for $m = 1, 2$
+
+$$
+e^{ix} = \sum_{k=0}^{m} \frac{(ix)^k}{k!} + \frac{i^{m+1}}{m!} \int_0^x (x - s)^m e^{is}\, ds .
+$$
+
+Since $\lvert e^{is} \rvert = 1$, the remainder is bounded by $\frac{1}{m!}\left\lvert\int_0^x \lvert x - s\rvert^m ds\right\rvert = \frac{\lvert x\rvert^{m+1}}{(m+1)!}$.
+
+- With $m = 2$ this is exactly the bound $\lvert x\rvert^3/6$.
+- With $m = 1$ we get $\lvert e^{ix} - 1 - ix \rvert \le x^2/2$, so by the triangle inequality $\lvert e^{ix} - 1 - ix + x^2/2 \rvert \le x^2/2 + x^2/2 = x^2$. $\blacksquare$
+
+The first bound is sharp for small $x$; the second is what keeps things integrable when we only know $\mathbb{E}[Y^2] < \infty$.
+
+#### Step 2: expand $\varphi$ near zero
+
+Put $x = tY_1$ in Lemma 1 and take expectations. Using $\mathbb{E}[Y_1] = 0$, $\mathbb{E}[Y_1^2] = 1$, and $\lvert \mathbb{E}[\,\cdot\,] \rvert \le \mathbb{E}[\lvert \cdot \rvert]$,
+
+$$
+\left\lvert \varphi(t) - \left(1 - \frac{t^2}{2}\right) \right\rvert
+\le \mathbb{E}\left[ \min\left( \frac{\lvert t\rvert^3 \lvert Y_1\rvert^3}{6},\; t^2 Y_1^2 \right) \right]
+= t^2 \, \varepsilon(t), \tag{2}
+$$
+
+where
+
+$$
+\varepsilon(t) := \mathbb{E}\left[ \min\left( \frac{\lvert t\rvert\, \lvert Y_1\rvert^3}{6},\; Y_1^2 \right) \right].
+$$
+
+**Claim.** $\varepsilon(t) \to 0$ as $t \to 0$.
+
+The random variable inside the expectation is dominated by $Y_1^2$, which is integrable, and it tends to $0$ pointwise as $t \to 0$ (because $\lvert t\rvert \lvert Y_1\rvert^3/6 \to 0$ whenever $Y_1$ is finite). By the dominated convergence theorem, $\varepsilon(t) \to 0$.
+
+In other words, $\varphi(t) = 1 - \frac{t^2}{2} + o(t^2)$ as $t \to 0$, using nothing more than a finite second moment.
+
+#### Step 3: compare products
+
+**Lemma 2.** If $z_1, \dots, z_n$ and $w_1, \dots, w_n$ are complex numbers with modulus at most $1$, then
+
+$$
+\left\lvert \prod_{k=1}^{n} z_k - \prod_{k=1}^{n} w_k \right\rvert \le \sum_{k=1}^{n} \lvert z_k - w_k \rvert .
+$$
+
+*Proof.* Induction on $n$. The case $n = 1$ is trivial. For the inductive step, write $z = z_1$, $w = w_1$, $Z = \prod_{k \ge 2} z_k$, $W = \prod_{k \ge 2} w_k$. Then
+
+$$
+\lvert zZ - wW \rvert = \lvert z(Z - W) + (z - w)W \rvert \le \lvert Z - W\rvert + \lvert z - w\rvert,
+$$
+
+since $\lvert z\rvert, \lvert W\rvert \le 1$. Apply the induction hypothesis to $\lvert Z - W \rvert$. $\blacksquare$
+
+#### Step 4: put it together
+
+Fix $t$. Take $n$ large enough that $t^2 / (2n) \le 1$, so that $w := 1 - \frac{t^2}{2n}$ lies in $[0, 1]$. Also $z := \varphi(t/\sqrt{n})$ satisfies $\lvert z \rvert \le 1$. Applying Lemma 2 with all $z_k = z$ and all $w_k = w$, and then (2) with $t$ replaced by $t/\sqrt{n}$:
+
+$$
+\begin{align*}
+\left\lvert \varphi\!\left(\frac{t}{\sqrt{n}}\right)^{n} - \left(1 - \frac{t^2}{2n}\right)^{n} \right\rvert
+&\le n \left\lvert \varphi\!\left(\frac{t}{\sqrt{n}}\right) - \left(1 - \frac{t^2}{2n}\right) \right\rvert \\[6pt]
+&\le n \cdot \frac{t^2}{n}\, \varepsilon\!\left(\frac{t}{\sqrt{n}}\right) \\[6pt]
+&= t^2\, \varepsilon\!\left(\frac{t}{\sqrt{n}}\right) \;\xrightarrow{\;n\to\infty\;}\; 0,
+\end{align*}
+$$
+
+by the claim in Step 2, since $t/\sqrt{n} \to 0$.
+
+Finally, the elementary limit $\left(1 + \frac{a}{n}\right)^n \to e^{a}$ with $a = -t^2/2$ gives
+
+$$
+\left(1 - \frac{t^2}{2n}\right)^{n} \longrightarrow e^{-t^2/2}.
+$$
+
+Combining the two displays with (1),
+
+$$
+\varphi_{Z_n}(t) = \varphi\!\left(\frac{t}{\sqrt{n}}\right)^{n} \longrightarrow e^{-t^2/2} = \varphi_{\mathcal{N}(0,1)}(t) \qquad \text{for every } t \in \mathbb{R}.
+$$
+
+By Lévy's continuity theorem, $Z_n \xrightarrow{d} \mathcal{N}(0,1)$. Since $\sqrt{n}(\bar{X}_n - \mu) = \sigma Z_n$, and scaling by $\sigma$ maps $\mathcal{N}(0,1)$ to $\mathcal{N}(0,\sigma^2)$,
+
+$$
+\sqrt{n}\,\left(\bar{X}_n - \mu\right) \xrightarrow{\;d\;} \mathcal{N}(0, \sigma^2). \qquad \blacksquare
+$$
+
+### Remarks
+
+- **Where each hypothesis is used.** Independence gives the product in (1). Identical distribution makes all factors equal to the same $\varphi$. The finite variance gives the dominating function $Y_1^2$ in Step 2, and $\sigma^2 > 0$ lets us divide by $\sigma$ in Step 0.
+- **Why $\sqrt{n}$.** The $t^2/2$ term in $\varphi$ must survive after raising to the $n$-th power, so the argument has to be scaled as $t/\sqrt{n}$: then $n \cdot (t/\sqrt{n})^2 / 2 = t^2/2$. A faster scaling sends the limit to $1$ (a point mass), and a slower one sends it to $0$ (no limit distribution).
+- **The error term.** The proof shows that the first-order and second-order behavior of $\varphi$ near $0$ (mean and variance) is all that survives in the limit. Every higher-order feature of the distribution is washed out by $\varepsilon(t/\sqrt{n}) \to 0$. This is why the Gaussian is universal.
