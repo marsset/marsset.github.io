@@ -8,7 +8,8 @@ classes: wide
 layout: single
 use_math: true
 excerpt: >
-  entropy counts choices, adds up like a physical quantity, and lives on the typical set.
+  entropy counts choices, adds up like a physical quantity, lives on the typical set, and splits into
+  what the source costs and what being wrong costs.
 ---
 
 
@@ -21,20 +22,18 @@ $$
 where $$X$$ is a random variable on a finite alphabet $$\mathcal{X}$$ with distribution $$p(x) = \mathbb{P}(X = x)$$, and $$\log$$ means $$\log_2$$, so entropy is measured in bits.
 
 
-Entropy describes a system asymptotically: as the number of observations $n \to \infty$, the system effectively has about $2^{nH}$ equally likely outcome sequences, so
+Entropy describes a system asymptotically: as the number of observations $$n \to \infty$$, the system effectively has about $$2^{nH}$$ equally likely outcome sequences, so
 
 $$
 H = \lim_{n \to \infty} \frac{1}{n} \log_2 \left| A_\varepsilon^{(n)} \right|
 $$
 
-is the log-count of possible states per observation in the limit, where $A_\varepsilon^{(n)}$ is the set of typical sequences of length $n$.
+is the log-count of possible states per observation in the limit, where $$A_\varepsilon^{(n)}$$ is the set of typical sequences of length $$n$$.
 
 Because entropy is an asymptotic limit, compressing data to near its entropy requires coding long sequences jointly, either explicitly through blocking or implicitly through arithmetic coding. Both spread the integer-bit overhead across many symbols, and when paired with a context model, they also exploit dependencies between symbols.
 
 
-Entropy can be added, subtracted, and compared like mass or energy. One important theorem is noisy channel coding theorem: Every noisy channel has a capacity $C = \max_{p(x)} I(X; Y)$ , and data can be sent with arbitrarily small error at any rate below C, but at no rate above it, with the guarantee holding asymptotically for long codes.
-
-Some useful equations:
+Entropy can be added, subtracted, and compared like mass or energy. Some useful equations:
 
 Two variables at once have a single joint distribution $$p(x, y) = \mathbb{P}(X = x, Y = y)$$ on $$\mathcal{X} \times \mathcal{Y}$$, and its joint entropy obeys a chain rule:
 
@@ -51,13 +50,15 @@ $$
 \begin{align*}
 I(X; Y) &= H(X) - H(X \mid Y) \\[4pt]
 &= H(Y) - H(Y \mid X) \\[4pt]
-&= H(X) + H(Y) - H(X, Y) \\[4pt]
+&= H(X) + H(Y) - H(X, Y)
 \end{align*}
 $$
 
-In particular it is symmetric, and $$I(X; X) = H(X)$$ (a variable tells you everything about itself), which is why entropy is sometimes called *self-information*.
+In particular it is symmetric, and $$I(X; X) = H(X)$$ — a variable tells you everything about itself. That identity is why $$H(X)$$ is sometimes read as a variable's *self-information*, though the term more often names the per-outcome surprisal $$-\log p(x)$$, whose average is (1).
 
-**The picture.** All these identities are the arithmetic of a Venn diagram, where each region is a nonnegative amount of bits:
+Mutual information is also the quantity the noisy-channel coding theorem turns on. Every discrete memoryless channel has a capacity $$C = \max_{p(x)} I(X; Y)$$, and data can be sent with arbitrarily small error at any rate below $$C$$, but at no rate above it, with the guarantee holding asymptotically for long codes.
+
+All these identities are the arithmetic of a Venn diagram, where each region is a nonnegative amount of bits:
 
 <svg viewBox="0 0 420 220" width="100%" style="max-width:420px;display:block;margin:1em auto;" role="img" aria-label="Venn diagram of two entropies">
   <circle cx="160" cy="110" r="90" fill="currentColor" fill-opacity="0.08" stroke="currentColor" stroke-width="1.5"/>
@@ -76,33 +77,24 @@ In particular it is symmetric, and $$I(X; X) = H(X)$$ (a variable tells you ever
 Cross-entropy measures the cost of believing the wrong distribution. If the data really comes from $$p$$ but you encode it with a code built for $$q$$, every symbol costs $$-\log q(x)$$ bits instead of $$-\log p(x)$$, and the average bill is
 
 $$
-H(p \parallel q) = -\sum_{x \in \mathcal{X}} p(x) \log q(x) . \tag{4}
-$$
-
-**Notation.** The comma in $$H(X, Y)$$ already means *joint*: one distribution over a pair of variables. Cross-entropy is a different object — two distributions over the *same* variable, one true and one assumed — so it takes the double bar instead, matching $$D_{\mathrm{KL}}(p \parallel q)$$, with the truth on the left. Set (2) beside (4): the joint sums one distribution over pairs, the cross sums two distributions over one alphabet. Much of the literature writes cross-entropy as $$H(p, q)$$ anyway, which collides with (2); that is why it is avoided here. Entropy itself is a functional of the distribution rather than of the variable, so $$H(p)$$ and $$H(X)$$ are the same number whenever $$X \sim p$$.
-
-**The decomposition.** Add and subtract the ideal cost:
-
-$$
 \begin{align*}
 H(p \parallel q) &= -\sum_x p(x) \log q(x) \\[4pt]
 &= -\sum_x p(x) \log p(x) \;+\; \sum_x p(x) \log \frac{p(x)}{q(x)} \\[4pt]
-&= H(p) + D_{\mathrm{KL}}(p \parallel q) . \tag{5}
+&= H(p) + D_{\mathrm{KL}}(p \parallel q) . \tag{4}
 \end{align*}
 $$
 
-The bill splits into two terms that mean different things. $$H(p)$$ is the irreducible part: the entropy of the source, what nature charges, identical for every modeller. $$D_{\mathrm{KL}}(p \parallel q)$$ is the surcharge for being wrong, and it is the only part anyone controls.
-
-**The surcharge is never negative.** By Gibbs' inequality $$D_{\mathrm{KL}}(p \parallel q) \ge 0$$, with equality exactly when $$q = p$$, so
+Consider an example. Let the true distribution of a die be $$p = (1/3, 1/3, 1/3, 0, 0, 0)$$, while the model is confident it is almost always a six: $$q = (0.02, 0.02, 0.02, 0.02, 0.02, 0.9)$$.
 
 $$
-H(p \parallel q) \ge H(p) .
+\begin{align*}
+H(q) &\approx 0.70 \text{ bits}, &&2^{H(q)} \approx 1.6 \\[4pt]
+H(p \parallel q) &= -\log 0.02 \approx 5.64 \text{ bits}, &&2^{H(p \parallel q)} = 50 \\[4pt]
+H(p) &= \log 3 \approx 1.58 \text{ bits}, &&D_{\mathrm{KL}}(p \parallel q) \approx 4.06 \text{ bits}
+\end{align*}
 $$
 
-No model codes below the entropy. This is the same floor the typical set gave: on $$n$$ observations a wrong model wastes about $$n D_{\mathrm{KL}}(p \parallel q)$$ bits, so the waste *per symbol* does not shrink as $$n$$ grows. It is a bias, not noise, and blocking or arithmetic coding cannot average it away.
-
-**Why it is the loss function.** $$H(p)$$ does not depend on $$q$$, so minimising cross-entropy over models is exactly minimising $$D_{\mathrm{KL}}(p \parallel q)$$ — the thing you actually want, reached through the only term you can measure. The constant offset also explains why a cross-entropy loss never reaches zero on a stochastic source: a perfectly fitted classifier or language model still pays $$H(p)$$. Perplexity reports the same number unlogged, $$2^{H(p \parallel q)}$$, the effective number of choices the *model* leaves itself, against $$2^{H(p)}$$, the number the source actually has.
-
+$$H(p)$$ is how uncertain the source really is. $$H(q)$$ is how uncertain the model *believes* it is, and it never touches reality at all — it is the model grading its own confidence. Only $$H(p \parallel q)$$ lets reality choose the outcomes and the model pay for them: $$p$$ weights, $$q$$ is charged. So $$2^{H(q)}$$ is the number of states the model thinks it faces, while $$2^{H(p \parallel q)}$$ is the number it *performs* like once the data arrives. Reporting the first as though it were the second is the easy mistake. Here the model rates itself at fewer than two effective states and then performs like a guess among fifty, because every outcome that actually occurs is one it gave a 2 per cent chance; the 4.06 bits of surcharge is what that confident error costs.
 
 
 ### References
