@@ -1,0 +1,110 @@
+---
+title:  "entropy"
+date:  2026-10-01 00:00:00 +0800
+categories:
+  - math
+tags: math
+classes: wide
+layout: single
+use_math: true
+excerpt: >
+  entropy counts choices, adds up like a physical quantity, and lives on the typical set.
+---
+
+
+Perplexity measures the effective number of possible states of a system, accounting for their probabilities. Entropy is perplexity in log form, which makes it additive.
+
+$$
+H(X) = -\sum_{x \in \mathcal{X}} p(x) \log p(x) , \tag{1}
+$$
+
+where $$X$$ is a random variable on a finite alphabet $$\mathcal{X}$$ with distribution $$p(x) = \mathbb{P}(X = x)$$, and $$\log$$ means $$\log_2$$, so entropy is measured in bits.
+
+
+Entropy describes a system asymptotically: as the number of observations $n \to \infty$, the system effectively has about $2^{nH}$ equally likely outcome sequences, so
+
+$$
+H = \lim_{n \to \infty} \frac{1}{n} \log_2 \left| A_\varepsilon^{(n)} \right|
+$$
+
+is the log-count of possible states per observation in the limit, where $A_\varepsilon^{(n)}$ is the set of typical sequences of length $n$.
+
+Because entropy is an asymptotic limit, compressing data to near its entropy requires coding long sequences jointly, either explicitly through blocking or implicitly through arithmetic coding. Both spread the integer-bit overhead across many symbols, and when paired with a context model, they also exploit dependencies between symbols.
+
+
+Entropy can be added, subtracted, and compared like mass or energy. One important theorem is noisy channel coding theorem: Every noisy channel has a capacity $C = \max_{p(x)} I(X; Y)$ , and data can be sent with arbitrarily small error at any rate below C, but at no rate above it, with the guarantee holding asymptotically for long codes.
+
+Some useful equations:
+
+Two variables at once have a single joint distribution $$p(x, y) = \mathbb{P}(X = x, Y = y)$$ on $$\mathcal{X} \times \mathcal{Y}$$, and its joint entropy obeys a chain rule:
+
+$$
+\begin{align*}
+H(X, Y) &= -\sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}} p(x, y) \log p(x, y) \tag{2} \\[4pt]
+&= H(X) + H(Y \mid X) \;=\; H(Y) + H(X \mid Y) \tag{3}
+\end{align*}
+$$
+
+Mutual information:
+
+$$
+\begin{align*}
+I(X; Y) &= H(X) - H(X \mid Y) \\[4pt]
+&= H(Y) - H(Y \mid X) \\[4pt]
+&= H(X) + H(Y) - H(X, Y) \\[4pt]
+\end{align*}
+$$
+
+In particular it is symmetric, and $$I(X; X) = H(X)$$ (a variable tells you everything about itself), which is why entropy is sometimes called *self-information*.
+
+**The picture.** All these identities are the arithmetic of a Venn diagram, where each region is a nonnegative amount of bits:
+
+<svg viewBox="0 0 420 220" width="100%" style="max-width:420px;display:block;margin:1em auto;" role="img" aria-label="Venn diagram of two entropies">
+  <circle cx="160" cy="110" r="90" fill="currentColor" fill-opacity="0.08" stroke="currentColor" stroke-width="1.5"/>
+  <circle cx="260" cy="110" r="90" fill="currentColor" fill-opacity="0.08" stroke="currentColor" stroke-width="1.5"/>
+  <text x="110" y="115" text-anchor="middle" font-size="14" fill="currentColor">H(X|Y)</text>
+  <text x="210" y="115" text-anchor="middle" font-size="14" fill="currentColor">I(X;Y)</text>
+  <text x="310" y="115" text-anchor="middle" font-size="14" fill="currentColor">H(Y|X)</text>
+  <text x="110" y="14" text-anchor="middle" font-size="14" fill="currentColor">H(X)</text>
+  <text x="310" y="14" text-anchor="middle" font-size="14" fill="currentColor">H(Y)</text>
+</svg>
+
+- $$H(X)$$ is the left circle, $$H(Y)$$ the right circle, $$H(X, Y)$$ the union.
+- $$H(X \mid Y)$$ and $$H(Y \mid X)$$ are the parts outside the overlap.
+- $$I(X; Y)$$ is the overlap.
+
+Cross-entropy measures the cost of believing the wrong distribution. If the data really comes from $$p$$ but you encode it with a code built for $$q$$, every symbol costs $$-\log q(x)$$ bits instead of $$-\log p(x)$$, and the average bill is
+
+$$
+H(p \parallel q) = -\sum_{x \in \mathcal{X}} p(x) \log q(x) . \tag{4}
+$$
+
+**Notation.** The comma in $$H(X, Y)$$ already means *joint*: one distribution over a pair of variables. Cross-entropy is a different object — two distributions over the *same* variable, one true and one assumed — so it takes the double bar instead, matching $$D_{\mathrm{KL}}(p \parallel q)$$, with the truth on the left. Set (2) beside (4): the joint sums one distribution over pairs, the cross sums two distributions over one alphabet. Much of the literature writes cross-entropy as $$H(p, q)$$ anyway, which collides with (2); that is why it is avoided here. Entropy itself is a functional of the distribution rather than of the variable, so $$H(p)$$ and $$H(X)$$ are the same number whenever $$X \sim p$$.
+
+**The decomposition.** Add and subtract the ideal cost:
+
+$$
+\begin{align*}
+H(p \parallel q) &= -\sum_x p(x) \log q(x) \\[4pt]
+&= -\sum_x p(x) \log p(x) \;+\; \sum_x p(x) \log \frac{p(x)}{q(x)} \\[4pt]
+&= H(p) + D_{\mathrm{KL}}(p \parallel q) . \tag{5}
+\end{align*}
+$$
+
+The bill splits into two terms that mean different things. $$H(p)$$ is the irreducible part: the entropy of the source, what nature charges, identical for every modeller. $$D_{\mathrm{KL}}(p \parallel q)$$ is the surcharge for being wrong, and it is the only part anyone controls.
+
+**The surcharge is never negative.** By Gibbs' inequality $$D_{\mathrm{KL}}(p \parallel q) \ge 0$$, with equality exactly when $$q = p$$, so
+
+$$
+H(p \parallel q) \ge H(p) .
+$$
+
+No model codes below the entropy. This is the same floor the typical set gave: on $$n$$ observations a wrong model wastes about $$n D_{\mathrm{KL}}(p \parallel q)$$ bits, so the waste *per symbol* does not shrink as $$n$$ grows. It is a bias, not noise, and blocking or arithmetic coding cannot average it away.
+
+**Why it is the loss function.** $$H(p)$$ does not depend on $$q$$, so minimising cross-entropy over models is exactly minimising $$D_{\mathrm{KL}}(p \parallel q)$$ — the thing you actually want, reached through the only term you can measure. The constant offset also explains why a cross-entropy loss never reaches zero on a stochastic source: a perfectly fitted classifier or language model still pays $$H(p)$$. Perplexity reports the same number unlogged, $$2^{H(p \parallel q)}$$, the effective number of choices the *model* leaves itself, against $$2^{H(p)}$$, the number the source actually has.
+
+
+
+### References
+
+1. C. E. Shannon, "A Mathematical Theory of Communication," *Bell System Technical Journal*, vol. 27, pp. 379–423 and 623–656, July and October 1948. [PDF](https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf).
