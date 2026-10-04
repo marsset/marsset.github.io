@@ -159,9 +159,6 @@ with no bias and no second layer. It meets the sine exactly at every kink. Becau
 
 This is what 3D modelling has always done. A sphere in a renderer is not a sphere; it is a few thousand flat triangles. Every facet is flat, every normal within a facet is constant, and all of the shape lives in how the facets are arranged. Refine the mesh and you converge on the surface, and at no point does anything actually curve.
 
-Neural fields make the correspondence literal rather than metaphorical. A NeRF is a ReLU network standing in for a smooth radiance field, so the field it represents is piecewise linear — a very finely faceted stand-in for something smooth.
-
 ### References
 
 1. X. Glorot, A. Bordes, Y. Bengio, "Deep Sparse Rectifier Neural Networks," *AISTATS*, 2011. [PMLR](https://proceedings.mlr.press/v15/glorot11a.html).
-2. B. Mildenhall, P. P. Srinivasan, M. Tancik, J. T. Barron, R. Ramamoorthi, R. Ng, "NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis," *ECCV*, 2020. [arXiv:2003.08934](https://arxiv.org/abs/2003.08934).
