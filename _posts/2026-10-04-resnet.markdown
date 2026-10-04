@@ -1,0 +1,62 @@
+---
+title:  "Resnet"
+date:  2026-10-04 08:00:00 +0800
+categories:
+  - ai
+tags: ai
+classes: wide
+layout: single
+use_math: true
+excerpt: >
+  two things break when networks get deep. Resnet is about the second one.
+---
+
+Depth is the premise of deep learning and, for most of its history, the obstacle to it. Two different things go wrong as networks get deeper, and they need different fixes.
+
+### Vanishing and exploding gradients
+
+Backpropagation through a stack of layers is a product. For a plain network $$x_l = f_l(x_{l-1})$$,
+
+$$
+\frac{\partial \mathcal{L}}{\partial x_0} = \frac{\partial \mathcal{L}}{\partial x_L} \prod_{l=1}^{L} \frac{\partial x_l}{\partial x_{l-1}} . \tag{1}
+$$
+
+A product of $$L$$ terms is unstable in $$L$$. If the Jacobians typically shrink vectors, the product decays geometrically and the early layers receive almost nothing — the gradient vanishes. If they typically stretch, it grows without bound and training diverges — it explodes.
+
+Which of the two you get is not luck, because the classic activation tilts the scales. For the sigmoid $$\sigma$$, writing $$p = \sigma(z)$$,
+
+$$
+\sigma(z) = \frac{1}{1 + e^{-z}} , \qquad \sigma'(z) = p \, (1 - p) \le \frac{1}{4} , \tag{2}
+$$
+
+the bound following because $$p(1-p)$$ is a downward parabola peaking at $$p = 1/2$$, that is at $$z = 0$$. A sigmoid layer has Jacobian $$\mathrm{diag}(\sigma'(z_l)) \, W_l$$, so the activation alone contributes a factor of at most $$1/4$$ per layer — at most $$(1/4)^L$$ over $$L$$ layers, already around $$10^{-6}$$ by ten.
+
+That barrier was largely dismantled without changing the architecture — by ReLU, $$f(x) = \max(0, x)$$, whose derivative is exactly $$1$$ wherever the unit is active and so introduces no contraction at all; by initialisation scaled to hold the variance of activations roughly constant from layer to layer; and by batch normalisation, which re-centres and re-scales at every layer and so keeps the Jacobians near unit scale. With those in place, networks of twenty or thirty layers train.
+
+### Degradation
+
+Then a second failure appears, and it is not the first one in disguise. On CIFAR-10 a 56-layer plain network reaches higher *training* error than a 20-layer one. Training error, not test error, so it is not overfitting. And it happens with batch normalisation in place, so it is not vanishing gradients.
+
+What makes it strange is that the deeper network *contains* the shallower one. Keep the first 20 layers, make the remaining 36 compute the identity, and you reproduce the shallow network exactly. A solution at least as good is guaranteed to sit somewhere in the deeper model's parameter space. Gradient descent just does not find it.
+
+So this obstacle is optimisation, not capacity. The difficulty is that a stack of nonlinear layers is bad at learning to *do nothing*: identity is an awkward function to assemble out of convolutions and ReLUs, so the extra depth cannot cheaply fall back on it.
+
+### The solution
+
+The fix is to change what the block’s layers are asked to output. Rather than have them compute the mapping $$H(x)$$ directly, have them compute its difference from the input, and let the wiring add the input back:
+
+$$
+y = \mathcal{F}(x, \{W_i\}) + x . \tag{3}
+$$
+
+The layers now learn a residual, $$\mathcal{F}(x) = H(x) - x$$. If the best thing a block can do is nothing, it no longer has to construct an identity out of nonlinearities — it only has to push $$\mathcal{F}$$ toward zero, which is exactly where weight decay and small gradients take it anyway. The easy case was made easy.
+
+The shortcut is plain addition: no parameters, no extra multiplications, so depth stays cheap. Only when a block changes shape does the shortcut need a linear projection:
+
+$$
+y = \mathcal{F}(x, \{W_i\}) + W_s x . \tag{4}
+$$
+
+### References
+
+1. K. He, X. Zhang, S. Ren, J. Sun, "Deep Residual Learning for Image Recognition," *CVPR*, 2016. [arXiv:1512.03385](https://arxiv.org/abs/1512.03385).
