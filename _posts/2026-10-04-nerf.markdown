@@ -1,0 +1,92 @@
+---
+title:  "NeRF"
+date:  2026-10-04 18:00:00 +0800
+categories:
+  - ai
+tags: ai
+classes: wide
+layout: single
+use_math: true
+excerpt: >
+  a scene stored as a function: what the network is, how it is fitted, and what density means.
+---
+
+
+NeRF — neural radiance fields — represents a three-dimensional scene as a neural network. Given a handful of photographs of a scene taken from different angles, it synthesises a photorealistic image of that scene from any new viewpoint.
+
+The name is literal. The *field* is a five-dimensional function — three coordinates for where you are, two angles for which way you are looking — returning the colour of light leaving that point in that direction, together with how opaque the point is. *Radiance* is that outgoing light, and *neural* is that the function is held in a network’s weights rather than tabulated anywhere. Rendering is then photographing the field: send rays through it and work out what colour reaches the camera.
+
+### The network
+
+The field is a single multilayer perceptron. It takes a point and a direction, and returns a colour and a density:
+
+$$
+(x, y, z, \theta, \phi) \; \longmapsto \; (r, g, b, \sigma) . \tag{1}
+$$
+
+Neither input goes in raw. Both are lifted first by a positional encoding, a bank of sines and cosines at geometrically rising frequencies, because an MLP fed bare coordinates learns only smooth low-frequency functions and the renderings come out blurred. Position gets ten frequency bands and so arrives as 63 numbers, direction gets four and arrives as 27.
+
+After that the network is unremarkable: eight fully connected layers of 256 units with ReLU, the encoded position concatenated back in at the fifth so the later layers need not carry it forward. Density leaves the eighth layer through a single unit. Colour takes a detour — a 256-dimensional bottleneck is concatenated with the encoded direction, pushed through one more layer of 128, and projected down to three.
+
+![NeRF MLP architecture](/assets/image/nerf_mlp_architecture.svg){: .align-center }
+
+The asymmetry at the end is the whole design. Density depends on position alone, and only colour is allowed to see the viewing direction. That is what lets the model render a specular highlight, which really does change as you move, without letting the geometry change as you move too — a density free to vary with direction would let every photograph carve out its own private surface, and the constraint that ties the views together would be gone.
+
+### The training loop
+
+The reference implementation writes one training step like this.
+
+```python
+with tf.GradientTape() as tape:
+
+    # Make predictions for color, disparity, accumulated opacity.
+    rgb, disp, acc, extras = render(
+        H, W, focal, chunk=args.chunk, rays=batch_rays,
+        verbose=i < 10, retraw=True, **render_kwargs_train)
+
+    # Compute MSE loss between predicted and true RGB.
+    img_loss = img2mse(rgb, target_s)
+    trans = extras['raw'][..., -1]
+    loss = img_loss
+    psnr = mse2psnr(img_loss)
+
+    # Add MSE loss for coarse-grained model
+    if 'rgb0' in extras:
+        img_loss0 = img2mse(extras['rgb0'], target_s)
+        loss += img_loss0
+        psnr0 = mse2psnr(img_loss0)
+
+gradients = tape.gradient(loss, grad_vars)
+optimizer.apply_gradients(zip(gradients, grad_vars))
+```
+
+`render` hides the whole forward pass: it walks the sampled points along each ray, queries the network for density and colour at each, and composites them into a pixel. The tape records all of it, so the chain from weights to pixel stays differentiable end to end.
+
+Then the striking line. `img_loss = img2mse(rgb, target_s)` is the entire supervision — mean squared error between the rendered pixels and the photographed ones. There is no depth map, no mask, no three-dimensional ground truth of any kind. Nothing ever tells the density field where a surface is. Geometry arrives only because it is the one way to explain several photographs at once, which is the multi-view constraint from the first section appearing as a line of code. `psnr` is for the log rather than the loss.
+
+The `if 'rgb0' in extras` branch adds a second term, because NeRF trains two networks rather than one. Hierarchical sampling needs the coarse network to be good enough to say where the fine one should spend its samples, so the coarse rendering is supervised on the same pixels and the two losses are simply added. `grad_vars` holds the weights of both.
+
+The last two lines are a single Adam step on those weights, which are the only thing in the scene there is to touch.
+
+
+### What the density means
+
+Volume rendering was built for cloud and smoke, and it keeps that model's assumption: space holds a great many tiny particles, randomly strewn, and a photon crossing it may or may not strike one. The density $$\sigma$$ measures how thickly they lie, so over an infinitesimal step the chance of a strike is $$\sigma \, dt$$. Note that $$\sigma$$ is therefore a probability *density* and not a probability — its units are per unit length and it may be far larger than one, exactly as a density function's value may exceed one. Only $$\sigma \, dt$$ is a probability.
+
+### From field to pixel
+
+The network gives a colour and a density at a point. Turning that into a pixel is a fixed piece of physics with nothing learned in it. A camera ray is $$\mathbf{r}(t) = \mathbf{o} + t\mathbf{d}$$, running from a near bound $$t_n$$ to a far bound $$t_f$$, and the colour the camera sees along it is
+
+$$
+C(\mathbf{r}) = \int_{t_n}^{t_f} T(t) \, \sigma(\mathbf{r}(t)) \, \mathbf{c}(\mathbf{r}(t), \mathbf{d}) \, dt ,
+\qquad
+T(t) = \exp\!\left(-\int_{t_n}^{t} \sigma(\mathbf{r}(s)) \, ds\right) . \tag{2}
+$$
+
+$$T$$ is the probability the ray gets as far as $$t$$ without being stopped. Surviving to $$t + dt$$ means surviving to $$t$$ and then not being stopped in $$dt$$, so $$T(t + dt) = T(t)\,(1 - \sigma \, dt)$$ — that is, $$dT/dt = -\sigma T$$. A quantity that loses itself at a rate proportional to what is left decays exponentially, as in radioactive decay, which is where the $$\exp$$ comes from. Transmittance is therefore set by the density *accumulated in front of* a point, not by the density at it.
+
+That makes $$T(t) \, \sigma(t) \, dt$$ the chance the ray is stopped in one particular slice — it reached there, and it stopped there. As a function of $$t$$ this is a probability distribution over where the ray terminates, and the integral is no more than the average emitted colour under that distribution. $$C$$ is an expected colour.
+
+### References
+
+1. B. Mildenhall, P. P. Srinivasan, M. Tancik, J. T. Barron, R. Ramamoorthi, R. Ng, "NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis," *ECCV*, 2020. [arXiv:2003.08934](https://arxiv.org/abs/2003.08934), [project page](https://www.matthewtancik.com/nerf).
