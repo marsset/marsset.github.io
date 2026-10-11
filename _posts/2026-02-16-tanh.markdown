@@ -1,5 +1,5 @@
 ---
-title:  "tanh"
+title:  "Tanh"
 date:  2026-02-16 10:00:00 +0800
 categories:
   - math

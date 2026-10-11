@@ -1,5 +1,5 @@
 ---
-title:  "attractor"
+title:  "Attractor"
 date:  2026-02-17 10:00:00 +0800
 categories:
   - math

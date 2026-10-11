@@ -1,5 +1,5 @@
 ---
-title:  "batch normalization"
+title:  "Batch Normalization"
 date:  2026-10-05 09:00:00 +0800
 categories:
   - ai
