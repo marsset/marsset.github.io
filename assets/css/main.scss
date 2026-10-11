@@ -55,3 +55,17 @@ body {
   text-align: right;
   margin-top: 1em;
 }
+
+/* Text selection.
+   The theme's _reset.scss hardcodes white-on-black, which reads as a redaction
+   bar over a page of maths. A pale blue instead -- a tint of the #5b7cfa used in
+   the figures -- with `color: inherit` so syntax colouring and the accent colours
+   inside figures survive being selected. Body text on it measures 8.1:1. */
+::selection {
+  color: inherit;
+  background: #dbe4fd;
+}
+::-moz-selection {
+  color: inherit;
+  background: #dbe4fd;
+}
