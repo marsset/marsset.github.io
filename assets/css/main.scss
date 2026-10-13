@@ -69,3 +69,13 @@ body {
   color: inherit;
   background: #dbe4fd;
 }
+
+/* The Itô term, called out inside the lemma's display equation.
+   Drawn as a tiled SVG rather than `text-decoration: underline wavy`: MathJax builds
+   its output from inline-block spans, and CSS does not propagate text decorations
+   into atomic inline-level boxes, so the underline would paint nothing. */
+.ito-term {
+  padding-bottom: 11px;
+  background: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='10'%20height='8'%3E%3Cpath%20d='M0%204%20Q2.5%201%205%204%20T10%204'%20fill='none'%20stroke='%233d4144'%20stroke-width='1.2'/%3E%3C/svg%3E") repeat-x left bottom;
+  background-size: 10px 8px;
+}
