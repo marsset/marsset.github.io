@@ -79,3 +79,12 @@ body {
   background: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='10'%20height='8'%3E%3Cpath%20d='M0%204%20Q2.5%201%205%204%20T10%204'%20fill='none'%20stroke='%233d4144'%20stroke-width='1.2'/%3E%3C/svg%3E") repeat-x left bottom;
   background-size: 10px 8px;
 }
+
+/* Tables in post content span the text column, so their left and right edges line
+   up with the surrounding paragraphs. The theme sets `display: block` on `table`,
+   which wraps the real table in an anonymous shrink-to-fit box — the `width: 100%`
+   sitting beside it never reaches that box, so the table stops wherever its content
+   happens to end. */
+.page__content table {
+  display: table;
+}
