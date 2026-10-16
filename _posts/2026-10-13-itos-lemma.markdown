@@ -22,9 +22,9 @@ $$
 
 $$X_t$$ is the quantity being modelled, at time $$t$$: a price, a log price, a rate. $$\mathrm{d}X_t$$ is how much it moves over an instant, and the equation says that movement has exactly two sources.
 
-$$W_t$$ is a **standard Brownian motion** (aka **Wiener process**) — and the only randomness in sight. It starts at $$W_0 = 0$$, has continuous paths, and its increments over disjoint intervals are independent with $$W_{t+h} - W_t \sim N(0, h)$$ — variance equal to the elapsed time. Independence is what makes that variance additive: writing $$v(h)$$ for the variance over a step of length $$h$$, splitting one step into two forces $$v(a+b) = v(a) + v(b)$$, and a non-decreasing function obeying that must be $$v(h) = ch$$. Calling the motion *standard* fixes $$c = 1$$.
+$$W_t$$ is a **standard Brownian motion** (aka **Wiener process**) — and the only source of randomness. It starts at $$W_0 = 0$$, has continuous paths, and its increments over disjoint intervals are independent with $$W_{t+h} - W_t \sim N(0, h)$$ — variance equal to the elapsed time. Independence is what makes that variance additive: writing $$v(h)$$ for the variance over a step of length $$h$$, splitting one step into two forces $$v(a+b) = v(a) + v(b)$$, and a non-decreasing function obeying that must be $$v(h) = ch$$. Calling the motion *standard* fixes $$c = 1$$.
 
-$$\sigma_t$$ is the **volatility** — how much of that randomness is let through. The subscript matters: it need not be a constant, but may itself be a process, provided it is adapted, meaning its value at time $$t$$ is knowable at time $$t$$ rather than read off the future.
+$$\sigma_t$$ is the **volatility** — how much of that randomness is let through. The subscript matters: it need not be a constant, but may itself be a process, provided it is adapted, meaning its value at time $$t$$ is knowable at time $$t$$ rather than taken from the future.
 
 $$\mu_t$$ is the **drift** — the rate of the smooth, trend-like part, per unit of time. Also a process, also adapted. $$\mathrm{d}t$$ is the time increment the two are measured against.
 
@@ -51,7 +51,7 @@ $$
 \mathrm{d}f = \frac{\partial f}{\partial t}\,\mathrm{d}t + \mu_t\,\frac{\partial f}{\partial x}\,\mathrm{d}t + \sigma_t\,\frac{\partial f}{\partial x}\,\mathrm{d}W_t .
 $$
 
-All three of those appear in the lemma unchanged. But the lemma carries a fourth — the underlined $$\tfrac12\sigma_t^2 f_{xx}\,\mathrm{d}t$$ — and nothing in this calculation produces anything resembling it. The answer is wrong, and wrong by omission rather than by error — which means the mistake is in a step that looked like it cost nothing.
+All three of those appear in the lemma unchanged. But the lemma carries a fourth — the underlined $$\tfrac12\sigma_t^2 f_{xx}\,\mathrm{d}t$$ — and nothing in this calculation produces anything resembling it. The answer is wrong, and wrong by omission rather than by error — which means the mistake is in a step that looked harmless.
 
 That step is the first one. The total differential is not a law handed down from anywhere; it is a Taylor expansion with everything past first order discarded. Written out in full it reads
 
