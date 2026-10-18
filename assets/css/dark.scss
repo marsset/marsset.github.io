@@ -1,0 +1,18 @@
+---
+# Dark counterpart of main.scss, linked with media="(prefers-color-scheme: dark)".
+#
+# The theme's colours are all declared `!default`, so a second skin cannot be
+# imported into the same stylesheet -- the first one wins and the later import is
+# a no-op. Compiling a separate file gives the dark skin its own variable scope,
+# and the browser applies whichever stylesheet the media query selects.
+search: false
+---
+
+@charset "utf-8";
+
+@import "minimal-mistakes/skins/dark"; // skin
+@import "minimal-mistakes"; // main partials
+
+$custom-selection-background: #2f4a6b;
+$custom-ito-underline: "eaeaea";   // matches $text-color of the dark skin
+@import "custom";
