@@ -1,0 +1,91 @@
+/* ==========================================================================
+   Site customisations, shared by the light and dark stylesheets.
+
+   Both assets/css/main.scss and assets/css/dark.scss import this after the
+   theme, so a layout tweak made here cannot drift between the two. Values that
+   must differ between the schemes arrive as variables set by whichever entry
+   point did the importing.
+   ========================================================================== */
+
+// https://github.com/mmistakes/minimal-mistakes/issues/1322
+.archive, article.page {
+    width: 100%;
+    max-width: 900px;
+    float: none;
+    margin: 2rem auto;
+}
+
+// desmos iframe
+.align-center, iframe.desmos {
+  width: 80%;
+  max-width: 600px;
+  height: auto;
+  border: 0;
+  display: block;       // removes inline spacing issues
+  margin: 2rem auto;
+}
+
+/* Initialize counter */
+body {
+  counter-reset: problem-counter;
+}
+
+/* Each problem increases counter */
+.problem {
+  counter-increment: problem-counter;
+  position: relative;
+  margin: 1.5em 0;
+  padding: 0.5em 1em;
+  border-left: 3px solid #888;
+}
+
+/* Auto-generate title */
+.problem::before {
+  content: "Problem " counter(problem-counter) ".";
+  font-style: italic;
+  display: block;
+  margin-bottom: 0.5em;
+}
+
+/* QED box */
+.problem::after {
+  content: "□";
+  display: block;
+  text-align: right;
+  margin-top: 1em;
+}
+
+/* Text selection.
+   The theme's _reset.scss hardcodes white-on-black, which reads as a redaction
+   bar over a page of maths. A blue tint instead -- related to the accent colours
+   used in the figures -- with `color: inherit` so syntax colouring and the accent
+   colours inside figures survive being selected. */
+::selection {
+  color: inherit;
+  background: $custom-selection-background;
+}
+::-moz-selection {
+  color: inherit;
+  background: $custom-selection-background;
+}
+
+/* The Itô term, called out inside the lemma's display equation.
+   Drawn as a tiled SVG rather than `text-decoration: underline wavy`: MathJax builds
+   its output from inline-block spans, and CSS does not propagate text decorations
+   into atomic inline-level boxes, so the underline would paint nothing. The stroke
+   has to match the surrounding text, so its colour is a variable rather than a
+   literal -- a data URI cannot see `currentColor`. */
+.ito-term {
+  padding-bottom: 11px;
+  background: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='10'%20height='8'%3E%3Cpath%20d='M0%204%20Q2.5%201%205%204%20T10%204'%20fill='none'%20stroke='%23#{$custom-ito-underline}'%20stroke-width='1.2'/%3E%3C/svg%3E") repeat-x left bottom;
+  background-size: 10px 8px;
+}
+
+/* Tables in post content span the text column, so their left and right edges line
+   up with the surrounding paragraphs. The theme sets `display: block` on `table`,
+   which wraps the real table in an anonymous shrink-to-fit box — the `width: 100%`
+   sitting beside it never reaches that box, so the table stops wherever its content
+   happens to end. */
+.page__content table {
+  display: table;
+}
