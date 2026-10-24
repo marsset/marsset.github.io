@@ -61,11 +61,16 @@ $$
 L(w, b) = \frac{1}{N} \sum_{i=1}^{N} (w x_i + b - y_i)^2 ,
 $$
 
-a quadratic in $$(w, b)$$. A quadratic is described completely by its minimum $$\theta^* = (w^*, b^*)$$ and its Hessian, which here is constant:
+a quadratic in $$(w, b)$$. A quadratic is described completely by its minimum $$\theta^* = (w^*, b^*)$$ and its Hessian,
 
 $$
-H = \begin{pmatrix} \partial^2 L / \partial w^2 & \partial^2 L / \partial w \partial b \\ \partial^2 L / \partial b \partial w & \partial^2 L / \partial b^2 \end{pmatrix}
-= 2 \begin{pmatrix} \overline{x^2} & \bar{x} \\ \bar{x} & 1 \end{pmatrix} ,
+H = \begin{pmatrix} \partial^2 L / \partial w^2 & \partial^2 L / \partial w \partial b \\ \partial^2 L / \partial b \partial w & \partial^2 L / \partial b^2 \end{pmatrix} ,
+$$
+
+which here is constant:
+
+$$
+H = 2 \begin{pmatrix} \overline{x^2} & \bar{x} \\ \bar{x} & 1 \end{pmatrix} ,
 $$
 
 with the bars meaning averages over the data. For a quadratic the gradient is exactly $$H(\theta - \theta^*)$$, so one step of gradient descent with learning rate $$\eta$$ does
@@ -352,8 +357,12 @@ step: 999, loss: 10143.4, w: 202.2772, b: -0.4575
 Converged in about fifty steps. These are parameters of the model in standardized coordinates, $$y = w_n x_n + b_n$$. Substituting $$x_n = (x - \mu)/\sigma$$ maps them back:
 
 $$
-y = \frac{w_n}{\sigma} x + \left( b_n - \frac{w_n \mu}{\sigma} \right)
-\quad\Longrightarrow\quad
+y = \frac{w_n}{\sigma} x + \left( b_n - \frac{w_n \mu}{\sigma} \right) ,
+$$
+
+so
+
+$$
 w = \frac{w_n}{\sigma} , \qquad b = b_n - \frac{w_n \mu}{\sigma} .
 $$
 
