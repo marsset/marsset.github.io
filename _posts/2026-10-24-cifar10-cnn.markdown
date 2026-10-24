@@ -1,0 +1,237 @@
+---
+title:  "PyTorch by Example: A Small CNN on CIFAR-10"
+date:  2026-10-24 12:00:00 +0800
+categories:
+  - ai
+tags: ai
+classes: wide
+layout: single
+use_math: true
+excerpt: >
+  the standard PyTorch training loop, read line by line: what each piece is for, and the few places where it quietly does something other than what it says.
+---
+
+<a href="{{ '/assets/code/cifar10_cnn/' | relative_url }}" target="_blank" rel="noopener">This example</a> trains a three-layer convolutional network on CIFAR-10 — 50,000 training images, 10,000 test images, $$32 \times 32$$ pixels, ten classes — and is meant as a template for the standard PyTorch workflow: a model, a dataset, a loader, a training loop, an evaluation loop, an optimizer and a schedule.
+
+### The model
+
+```python
+class SmallCNN(nn.Module):
+    def __init__(self, num_classes: int = 10):
+        super().__init__()
+        self.conv1 = nn.Conv2d(3, 32, kernel_size=3, padding=1)
+        self.bn1 = nn.BatchNorm2d(32)
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
+        self.bn2 = nn.BatchNorm2d(64)
+        self.conv3 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
+        self.bn3 = nn.BatchNorm2d(128)
+        self.dropout = nn.Dropout(0.3)
+        self.fc1 = nn.Linear(128 * 8 * 8, 256)
+        self.fc2 = nn.Linear(256, num_classes)
+
+    def forward(self, x):
+        x = F.relu(self.bn1(self.conv1(x)))
+        x = F.max_pool2d(F.relu(self.bn2(self.conv2(x))), 2)
+        x = F.max_pool2d(F.relu(self.bn3(self.conv3(x))), 2)
+        x = torch.flatten(x, 1)
+        x = self.dropout(F.relu(self.fc1(x)))
+        return self.fc2(x)
+```
+
+Drawn out, `forward` takes one $$3 \times 32 \times 32$$ image down to ten scores. Each box is the tensor between two layers — its face is the image size, its depth the number of channels — and each arrow is a layer, labelled with how many weights it has:
+
+<svg viewBox="0 0 380 722" width="100%" style="max-width:440px;display:block;margin:1.4em auto;" role="img" aria-label="SmallCNN architecture, top to bottom: a 3 by 32 by 32 image; conv1 with batch norm and ReLU to 32 by 32 by 32; conv2 to 64 by 32 by 32; max-pool to 64 by 16 by 16; conv3 to 128 by 16 by 16; max-pool to 128 by 8 by 8; flatten to 8192; fc1 with ReLU and dropout to 256, holding 2,097,408 of the 2,193,674 parameters; fc2 to 10 logits">
+  <polygon points="29.4,17.1 33.8,14.0 94.6,14.0 90.2,17.1" fill="currentColor" fill-opacity="0.16" stroke="currentColor" stroke-opacity="0.55" stroke-width="1" stroke-linejoin="round"/>
+  <polygon points="90.2,17.1 94.6,14.0 94.6,74.8 90.2,77.9" fill="currentColor" fill-opacity="0.26" stroke="currentColor" stroke-opacity="0.55" stroke-width="1" stroke-linejoin="round"/>
+  <rect x="29.4" y="17.1" width="60.8" height="60.8" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1"/>
+  <text x="138.0" y="50.5" text-anchor="start" font-size="13" fill="currentColor" fill-opacity="0.9" font-family="Georgia, serif">3 × 32 × 32</text>
+  <text x="229.4" y="50.5" text-anchor="start" font-size="12" fill="currentColor" fill-opacity="0.55">input image</text>
+  <line x1="62" y1="83.9" x2="62" y2="112.9" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2"/>
+  <path d="M58,111.9 L62,117.9 L66,111.9" fill="none" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2"/>
+  <text x="138.0" y="98.9" text-anchor="start" font-size="12.5" fill="#3b82f6" fill-opacity="1" font-weight="600">conv1 3×3 · BN · ReLU</text>
+  <text x="138.0" y="113.9" text-anchor="start" font-size="12" fill="currentColor" fill-opacity="0.6">896 params</text>
+  <polygon points="24.3,134.1 38.9,123.9 99.7,123.9 85.1,134.1" fill="currentColor" fill-opacity="0.16" stroke="currentColor" stroke-opacity="0.55" stroke-width="1" stroke-linejoin="round"/>
+  <polygon points="85.1,134.1 99.7,123.9 99.7,184.7 85.1,194.9" fill="currentColor" fill-opacity="0.26" stroke="currentColor" stroke-opacity="0.55" stroke-width="1" stroke-linejoin="round"/>
+  <rect x="24.3" y="134.1" width="60.8" height="60.8" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1"/>
+  <text x="138.0" y="163.9" text-anchor="start" font-size="13" fill="currentColor" fill-opacity="0.9" font-family="Georgia, serif">32 × 32 × 32</text>
+  <line x1="62" y1="200.9" x2="62" y2="229.9" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2"/>
+  <path d="M58,228.9 L62,234.9 L66,228.9" fill="none" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2"/>
+  <text x="138.0" y="215.9" text-anchor="start" font-size="12.5" fill="#3b82f6" fill-opacity="1" font-weight="600">conv2 3×3 · BN · ReLU</text>
+  <text x="138.0" y="230.9" text-anchor="start" font-size="12" fill="currentColor" fill-opacity="0.6">18,496 params</text>
+  <polygon points="21.2,255.3 42.0,240.9 102.8,240.9 82.0,255.3" fill="currentColor" fill-opacity="0.16" stroke="currentColor" stroke-opacity="0.55" stroke-width="1" stroke-linejoin="round"/>
+  <polygon points="82.0,255.3 102.8,240.9 102.8,301.7 82.0,316.1" fill="currentColor" fill-opacity="0.26" stroke="currentColor" stroke-opacity="0.55" stroke-width="1" stroke-linejoin="round"/>
+  <rect x="21.2" y="255.3" width="60.8" height="60.8" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1"/>
+  <text x="138.0" y="283.0" text-anchor="start" font-size="13" fill="currentColor" fill-opacity="0.9" font-family="Georgia, serif">64 × 32 × 32</text>
+  <line x1="62" y1="322.1" x2="62" y2="339.1" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2"/>
+  <path d="M58,338.1 L62,344.1 L66,338.1" fill="none" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2"/>
+  <text x="138.0" y="337.6" text-anchor="start" font-size="12.5" fill="currentColor" fill-opacity="0.55">max-pool 2×2</text>
+  <polygon points="36.4,364.5 57.2,350.1 87.6,350.1 66.8,364.5" fill="currentColor" fill-opacity="0.16" stroke="currentColor" stroke-opacity="0.55" stroke-width="1" stroke-linejoin="round"/>
+  <polygon points="66.8,364.5 87.6,350.1 87.6,380.5 66.8,394.9" fill="currentColor" fill-opacity="0.26" stroke="currentColor" stroke-opacity="0.55" stroke-width="1" stroke-linejoin="round"/>
+  <rect x="36.4" y="364.5" width="30.4" height="30.4" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1"/>
+  <text x="138.0" y="377.0" text-anchor="start" font-size="13" fill="currentColor" fill-opacity="0.9" font-family="Georgia, serif">64 × 16 × 16</text>
+  <line x1="62" y1="400.9" x2="62" y2="429.9" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2"/>
+  <path d="M58,428.9 L62,434.9 L66,428.9" fill="none" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2"/>
+  <text x="138.0" y="415.9" text-anchor="start" font-size="12.5" fill="#3b82f6" fill-opacity="1" font-weight="600">conv3 3×3 · BN · ReLU</text>
+  <text x="138.0" y="430.9" text-anchor="start" font-size="12" fill="currentColor" fill-opacity="0.6">73,856 params</text>
+  <polygon points="32.1,461.3 61.5,440.9 91.9,440.9 62.5,461.3" fill="currentColor" fill-opacity="0.16" stroke="currentColor" stroke-opacity="0.55" stroke-width="1" stroke-linejoin="round"/>
+  <polygon points="62.5,461.3 91.9,440.9 91.9,471.3 62.5,491.7" fill="currentColor" fill-opacity="0.26" stroke="currentColor" stroke-opacity="0.55" stroke-width="1" stroke-linejoin="round"/>
+  <rect x="32.1" y="461.3" width="30.4" height="30.4" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1"/>
+  <text x="138.0" y="470.8" text-anchor="start" font-size="13" fill="currentColor" fill-opacity="0.9" font-family="Georgia, serif">128 × 16 × 16</text>
+  <line x1="62" y1="497.7" x2="62" y2="514.7" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2"/>
+  <path d="M58,513.7 L62,519.7 L66,513.7" fill="none" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2"/>
+  <text x="138.0" y="513.2" text-anchor="start" font-size="12.5" fill="currentColor" fill-opacity="0.55">max-pool 2×2</text>
+  <polygon points="39.7,546.0 69.1,525.7 84.3,525.7 54.9,546.0" fill="currentColor" fill-opacity="0.16" stroke="currentColor" stroke-opacity="0.55" stroke-width="1" stroke-linejoin="round"/>
+  <polygon points="54.9,546.0 84.3,525.7 84.3,540.9 54.9,561.2" fill="currentColor" fill-opacity="0.26" stroke="currentColor" stroke-opacity="0.55" stroke-width="1" stroke-linejoin="round"/>
+  <rect x="39.7" y="546.0" width="15.2" height="15.2" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1"/>
+  <text x="138.0" y="547.9" text-anchor="start" font-size="13" fill="currentColor" fill-opacity="0.9" font-family="Georgia, serif">128 × 8 × 8</text>
+  <line x1="62" y1="567.2" x2="62" y2="584.2" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2"/>
+  <path d="M58,583.2 L62,589.2 L66,583.2" fill="none" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2"/>
+  <text x="138.0" y="582.7" text-anchor="start" font-size="12.5" fill="currentColor" fill-opacity="0.55">flatten</text>
+  <rect x="13.5" y="595.2" width="97.0" height="9" rx="2" fill="currentColor" fill-opacity="0.16" stroke="currentColor" stroke-opacity="0.55" stroke-width="1"/>
+  <text x="138.0" y="604.2" text-anchor="start" font-size="13" fill="currentColor" fill-opacity="0.9" font-family="Georgia, serif">8192</text>
+  <line x1="62" y1="610.2" x2="62" y2="639.2" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2"/>
+  <path d="M58,638.2 L62,644.2 L66,638.2" fill="none" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2"/>
+  <text x="138.0" y="625.2" text-anchor="start" font-size="12.5" fill="#f59e0b" fill-opacity="1" font-weight="600">fc1 · ReLU · dropout 0.3</text>
+  <text x="138.0" y="640.2" text-anchor="start" font-size="12" fill="#f59e0b" fill-opacity="1">2,097,408 — 95.6% params</text>
+  <rect x="31.0" y="650.2" width="62.0" height="9" rx="2" fill="currentColor" fill-opacity="0.16" stroke="currentColor" stroke-opacity="0.55" stroke-width="1"/>
+  <text x="138.0" y="659.2" text-anchor="start" font-size="13" fill="currentColor" fill-opacity="0.9" font-family="Georgia, serif">256</text>
+  <line x1="62" y1="665.2" x2="62" y2="694.2" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2"/>
+  <path d="M58,693.2 L62,699.2 L66,693.2" fill="none" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2"/>
+  <text x="138.0" y="680.2" text-anchor="start" font-size="12.5" fill="#3b82f6" fill-opacity="1" font-weight="600">fc2</text>
+  <text x="138.0" y="695.2" text-anchor="start" font-size="12" fill="currentColor" fill-opacity="0.6">2,570 params</text>
+  <rect x="47.4" y="705.2" width="29.3" height="9" rx="2" fill="currentColor" fill-opacity="0.16" stroke="currentColor" stroke-opacity="0.55" stroke-width="1"/>
+  <text x="138.0" y="714.2" text-anchor="start" font-size="13" fill="currentColor" fill-opacity="0.9" font-family="Georgia, serif">10</text>
+  <text x="162.8" y="714.2" text-anchor="start" font-size="12" fill="currentColor" fill-opacity="0.55">logits</text>
+</svg>
+
+In `nn.Conv2d(3, 32, kernel_size=3, padding=1)`, 3 is the input channels (RGB) and 32 the output channels: 32 kernels, each producing one channel. $$3 \times 3$$ is the standard kernel size. The next two convs widen to 64 and 128 channels while each max-pool halves the image, $$32 \times 32 \to 16 \times 16 \to 8 \times 8$$, so the last block is $$128 \times 8 \times 8 = 8192$$ numbers, flattened into one vector. Two fully connected layers finish the job: in `fc1` each of the 256 outputs is a weighted sum of all 8192 inputs, and `fc2` turns those 256 into the 10 class scores.
+
+A $$3 \times 3$$ kernel can be viewed as a vector of 9 numbers, and so can the $$3 \times 3$$ window of the input under it. The convolution at that position — multiply element by element, then sum — is just their dot product, which measures how similar they are. The more the patch looks like the kernel, the larger the output, so each output channel is a map of where its pattern appears.
+
+Each channel learns its own kernel, so each channel comes out at its own scale: one kernel's responses may run into the tens while another's stay near zero. That is the unequal feature scale problem from [Learning Rate and Feature Scale]({% post_url 2026-10-24-learning-rate-divergence %}) — the next layer sees inputs of very different sizes, and no single learning rate suits them all. The [`BatchNorm2d`]({% post_url 2026-10-05-batch-normalization %}) after each conv standardizes every channel to zero mean and unit variance, so they all reach the next layer on the same scale.
+
+**Logits, not probabilities.** `forward` returns the raw scores $$z \in \mathbb{R}^{10}$$ with no softmax, because `nn.CrossEntropyLoss` applies it itself:
+
+$$
+\ell(z, y) = -\log \frac{e^{z_y}}{\sum_{k} e^{z_k}} ,
+$$
+
+which is the same as
+
+$$
+\ell(z, y) = -z_y + \log \sum_{k} e^{z_k} .
+$$
+
+Computed in the second form, the log-sum-exp can subtract $$\max_k z_k$$ before exponentiating and never overflows; a softmax followed by a separate log can underflow to $$\log 0$$. Adding a softmax inside `forward` as well would apply it twice and squash the gradients.
+
+This also gives a free sanity check. At initialization the logits are small and nearly equal, the predicted distribution is close to uniform, and the loss should be close to $$\log 10 \approx 2.303$$. An untrained `SmallCNN` on a batch of 256 gives $$2.32$$. A first-batch loss far from $$\log(\text{number of classes})$$ means something is wrong before training has even started.
+
+### Data
+
+The transforms are where the preprocessing goes:
+
+```python
+mean, std = (0.4914, 0.4822, 0.4465), (0.2470, 0.2435, 0.2616)
+train_tf = T.Compose([
+    T.RandomCrop(32, padding=4),
+    T.RandomHorizontalFlip(),
+    T.ToTensor(),
+    T.Normalize(mean, std),
+])
+test_tf = T.Compose([T.ToTensor(), T.Normalize(mean, std)])
+```
+
+`ToTensor` turns an $$H \times W \times C$$ array of bytes in $$[0, 255]$$ into a $$C \times H \times W$$ float tensor in $$[0, 1]$$. `Normalize` then subtracts each channel's mean and divides by its standard deviation, the six constants being those statistics measured over the CIFAR-10 training images. It is the same standardization as in the [previous post]({% post_url 2026-10-24-learning-rate-divergence %}), and for the same reason: inputs with mean zero and unit variance keep the loss surface well-conditioned at the first layer.
+
+The first two transforms are augmentation, applied to training images only. `RandomCrop(32, padding=4)` pads each image to $$40 \times 40$$ and cuts a random $$32 \times 32$$ window, shifting the content by up to four pixels; `RandomHorizontalFlip` mirrors it half the time. A shifted or mirrored cat is still a cat, so the network sees a slightly different version of each image every epoch and cannot simply memorise pixels. The test transform leaves these out, because evaluation must be deterministic: the same model on the same image should give the same answer every time.
+
+### The training step
+
+```python
+def train_one_epoch(model, loader, criterion, optimizer, device):
+    model.train()
+    total_loss, correct, n = 0.0, 0, 0
+    for x, y in loader:
+        x, y = x.to(device), y.to(device)
+        optimizer.zero_grad()
+        logits = model(x)
+        loss = criterion(logits, y)
+        loss.backward()
+        optimizer.step()
+
+        total_loss += loss.item() * y.size(0)
+        correct += (logits.argmax(1) == y).sum().item()
+        n += y.size(0)
+    return total_loss / n, correct / n
+```
+
+The five lines in the middle are the core of essentially every PyTorch training loop, in this order:
+
+1. `zero_grad()` — clear last step's gradients. `backward()` *adds* into each parameter's `.grad` rather than overwriting it. That is deliberate — it lets several small batches accumulate into one large one — but it means that forgetting this line sums the gradients of every step so far.
+2. `model(x)` — the forward pass, which also records the computation graph that the backward pass will walk.
+3. `criterion(logits, y)` — reduce the batch to one scalar.
+4. `backward()` — [backpropagation]({% post_url 2026-02-15-backpropagation %}): fill in $$\partial \ell / \partial \theta$$ for every parameter, then free the graph.
+5. `step()` — update every parameter from its `.grad`.
+
+`loss.item()` turns a one-element tensor into a Python float. Accumulating `total_loss += loss` instead would keep every step's graph alive through the reference and grow memory all epoch. On a GPU, `.item()` also forces the host to wait for the device to finish, which is a cost worth knowing about even if it does not matter at this size.
+
+The loss is weighted by `y.size(0)` and divided by the count `n`, not by the number of batches, so batches of different sizes are averaged correctly. In training every batch is full, but the test loader's last batch has $$10000 - 39 \times 256 = 16$$ images, and a plain mean over batches would give those 16 the same weight as a full 256.
+
+The training accuracy this returns is not the accuracy of the final model. It averages over a whole epoch during which the weights kept changing, and it is measured on augmented images with dropout switched on. Early in training it is therefore usually *below* the test accuracy, which looks backwards but is expected.
+
+### Evaluation
+
+```python
+@torch.no_grad()
+def evaluate(model, loader, criterion, device):
+    model.eval()
+    ...
+```
+
+Two independent switches, and both matter.
+
+`model.eval()` changes what layers *compute*. Dropout stops dropping, and batch norm stops using the current batch's statistics and uses the running averages it collected during training. It does nothing to autograd.
+
+`torch.no_grad()` changes what autograd *records*. No graph is built and no intermediate activations are kept for a backward pass, which saves memory and time — and is also why the test loader can use twice the batch size. It does nothing to dropout or batch norm.
+
+Forgetting `eval()` gives wrong numbers silently: predictions with random units zeroed, normalized against whatever else is in the test batch. Forgetting `no_grad()` gives the right numbers at higher cost. The script does both, and `train_one_epoch` calls `model.train()` at the top to switch back, so neither mode leaks into the other.
+
+### Optimizer and schedule
+
+```python
+criterion = nn.CrossEntropyLoss()
+optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=5e-4)
+scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=args.epochs)
+```
+
+**Adam's `weight_decay` is an L2 penalty, not weight decay.** In `torch.optim.Adam` it adds $$\lambda\theta$$ to the gradient, and that sum then goes through Adam's per-parameter rescaling like any other gradient. A parameter with large gradients therefore has its decay divided by a large number, so the shrinkage is weakest exactly where the weights are most active. Decoupled weight decay — shrinking $$\theta$$ directly, outside the adaptive step — is what `torch.optim.AdamW` does, and it is the usual choice when Adam and weight decay are wanted together. Separately, the decay here also applies to the batch-norm $$\gamma, \beta$$ and to every bias, which larger setups usually exclude.
+
+**Cosine annealing** lowers the learning rate smoothly from its initial value to zero over `T_max` scheduler steps:
+
+$$
+\eta_t = \frac{\eta_0}{2} \left( 1 + \cos \frac{\pi t}{T} \right) .
+$$
+
+`scheduler.step()` is called once per epoch, after that epoch's optimizer steps, so epoch $$e$$ trains at $$\eta_{e-1}$$: $$10^{-3}$$ for the first epoch, $$5 \times 10^{-4}$$ for the sixth, $$2.4 \times 10^{-5}$$ for the tenth. Large steps early cover ground quickly; small steps late settle into a minimum instead of bouncing around it.
+
+### Results
+
+Ten epochs on an Apple M4, through PyTorch's MPS backend:
+
+```
+device: mps
+params: 2,193,674
+epoch  1 | train loss 1.657 acc 39.5% | test loss 1.293 acc 52.3% | 31.1s
+epoch  2 | train loss 1.281 acc 53.5% | test loss 1.006 acc 64.0% | 30.4s
+epoch  3 | train loss 1.146 acc 59.0% | test loss 0.946 acc 66.1% | 30.6s
+epoch  4 | train loss 1.065 acc 62.1% | test loss 0.892 acc 67.9% | 30.8s
+epoch  5 | train loss 1.004 acc 64.3% | test loss 0.965 acc 66.8% | 30.6s
+epoch  6 | train loss 0.950 acc 66.4% | test loss 0.789 acc 72.6% | 30.7s
+epoch  7 | train loss 0.902 acc 68.1% | test loss 0.748 acc 73.8% | 30.6s
+epoch  8 | train loss 0.863 acc 69.4% | test loss 0.704 acc 75.1% | 30.6s
+epoch  9 | train loss 0.828 acc 71.0% | test loss 0.690 acc 75.7% | 30.6s
+epoch 10 | train loss 0.810 acc 71.6% | test loss 0.656 acc 76.8% | 30.5s
+best test acc: 76.8%
+```
+
+The final test accuracy is $$76.8\%$$, well past the $$60\%$$ target and in line with the script's own estimate of about $$75\%$$, at about 31 seconds per epoch including evaluation.
