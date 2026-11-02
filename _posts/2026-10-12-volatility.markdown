@@ -212,9 +212,9 @@ $$
 \text{daily move} \;\approx\; \frac{\text{DVOL}}{\sqrt{365}} \;\approx\; \frac{\text{DVOL}}{19} .
 $$
 
-Deribit's own rule of thumb is to divide by $$20$$. Here is the index live, with that arithmetic already carried down to one of our rounds.
+Deribit's own rule of thumb is to divide by $$20$$. Here is the latest available index, with that arithmetic already carried down to one of our rounds.
 
-<div id="dvol-live">
+<div id="dvol-live" data-snapshot-url="{{ '/assets/data/btc-dvol.json' | relative_url }}">
 <style>
 #dvol-live{border:1px solid rgba(128,128,128,.4);border-radius:8px;padding:.8em 1em .6em;margin:1.5em 0}
 #dvol-live .hd{font-size:.82em;opacity:.7;margin-bottom:.1em}
@@ -238,84 +238,12 @@ Deribit's own rule of thumb is to divide by $$20$$. Here is the index live, with
 <path class="line" fill="none" stroke="#3b82f6" stroke-width="1.6" stroke-linejoin="round"></path>
 <circle class="dot" cx="-10" cy="-10" r="2.6" fill="#3b82f6"></circle>
 </svg>
-<div class="ax"><span>30 days ago</span><span>low <b class="lo">&mdash;</b> &middot; high <b class="hi">&mdash;</b></span><span>now</span></div>
-<div class="row dv"><span>&asymp; <b class="day">&mdash;</b> per day</span><span>&asymp; <b class="five">&mdash;</b> over a five-minute round, at BTC <b class="btc">&mdash;</b></span></div>
-<div class="stamp">loading&hellip;</div>
+<div class="ax"><span class="range-start">30 days ago</span><span>low <b class="lo">&mdash;</b> &middot; high <b class="hi">&mdash;</b></span><span class="range-end">latest</span></div>
+<div class="row dv"><span>&asymp; <b class="day">&mdash;</b> per day</span><span>&asymp; <b class="five">&mdash;</b> over a five-minute round<span class="btc-note" hidden>, at BTC <b class="btc">&mdash;</b></span></span></div>
+<div class="stamp" role="status" aria-live="polite">loading&hellip;</div>
 </div>
 
-<script>
-(function(){
-  var root = document.getElementById('dvol-live');
-  if (!root) return;
-  var API  = 'https://www.deribit.com/api/v2/public/',
-      YEAR = 365 * 24 * 3600,
-      DAYS = 30,
-      q    = function(s){ return root.querySelector(s); };
-
-  function get(url){
-    return fetch(url, {cache:'no-store'}).then(function(r){
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      return r.json();
-    }).then(function(j){ return j.result; });
-  }
-
-  function spark(closes){
-    var W = 640, H = 88, p = 3,
-        lo = Math.min.apply(null, closes),
-        hi = Math.max.apply(null, closes),
-        span = (hi - lo) || 1,
-        n = closes.length,
-        X = function(i){ return p + i * (W - 2*p) / (n - 1); },
-        Y = function(v){ return p + (hi - v) * (H - 2*p) / span; },
-        d = '', i;
-    for (i = 0; i < n; i++) d += (i ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(closes[i]).toFixed(1);
-    q('.line').setAttribute('d', d);
-    q('.area').setAttribute('d', d + 'L' + X(n-1).toFixed(1) + ' ' + H + 'L' + X(0).toFixed(1) + ' ' + H + 'Z');
-    q('.dot').setAttribute('cx', X(n-1).toFixed(1));
-    q('.dot').setAttribute('cy', Y(closes[n-1]).toFixed(1));
-    q('.hi').textContent = hi.toFixed(1);
-    q('.lo').textContent = lo.toFixed(1);
-  }
-
-  function render(rows, btc){
-    var closes = rows.map(function(r){ return r[4]; }),
-        now    = closes[closes.length - 1],
-        back   = closes.length > 24 ? closes[closes.length - 25] : closes[0],
-        chg    = now - back;
-
-    q('.val').textContent  = now.toFixed(2);
-    q('.day').textContent  = (now / Math.sqrt(365)).toFixed(2) + '%';
-    q('.five').textContent = '$' + Math.round(now / 100 * Math.sqrt(300 / YEAR) * btc).toLocaleString();
-    q('.btc').textContent  = '$' + Math.round(btc).toLocaleString();
-
-    var c = q('.chg');
-    c.textContent = (chg >= 0 ? '▲ +' : '▼ −') + Math.abs(chg).toFixed(2) + ' (24h)';
-    c.className = 'chg ' + (chg >= 0 ? 'up' : 'dn');
-
-    spark(closes);
-    q('.stamp').textContent = 'Deribit, ' + new Date().toISOString().slice(0, 16).replace('T', ' ') + ' UTC';
-    root.classList.add('ready');
-  }
-
-  function load(){
-    var end = Date.now(), start = end - DAYS * 86400 * 1000;
-    Promise.all([
-      get(API + 'get_volatility_index_data?currency=BTC&resolution=3600' +
-          '&start_timestamp=' + start + '&end_timestamp=' + end),
-      get(API + 'get_index_price?index_name=btc_usd')
-    ]).then(function(r){
-      var rows = r[0] && r[0].data;
-      if (!rows || rows.length < 2) throw new Error('no data');
-      render(rows, r[1].index_price);
-    }).catch(function(e){
-      q('.stamp').textContent = 'live value unavailable (' + e.message + ')';
-    });
-  }
-
-  load();
-  setInterval(load, 60000);
-})();
-</script>
+<script src="{{ '/assets/js/dvol.js' | relative_url }}" defer></script>
 
 ### References
 
