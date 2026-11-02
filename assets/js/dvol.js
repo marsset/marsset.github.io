@@ -6,7 +6,7 @@
   var API = 'https://www.deribit.com/api/v2/public/';
   var YEAR = 365 * 24 * 3600;
   var TIMEOUT = 8000;
-  var state = { rows: null, updated: 0, source: '', btc: null, btcUpdated: 0 };
+  var state = { rows: null, updated: 0, btc: null, btcUpdated: 0 };
   var q = function (selector) { return root.querySelector(selector); };
 
   function get(url) {
@@ -85,8 +85,7 @@
     q('.range-start').textContent = new Date(rows[0][0]).toISOString().slice(0, 10);
     q('.range-end').textContent = new Date(last[0]).toISOString().slice(0, 10);
 
-    var message = 'Deribit · ' + (state.source === 'live' ? 'live update ' : 'saved update ') + stamp(state.updated);
-    if (Date.now() - state.updated > 2 * 3600000) message += ' · latest refresh unavailable';
+    var message = 'Deribit · fetched ' + stamp(state.updated);
     if (state.btc && Math.abs(state.btcUpdated - state.updated) > 60000) {
       message += ' · BTC price ' + stamp(state.btcUpdated);
     }
@@ -94,49 +93,58 @@
     root.classList.add('ready');
   }
 
-  function history(rows, updated, source) {
+  function history(rows, updated) {
     rows = validRows(rows);
     if (!Number.isFinite(updated) || updated <= 0) throw new Error('Missing update time');
-    if (updated < state.updated) return; // A slow snapshot must not replace a newer live response.
     state.rows = rows;
     state.updated = updated;
-    state.source = source;
     render();
   }
 
   function price(value, updated) {
-    if (!Number.isFinite(value) || value <= 0 || !Number.isFinite(updated) || updated <= 0) return;
+    if (!Number.isFinite(value) || value <= 0 || !Number.isFinite(updated) || updated <= 0) {
+      throw new Error('BTC price unavailable');
+    }
     if (updated < state.btcUpdated) return;
     state.btc = value;
     state.btcUpdated = updated;
     render();
   }
 
-  function unavailable() {
-    if (state.rows) return; // Preserve the dated snapshot or previous successful update.
-    q('.stamp').textContent = 'Volatility data is temporarily unavailable. Retrying shortly.';
+  function unavailable(error) {
+    state.rows = null;
+    root.classList.remove('ready');
+    ['.val', '.day', '.five', '.lo', '.hi', '.chg'].forEach(function (selector) {
+      q(selector).textContent = '—';
+    });
+    q('.line').setAttribute('d', '');
+    q('.area').setAttribute('d', '');
+    q('.dot').setAttribute('cx', '-10');
+    q('.dot').setAttribute('cy', '-10');
+    q('.btc-note').hidden = true;
+    q('.stamp').textContent = error && error.name === 'AbortError'
+      ? 'The live Deribit request timed out. Retrying shortly.'
+      : 'Live volatility data is temporarily unavailable. Retrying shortly.';
   }
 
   function load() {
-    // Load from this website too: some visitors cannot reach Deribit from their browser.
-    get(root.getAttribute('data-snapshot-url')).then(function (snapshot) {
-      if (snapshot.btc) price(snapshot.btc.price, Date.parse(snapshot.btc.updated_at));
-      history(snapshot.series, Date.parse(snapshot.updated_at), 'snapshot');
-    }).catch(unavailable);
-
     var end = Date.now(), start = end - 30 * 86400000;
     api('get_volatility_index_data?currency=BTC&resolution=3600&start_timestamp=' + start + '&end_timestamp=' + end)
       .then(function (result) {
         if (!Array.isArray(result.data)) throw new Error('Missing DVOL history');
-        history(result.data.map(function (row) { return [row[0], row[4]]; }), Date.now(), 'live');
+        history(result.data.map(function (row) { return [row[0], row[4]]; }), Date.now());
       }).catch(unavailable);
 
     // A BTC price outage must never hide DVOL or its percentage-based calculations.
     api('get_index_price?index_name=btc_usd').then(function (result) {
       price(result.index_price, Date.now());
-    }).catch(function () {});
+    }).catch(function () {
+      state.btc = null;
+      state.btcUpdated = 0;
+      render();
+    });
   }
 
   load();
-  setInterval(load, 60000);
+  setInterval(function () { if (!document.hidden) load(); }, 60000);
 })();

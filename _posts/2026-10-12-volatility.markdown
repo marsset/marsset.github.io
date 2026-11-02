@@ -212,9 +212,9 @@ $$
 \text{daily move} \;\approx\; \frac{\text{DVOL}}{\sqrt{365}} \;\approx\; \frac{\text{DVOL}}{19} .
 $$
 
-Deribit's own rule of thumb is to divide by $$20$$. Here is the latest available index, with that arithmetic already carried down to one of our rounds.
+Deribit's own rule of thumb is to divide by $$20$$. Here is the index live, with that arithmetic already carried down to one of our rounds.
 
-<div id="dvol-live" data-snapshot-url="{{ '/assets/data/btc-dvol.json' | relative_url }}">
+<div id="dvol-live">
 <style>
 #dvol-live{border:1px solid rgba(128,128,128,.4);border-radius:8px;padding:.8em 1em .6em;margin:1.5em 0}
 #dvol-live .hd{font-size:.82em;opacity:.7;margin-bottom:.1em}
