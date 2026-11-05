@@ -47,10 +47,10 @@ Because sequence numbers are monotonic, we do not need to store the 64-bit integ
 
 1. **Fixed Window Capacity $W$:**
    Choose a power-of-two window size, e.g. $W = 8192$ bits.
-   $$\text{Memory} = \frac{8192 \text{ bits}}{8 \times 8} = 128 \times \text{uint64\_t} = 1024 \text{ bytes (1 KB)}$$
-   A 1 KB array occupies only **16 CPU cache lines** (64 bytes each). The entire bitset permanently resides inside the CPU's ultra-fast L1 Data Cache (typically 32 KB or 64 KB).
+   $$\text{Memory} = \frac{8192 \text{ bits}}{8 \times 8} = 128 \times 8 \text{ bytes} = 1024 \text{ bytes (1 KB)}$$
+   Consisting of 128 `uint64_t` words, this 1 KB array occupies only **16 CPU cache lines** (64 bytes each). The entire bitset permanently resides inside the CPU's ultra-fast L1 Data Cache (typically 32 KB or 64 KB).
 2. **Single State Variable:**
-   Maintain a single 64-bit integer: `max_seen_seq` (the highest sequence number observed so far).
+   Maintain a single 64-bit integer: `max_seen_seq` ($S_{\max}$, the highest sequence number observed so far).
 
 ```
                       Sliding Bitset (W = 8192 bits, 1 KB in L1)
@@ -76,31 +76,31 @@ When a packet with sequence number $S$ arrives, the engine classifies it into on
                DROP (Old)                 TEST BIT                       SLIDE & CLEAR
 ```
 
-### Regime 1: New High ($S > \text{max\_seen\_seq}$) &rarr; Accept & Slide Window
+### Regime 1: New High ($S > S_{\max}$) &rarr; Accept & Slide Window
 
-If $S > \text{max\_seen\_seq}$, this sequence number is strictly higher than any previously observed packet. It is **guaranteed to be new**.
+If $S > S_{\max}$ (`seq > max_seen_seq`), this sequence number is strictly higher than any previously observed packet. It is **guaranteed to be new**.
 
 However, because the bitset is circular, moving the window horizon forward means the bits between the old `max_seen_seq` and the new $S$ represent **stale data from the previous cycle ($S - W$)**. We must wipe those bits clean:
 
-1. **Calculate Advance Gap:** $\Delta = S - \text{max\_seen\_seq}$.
+1. **Calculate Advance Gap:** $\Delta = S - S_{\max}$.
 2. **Clear Stale Cycle Bits:**
    - If $\Delta \ge W$: The feed leaped completely past the entire window (e.g. after a prolonged reconnect). Wipe the entire bitset (`std::memset(words, 0, sizeof(words))`).
-   - If $0 < \Delta < W$: Clear the bits in the range $(\text{max\_seen\_seq}, S]$. In normal trading, $\Delta = 1$ in over 95% of packets; clearing that single bit is a single CPU instruction!
+   - If $0 < \Delta < W$: Clear the bits in the range $(S_{\max}, S]$. In normal trading, $\Delta = 1$ in over 95% of packets; clearing that single bit is a single CPU instruction!
 3. **Mark and Advance:**
    - Set the bit corresponding to $S$: `set_bit(S)`.
-   - Update `max_seen_seq = S`.
+   - Update $S_{\max} = S$ (`max_seen_seq = S`).
 4. **Action:** Return `ACCEPTED_NEW`.
 
-### Regime 2: Within-Window ($ \text{max\_seen\_seq} - W < S \le \text{max\_seen\_seq} $) &rarr; Test Bit
+### Regime 2: Within-Window ($S_{\max} - W < S \le S_{\max}$) &rarr; Test Bit
 
 This sequence number falls within our active drift window. It is either an out-of-order arrival or a redundant packet from the duplicate feed:
 
-1. Compute circular bit index: $\text{idx} = S \ \& \ (W - 1)$.
+1. Compute circular bit index: `idx = S & (W - 1)`.
 2. Inspect bit at index:
    - **Bit == 1:** The packet was already processed via the other feed line &rarr; **`DROPPED_DUPLICATE`**.
    - **Bit == 0:** The packet was delayed/reordered, but has not yet been processed &rarr; **`ACCEPTED_OUT_OF_ORDER`**. Set bit to `1` and allow downstream processing.
 
-### Regime 3: Stale History ($ S \le \text{max\_seen\_seq} - W $) &rarr; Drop
+### Regime 3: Stale History ($S \le S_{\max} - W$) &rarr; Drop
 
 The packet's sequence number has fallen behind the maximum tolerable reorder window $W$. It represents obsolete historical data or severely delayed network drift:
 - **Action:** Return `DROPPED_STALE` immediately without modifying the bitset.
@@ -110,9 +110,9 @@ The packet's sequence number has fallen behind the maximum tolerable reorder win
 ## 4. Bitwise Mechanics & Zero-Cost Indexing
 
 Because $W$ is constrained to a power of two ($W = 2^k$):
-- **Modulo via Bitwise AND:** $\text{idx} = S \pmod W \equiv S \ \& \ (W - 1)$.
-- **Word Index in 64-bit Array:** $\text{word\_idx} = \text{idx} \gg 6$ (division by 64).
-- **Bit Offset in Word:** $\text{bit\_offset} = \text{idx} \ \& \ 63$ (remainder modulo 64).
+- **Modulo via Bitwise AND:** `idx = S & (W - 1)`.
+- **Word Index in 64-bit Array:** `word_idx = idx >> 6` (division by 64).
+- **Bit Offset in Word:** `bit_offset = idx & 63` (remainder modulo 64).
 
 Both operations compile to single-cycle CPU instructions (`and`, `shrq`).
 
