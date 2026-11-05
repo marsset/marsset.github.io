@@ -1,5 +1,5 @@
 ---
-title:  "Low-Latency Market Data Deduplication: The Sliding Bitset (环形滑动位图)"
+title:  "Low-Latency Market Data Deduplication: The Sliding Bitset"
 date:  2026-11-05 13:30:00 +0800
 categories:
   - system
@@ -20,7 +20,7 @@ To guarantee zero packet loss and minimum latency, production ticker plants typi
 
 Every nanosecond spent filtering duplicates directly delays order book publication. How can we check and filter sequence duplicates in $O(1)$ time with **zero heap allocation** and **deterministic sub-5-nanosecond latency**?
 
-This post details the architecture and implementation of the **Sliding Bitset (环形滑动位图)**—the gold standard deduplication structure in low-latency ticker plants.
+This post details the architecture and implementation of the **Circular Sliding Bitset**—the gold standard deduplication structure in low-latency ticker plants.
 
 ---
 
