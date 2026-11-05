@@ -13,7 +13,7 @@ excerpt: >
 
 The Memory Management Unit (MMU), a dedicated hardware unit inside the CPU, and the L1/L2/L3 caches are two stages placed back to back on every memory access: the MMU translates a virtual address into a physical address, and the cache hierarchy checks whether the data at that physical address can be served directly from fast cache instead of going all the way to DRAM.
 
-<svg viewBox="0 0 716 156" width="100%" style="max-width:716px;display:block;margin:1.5em auto;" role="img" aria-label="Memory access flow and typical latencies: inside the CPU chip, Core sends VA to MMU (~1 ns TLB), then PA to L1 (~1 ns), L2 (~4 ns), and L3 (~15 ns); on an L3 miss, it goes off-chip to DRAM (~80 ns)">
+<svg viewBox="0 0 716 156" width="100%" style="max-width:716px;display:block;margin:1.5em auto;" role="img" aria-label="Memory access flow, typical sizes, and latencies: inside the CPU chip, Core sends VA to MMU (~1 ns TLB), then PA to L1 (64–128 KB, ~1 ns), L2 (4–16 MB, ~4 ns), and L3 (24–32 MB, ~15 ns); on an L3 miss, it goes off-chip to DRAM (16–64 GB, ~80 ns)">
   <!-- On-chip CPU boundary -->
   <rect x="6" y="18" width="574" height="128" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.2" stroke-dasharray="4,4"/>
   <text x="16" y="12" text-anchor="start" font-size="11" fill="currentColor" fill-opacity="0.5">CPU (on-chip)</text>
@@ -33,16 +33,20 @@ The Memory Management Unit (MMU), a dedicated hardware unit inside the CPU, and 
   <text x="176" y="70" text-anchor="middle" font-size="13" fill="currentColor" fill-opacity="0.9">MMU</text>
 
   <rect x="264" y="44" width="68" height="44" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1.2"/>
-  <text x="298" y="70" text-anchor="middle" font-size="13" fill="currentColor" fill-opacity="0.9">L1</text>
+  <text x="298" y="62" text-anchor="middle" font-size="12.5" font-weight="600" fill="currentColor" fill-opacity="0.95">L1</text>
+  <text x="298" y="77" text-anchor="middle" font-size="9.5" fill="currentColor" fill-opacity="0.6">64–128 KB</text>
 
   <rect x="382" y="44" width="68" height="44" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1.2"/>
-  <text x="416" y="70" text-anchor="middle" font-size="13" fill="currentColor" fill-opacity="0.9">L2</text>
+  <text x="416" y="62" text-anchor="middle" font-size="12.5" font-weight="600" fill="currentColor" fill-opacity="0.95">L2</text>
+  <text x="416" y="77" text-anchor="middle" font-size="9.5" fill="currentColor" fill-opacity="0.6">4–16 MB</text>
 
   <rect x="500" y="44" width="68" height="44" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1.2"/>
-  <text x="534" y="70" text-anchor="middle" font-size="13" fill="currentColor" fill-opacity="0.9">L3</text>
+  <text x="534" y="62" text-anchor="middle" font-size="12.5" font-weight="600" fill="currentColor" fill-opacity="0.95">L3</text>
+  <text x="534" y="77" text-anchor="middle" font-size="9.5" fill="currentColor" fill-opacity="0.6">24–32 MB</text>
 
   <rect x="632" y="44" width="74" height="44" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1.2"/>
-  <text x="669" y="70" text-anchor="middle" font-size="13" fill="currentColor" fill-opacity="0.9">DRAM</text>
+  <text x="669" y="62" text-anchor="middle" font-size="12.5" font-weight="600" fill="currentColor" fill-opacity="0.95">DRAM</text>
+  <text x="669" y="77" text-anchor="middle" font-size="9.5" fill="currentColor" fill-opacity="0.6">16–64 GB</text>
 
   <!-- Forward arrows -->
   <line x1="88" y1="66" x2="132" y2="66" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
