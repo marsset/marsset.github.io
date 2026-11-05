@@ -3,8 +3,7 @@ title:  "K-Way Stream Merge: Binary Heap, 8-Ary Heap, Winner Tree, and Loser Tre
 date:  2026-11-05 12:00:00 +0800
 categories:
   - system
-  - math
-tags: system algorithm
+tags: system
 classes: wide
 layout: single
 use_math: true
