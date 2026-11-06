@@ -42,11 +42,20 @@ A financial data platform stores petabytes of historical tick data ($10^9$ to $1
 1. How does the choice between **Array of Structures (AoS)** and **Structure of Arrays (SoA)** impact CPU cache line utilization, SIMD vectorization, and query throughput during backtesting scans?
 2. Why is general-purpose compression (e.g. gzip, zstd) often suboptimal for tick data? How do specialized time-series encoding algorithms—such as **Gorilla delta-of-delta** for timestamps and **XOR bit-packing** for IEEE 754 floating-point prices—achieve both higher compression ratios and orders-of-magnitude faster decompression?
 
-### 5. Zero-copy I/O and kernel mechanics
+### 5. Zero-copy I/O, kernel mechanics, and mmap pitfalls
 
-When ingesting or serving tens of gigabytes of market data per second per storage node, traditional user-kernel context switching and buffer copying become the primary throughput bottleneck.
-1. Compare `read()` / `write()`, `mmap()` with memory-mapped files, and `O_DIRECT` (direct I/O). Under what access patterns does each approach shine, and where does each fail?
-2. How does the OS page cache interact with large sequential scans? Why can an unconstrained sequential scan cause "page cache thrashing" that evicts hot working memory, and how do POSIX primitives like `posix_fadvise(..., POSIX_FADV_DONTNEED)` or `madvise(..., MADV_SEQUENTIAL)` mitigate this?
+A junior engineer proposes an architecture: *"Map hundreds of gigabytes to terabytes of daily historical tick files directly into user space via `mmap()` and let the OS Page Cache handle paging and caching automatically."*
+
+1. **Hardware & Kernel Breakdown:**  
+   From the perspectives of CPU architecture and kernel subsystems (e.g. MMU page fault overhead, TLB thrashing, 4-level page table memory footprint, and global lock contention during page reclamation such as `mmap_lock` and LRU spinlocks), what critical bottlenecks collapse when multiple researchers concurrently run large-scale backtests or frequent localized slice queries?
+2. **Dual-Workload Architectural Design:**  
+   Quantitative research typically stresses the storage tier with two contrasting access patterns:
+   - **Workload A (High-Throughput Streaming Scan):** Monotonic, full-day sequential scans feeding backtesting algorithms.
+   - **Workload B (Sub-Millisecond Point Slice):** Low-latency localized queries extracting a microsecond-to-minute window (e.g. reconstructing an L2/L3 order book $\pm 5$ minutes around `14:02:15`).  
+   What production-grade alternative architecture would you implement across:
+   - **Physical file organization:** Chunking, columnar sharding, and sparse timestamp indices.
+   - **I/O scheduling & syscall selection:** `read()` / `pread()`, POSIX advice (`posix_fadvise(..., POSIX_FADV_DONTNEED)`), `O_DIRECT`, and asynchronous ring I/O (`io_uring`).
+   - **User-space memory management:** Pre-allocated buffer arenas, zero-copy deserialization, and custom eviction pools to isolate concurrent query workloads.
 
 ### 6. Concurrency and lock-free data pipelines
 

@@ -47,7 +47,7 @@ Because sequence numbers are monotonic, we do not need to store the 64-bit integ
 
 1. **Fixed Window Capacity $W$:**
    Choose a power-of-two window size, e.g. $W = 8192$ bits.
-   $$\text{Memory} = \frac{8192 \text{ bits}}{8 \times 8} = 128 \times 8 \text{ bytes} = 1024 \text{ bytes (1 KB)}$$
+   $$\text{Memory} = \frac{8192 \text{ bits}}{64 \text{ bits/word}} = 128 \text{ words} = 1024 \text{ bytes (1 KB)}$$
    Consisting of 128 `uint64_t` words, this 1 KB array occupies only **16 CPU cache lines** (64 bytes each). The entire bitset permanently resides inside the CPU's ultra-fast L1 Data Cache (typically 32 KB or 64 KB).
 2. **Single State Variable:**
    Maintain a single 64-bit integer: `max_seen_seq` ($S_{\max}$, the highest sequence number observed so far).
