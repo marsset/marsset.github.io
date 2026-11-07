@@ -89,7 +89,7 @@ This phenomenon is known as the **Transposition Stall**: the CPU spends up to $7
 
 To eliminate the row-stitching stall while retaining columnar compression, high-performance engines turn to **PAX**, first formalized by Ailamaki et al. (VLDB 2001):
 
-<svg viewBox="0 0 860 310" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+<svg viewBox="0 0 860 310" xmlns="http://www.w3.org/2000/svg" style="max-width:860px;display:block;margin:1.5em auto;width:100%; height:auto; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
   <!-- Background -->
   <rect width="860" height="310" rx="8" fill="currentColor" fill-opacity="0.03" stroke="currentColor" stroke-opacity="0.15" stroke-width="1"/>
   

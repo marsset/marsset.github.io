@@ -12,6 +12,7 @@ excerpt: >
 ---
 
 <div class="problem" markdown="1">
+
 $$
 \lim_{x \to 0} \frac{\sin(ax)}{x} = a
 $$

@@ -126,7 +126,7 @@ Press play to let $$\eta$$ sweep through all five, or grab the bar and hold it a
 <span>1 − ηλ = <b class="r">0.80</b></span>
 <b class="ph">converges, sliding down one side</b>
 </div>
-<svg viewBox="0 0 640 300" tabindex="0" role="img" aria-label="gradient descent on L(theta) = theta squared; drag the bar or use the arrow keys to change the learning rate"></svg>
+<svg width="100%" viewBox="0 0 640 300" tabindex="0" role="img" aria-label="gradient descent on L(theta) = theta squared; drag the bar or use the arrow keys to change the learning rate" style="max-width:640px;display:block;margin:1.5em auto;"></svg>
 </div>
 
 <script>
@@ -374,7 +374,7 @@ With $$\mu = -1.07$$ and $$\sigma = 100.19$$ that gives $$w = 2.0189$$ and $$b =
 #lr-cloud svg{display:block;width:100%;height:auto}
 #lr-cloud .lg{font-size:.82em;opacity:.75;display:flex;flex-wrap:wrap;gap:1.2em;justify-content:center;margin-top:.3em}
 </style>
-<svg viewBox="0 0 640 380" role="img" aria-label="3,000 of the 10,000 training points, a broad band rising left to right, with the fitted line y = 2.019x + 1.702 running through its middle"></svg>
+<svg width="100%" viewBox="0 0 640 380" role="img" aria-label="3,000 of the 10,000 training points, a broad band rising left to right, with the fitted line y = 2.019x + 1.702 running through its middle" style="max-width:640px;display:block;margin:1.5em auto;"></svg>
 <div class="lg"><span>• 3,000 of the 10,000 points</span><span style="color:#3b82f6">—— fitted y = 2.019x + 1.702</span></div>
 </div>
 <script>

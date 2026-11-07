@@ -67,7 +67,7 @@ with no bias and no second layer. It meets the sine exactly at every kink. Becau
 <span>segments <b class="seg big">15</b></span>
 </div>
 <div class="lg"><span>— — sin x</span><span style="color:#3b82f6">—— network</span><span>• kinks</span><span style="opacity:.55">—— partial sums</span></div>
-<svg viewBox="0 0 640 310" role="img" aria-label="a ReLU network approximating one period of a sine"></svg>
+<svg width="100%" viewBox="0 0 640 310" role="img" aria-label="a ReLU network approximating one period of a sine" style="max-width:640px;display:block;margin:1.5em auto;"></svg>
 </div>
 
 <script>

@@ -1,0 +1,36 @@
+#!/bin/bash
+# Pre-push hook to guarantee all posts and CSS pass mobile layout QA before publishing.
+
+echo "======================================================================"
+echo " Executing Pre-Publish Mobile Layout QA Check"
+echo "======================================================================"
+
+HOOK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$HOOK_DIR/../.." && pwd)"
+
+python3 "$REPO_ROOT/scripts/test_mobile_layout.py" --fix
+
+STATUS=$?
+if [ $STATUS -ne 0 ]; then
+    echo "======================================================================"
+    echo " [ERROR] Mobile layout test failed. Push aborted."
+    echo " Please review the errors above and fix them before pushing."
+    echo "======================================================================"
+    exit 1
+fi
+
+# Check if --fix modified any tracked files
+MODIFIED_FILES=$(git -C "$REPO_ROOT" diff --name-only)
+if [ -n "$MODIFIED_FILES" ]; then
+    echo "======================================================================"
+    echo " [NOTICE] Auto-fixer repaired mobile layout issues in:"
+    echo "$MODIFIED_FILES"
+    echo " Please stage and commit these fixes before pushing:"
+    echo "   git commit -am 'Auto-fix mobile layout compliance'"
+    echo "   git push"
+    echo "======================================================================"
+    exit 1
+fi
+
+echo " Mobile layout QA check passed. Proceeding with push."
+exit 0

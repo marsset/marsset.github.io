@@ -106,6 +106,33 @@ body {
   display: table;
 }
 
+@media (max-width: 768px) {
+  .page__content table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* ==========================================================================
+   Global mobile layout guards: prevent elements from overflowing phone screens
+   ========================================================================== */
+.page__content {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  img, video, iframe {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
 /* ==========================================================================
    Math equation overflow: prevent layout breakage on mobile devices.
    Makes wide display formulas scroll horizontally instead of expanding

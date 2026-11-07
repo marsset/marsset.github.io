@@ -63,14 +63,19 @@ $$
 Examine the behavior of each factor as $$n \to \infty$$:
 
 1. **Factor 1:** A product of $$k$$ linear terms, each divided by $$n$$:
+
    $$
    \lim_{n \to \infty} \frac{n}{n} \cdot \frac{n - 1}{n} \cdots \frac{n - k + 1}{n} = 1 \cdot 1 \cdots 1 = 1
    $$
+
 2. **Factor 2:** The standard exponential limit:
+
    $$
    \lim_{n \to \infty} \left( 1 - \frac{\mu}{n} \right)^n = e^{-\mu}
    $$
+
 3. **Factor 3:** Since $$k$$ and $$\mu$$ are fixed, $$\frac{\mu}{n} \to 0$$:
+
    $$
    \lim_{n \to \infty} \left( 1 - \frac{\mu}{n} \right)^{-k} = (1 - 0)^{-k} = 1
    $$
@@ -411,17 +416,23 @@ As arrival intensity $$\lambda$$ increases, the Poisson distribution undergoes a
 #### Why They Converge (The Central Limit Theorem)
 
 1. **Poisson Additivity:** An arrival process of rate $$\lambda$$ over time $$T$$ is mathematically identical to the sum of $$m$$ independent sub-windows, each with arrival rate $$\frac{\lambda}{m}$$:
+
    $$
    X = \sum_{i=1}^{m} X_i, \quad X_i \sim \operatorname{Pois}\left(\frac{\lambda}{m}\right)
    $$
+
 2. **Central Limit Theorem:** Because $$X$$ is the sum of independent and identically distributed increments, the Central Limit Theorem guarantees convergence to a Gaussian distribution as $$\lambda \to \infty$$:
+
    $$
    \frac{X - \lambda}{\sqrt{\lambda}} \xrightarrow{d} \mathcal{N}(0, 1) \implies \operatorname{Pois}(\lambda) \xrightarrow{d} \mathcal{N}(\mu = \lambda, \, \sigma^2 = \lambda)
    $$
+
 3. **Vanishing Skewness:** The third standardized moment (skewness) of the Poisson distribution is:
+
    $$
    \gamma_1 = \frac{1}{\sqrt{\lambda}}
    $$
+
    At $$\lambda = 1$$, skewness is $$1.0$$ (heavily lopsided). By $$\lambda = 20$$, skewness drops to $$\frac{1}{\sqrt{20}} \approx 0.22$$, rendering the distribution virtually indistinguishable from a symmetric bell curve.
 
 4. **Variance Diffusion:** Because $$\operatorname{Var}(X) = \lambda$$, the standard deviation expands as $$\sigma = \sqrt{\lambda}$$. Since the total discrete probability mass must sum to $$1$$, this lateral spreading forces the peak probability downward ($$0.37$$ at $$\lambda=1$$ down to $$0.09$$ at $$\lambda=20$$).

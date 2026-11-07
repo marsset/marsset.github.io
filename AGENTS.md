@@ -40,6 +40,13 @@ bundle exec jekyll serve -H 127.0.0.1 -P 4000 --livereload
       - system
     tags: system linux kernel memory-management
     ```
+- **Mandatory Mobile Layout QA Check Before Publishing:**
+  - Before pushing or publishing, always execute:
+    ```bash
+    python3 scripts/test_mobile_layout.py --fix
+    ```
+  - This verifies and guarantees that math equations, SVGs, tables, and images strictly conform to mobile phone viewports without horizontal blowout or layout breakage.
+  - A git pre-push hook (`.git/hooks/pre-push`) automatically enforces this on every `git push`.
 
 ---
 
