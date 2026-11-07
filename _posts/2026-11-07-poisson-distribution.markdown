@@ -44,7 +44,7 @@ We make two physical assumptions:
 
 Under these assumptions, each slice is an independent Bernoulli trial:
 * Success (an event occurs) with probability $$p \approx \lambda \Delta t = \lambda \left(\frac{T}{n}\right) = \frac{\mu}{n}$$.
-* Failure (no event occurs) with probability $$1 - p = 1 - \lambda \Delta t = 1 - \frac{\mu}{n}$$.
+* Failure (no event occurs) with probability $$1 - p = 1 - \frac{\mu}{n}$$.
 
 The total number of events $$K$$ across the whole interval $$[0, T]$$ is the sum of these $$n$$ Bernoulli trials, which follows the Binomial distribution:
 
