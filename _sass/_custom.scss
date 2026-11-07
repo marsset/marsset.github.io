@@ -105,3 +105,39 @@ body {
 .page__content table {
   display: table;
 }
+
+/* ==========================================================================
+   Math equation overflow: prevent layout breakage on mobile devices.
+   Makes wide display formulas scroll horizontally instead of expanding
+   the page width.
+   ========================================================================== */
+.MathJax_Display,
+.MJXc-display,
+.MathJax_SVG_Display,
+mjx-container[display="true"],
+mjx-container[jax="CHTML"][display="true"],
+mjx-container[jax="SVG"][display="true"],
+.katex-display {
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  -webkit-overflow-scrolling: touch;
+  padding: 0.3em 0 !important;
+  margin: 1em 0 !important;
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: currentColor;
+    opacity: 0.25;
+    border-radius: 4px;
+  }
+}
+
