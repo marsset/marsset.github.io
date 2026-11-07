@@ -175,6 +175,23 @@ def audit_and_fix_post(filepath: Path, fix: bool = False):
         else:
             new_lines.append(line)
 
+    # -------------------------------------------------------------------------
+    # 4. GFM Alert Check (> [!WARNING], > [!NOTE], etc.)
+    # -------------------------------------------------------------------------
+    # Kramdown does not support GitHub alerts; they render as raw text "[!WARNING]".
+    # Minimal Mistakes requires <div class="notice--..." markdown="1">.
+    alert_map = {
+        "NOTE": "info",
+        "TIP": "info",
+        "IMPORTANT": "primary",
+        "WARNING": "warning",
+        "CAUTION": "danger",
+    }
+    for match in re.finditer(r'>\s*\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]', content):
+        alert_type = match.group(1)
+        notice_class = alert_map.get(alert_type, "warning")
+        issues.append(f"GFM alert syntax > [!{alert_type}] found. Use <div class=\"notice--{notice_class}\" markdown=\"1\">")
+
     if fix and math_modified:
         content = '\n'.join(new_lines)
 

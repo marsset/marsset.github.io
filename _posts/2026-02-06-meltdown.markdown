@@ -77,3 +77,14 @@ will response with a longer time. As a result we can tell what secret is.
 
 4096 here is to ensure each `i` owns an unique cache line.
 
+---
+
+### Mitigation & The Systems Performance Cost: KPTI
+
+To defend against Meltdown in software without requiring silicon replacement, the Linux kernel deployed **Kernel Page Table Isolation (KPTI)**.
+
+Historically, user-space process page tables mapped kernel memory directly into the upper virtual address space (protected by the page table supervisor bit) so that `syscall` invocations did not require switching page directory tables. Because Meltdown allowed speculative execution to transiently read kernel memory before the `#PF` (Page Fault) retired, KPTI completely unmaps kernel address space while running in user mode.
+
+As a result, every transition across the user-kernel boundary (system calls, hardware interrupts, context switches) now forces the CPU to switch `CR3` and invalidate/tag TLB entries. This imposes a non-trivial **$100\text{–}300\text{ ns}$ penalty on every system call**—a direct performance overhead that motivates zero-syscall architectures like [TCP Nagle and Delayed ACK Deadlock](/system/2026/11/07/nagle-delayed-ack-deadlock.html) and kernel-bypass designs, as well as the page table mechanisms explored in [Virtual Memory Translation](/system/2026/11/03/virtual-memory-translation.html).
+
+

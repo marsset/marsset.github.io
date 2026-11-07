@@ -83,6 +83,16 @@ excerpt: >
 5. **Short, Concise Titles (Mandatory Memory):**
    - Always prefer short, punchy titles (e.g. *"Poisson Distribution"*, *"Page Cache Thrashing"*, *"Zero-Copy Binary Parsing"*, *"Memory Ordering"*).
    - Avoid long compound titles, academic subtitles, or run-on explanatory clauses. Keep titles strictly under 3–4 words whenever possible, placing extended summaries into the `excerpt:` field.
+6. **Notices & Callout Boxes (No GitHub Alert Syntax):**
+   - **Do NOT use GitHub Flavored Markdown alerts (`> [!WARNING]`, `> [!NOTE]`)**: Kramdown does not recognize GFM alerts, rendering them as raw, ugly `[!WARNING]` text inside standard blockquotes.
+   - Instead, always use Minimal Mistakes native notice HTML blocks:
+     ```html
+     <div class="notice--warning" markdown="1">
+     #### Title
+     Content here...
+     </div>
+     ```
+     Available variants: `.notice--warning`, `.notice--info`, `.notice--danger`, `.notice--primary`.
 
 ---
 

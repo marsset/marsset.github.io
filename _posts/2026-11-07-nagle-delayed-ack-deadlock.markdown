@@ -339,7 +339,7 @@ int enable_tcp_nodelay(int sock_fd) {
 
 ### Layer 2: Write Coalescing with Vectored I/O (`writev`)
 
-Even with `TCP_NODELAY`, executing two distinct system calls (`write` followed by `write`) is suboptimal: each invocation crosses the user-kernel boundary ($100\text{–}300\text{ ns}$ overhead due to Meltdown/Spectre KPTI mitigations) and generates two distinct IP packets on the wire.
+Even with `TCP_NODELAY`, executing two distinct system calls (`write` followed by `write`) is suboptimal: each invocation crosses the user-kernel boundary ($100\text{–}300\text{ ns}$ overhead due to [Meltdown](/system/2026/02/06/meltdown.html)/Spectre KPTI mitigations) and generates two distinct IP packets on the wire.
 
 Instead, coalesce multiple application frames using **vectored I/O (`writev`)**:
 
@@ -369,11 +369,12 @@ int one = 1;
 setsockopt(sock_fd, IPPROTO_TCP, TCP_QUICKACK, &one, sizeof(one));
 ```
 
-> [!WARNING]
-> **The `TCP_QUICKACK` Trap in Linux**  
-> Unlike `TCP_NODELAY` (which is a persistent socket state), Linux's `TCP_QUICKACK` is **ephemeral**. The kernel automatically disables QuickACK mode and reverts to Delayed ACK after processing subsequent TCP state transitions or receiving out-of-order packets. To keep QuickACK active, the application must repeatedly call `setsockopt(TCP_QUICKACK)` after almost every `recv()`.  
-> 
-> Because client trading firms rarely control exchange matching engine socket configurations, **relying on receiver-side QuickACK is fragile. Sender-side `TCP_NODELAY` is the only robust guarantee.**
+<div class="notice--warning" markdown="1">
+#### The `TCP_QUICKACK` Trap in Linux
+Unlike `TCP_NODELAY` (which is a persistent socket state), Linux's `TCP_QUICKACK` is **ephemeral**. The kernel automatically disables QuickACK mode and reverts to Delayed ACK after processing subsequent TCP state transitions or receiving out-of-order packets. To keep QuickACK active, the application must repeatedly call `setsockopt(TCP_QUICKACK)` after almost every `recv()`.
+
+Because client trading firms rarely control exchange matching engine socket configurations, **relying on receiver-side QuickACK is fragile. Sender-side `TCP_NODELAY` is the only robust guarantee.**
+</div>
 
 ### Layer 4: Distinguish `TCP_CORK` vs. `TCP_NODELAY`
 
@@ -386,7 +387,7 @@ Developers occasionally confuse `TCP_CORK` with `TCP_NODELAY`:
 | **Flush Trigger** | Never delays | Only when explicitly uncorked (`val = 0`) or 200ms timeout |
 | **Typical Use Case**| HFT, OMS, RPC, Interactive shells | `sendfile()`, static web servers, bulk file I/O |
 
-Applying `TCP_CORK` in an OMS gateway is fatal: it explicitly forces the kernel to hold data in memory, guaranteeing multi-millisecond stalls on partial frames.
+Applying `TCP_CORK` in an Order Management System (OMS) gateway is fatal: it explicitly forces the kernel to hold data in memory, guaranteeing multi-millisecond stalls on partial frames.
 
 ### Layer 5: User-Space Kernel Bypass (Solarflare Onload / OpenOnload)
 

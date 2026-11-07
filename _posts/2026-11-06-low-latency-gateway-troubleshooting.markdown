@@ -215,8 +215,9 @@ taskset -pc <pid_core2>
 numactl --hardware
 ```
 
-> [!WARNING]
-> If `/sys/class/net/<eth_interface>/device/numa_node` returns `0`, but `taskset` indicates Core 1 or Core 2 is pinned to CPU cores on Node 1, cross-socket UPI traversal is occurring on every single packet.
+<div class="notice--warning" markdown="1">
+**Warning:** If `/sys/class/net/<eth_interface>/device/numa_node` returns `0`, but `taskset` indicates Core 1 or Core 2 is pinned to CPU cores on Node 1, cross-socket UPI traversal is occurring on every single packet.
+</div>
 
 ---
 
