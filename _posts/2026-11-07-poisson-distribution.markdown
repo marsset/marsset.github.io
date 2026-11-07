@@ -83,7 +83,8 @@ $$
 
 For a unit time interval where $$\mu = \lambda$$:
 
-<a id="poisson-pmf"></a>
+<div id="poisson-pmf"></div>
+
 $$
 \mathbb{P}(K = k) = \frac{\lambda^k e^{-\lambda}}{k!}
 $$
