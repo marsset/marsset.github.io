@@ -8,7 +8,7 @@ classes: wide
 layout: single
 use_math: true
 excerpt: >
-  A first-principles derivation of the Poisson distribution from the binomial limit, moment generating functions, waiting times, and counting processes.
+  A first-principles derivation of the Poisson distribution from the binomial limit and rare event assumptions.
 ---
 
 Most fundamental probability distributions are answers to questions about geometry or games of chance: tossing coins, rolling dice, or measuring lengths. 
@@ -142,82 +142,11 @@ $$
 
 ---
 
-### 3. Characteristic Function & Additivity
-
-The characteristic function of a Poisson random variable is:
-
-$$
-\varphi_K(t) = \mathbb{E}\left[ e^{itK} \right] = \sum_{k=0}^{\infty} e^{itk} \frac{\lambda^k e^{-\lambda}}{k!} = e^{-\lambda} \sum_{k=0}^{\infty} \frac{(\lambda e^{it})^k}{k!}
-$$
-
-Evaluating the sum:
-
-$$
-\varphi_K(t) = e^{-\lambda} \cdot e^{\lambda e^{it}} = \exp\left( \lambda (e^{it} - 1) \right)
-$$
-
-This algebraic form provides an immediate proof of **Poisson additivity**:
-
-If $$X \sim \operatorname{Pois}(\lambda_1)$$ and $$Y \sim \operatorname{Pois}(\lambda_2)$$ are independent random variables, the characteristic function of their sum is the product of their individual functions:
-
-$$
-\varphi_{X+Y}(t) = \varphi_X(t) \cdot \varphi_Y(t) = \exp\left( \lambda_1(e^{it} - 1) \right) \cdot \exp\left( \lambda_2(e^{it} - 1) \right) = \exp\left( (\lambda_1 + \lambda_2)(e^{it} - 1) \right)
-$$
-
-By the uniqueness theorem of characteristic functions:
-
-$$
-X + Y \sim \operatorname{Pois}(\lambda_1 + \lambda_2)
-$$
-
-Independent Poisson streams aggregate into another Poisson stream whose intensity is simply the sum of individual arrival rates.
-
----
-
-### 4. The Continuous-Time Dual: The Exponential Waiting Time
-
-The Poisson distribution counts how many events occur in fixed time. What about the continuous time you must wait between events?
-
-Let $$T_1$$ denote the time until the very first event occurs.
-
-The statement $$T_1 > t$$ means that **zero events** occurred in the interval $$[0, t]$$:
-
-$$
-\mathbb{P}(T_1 > t) = \mathbb{P}(K = 0 \text{ in } [0, t]) = \frac{(\lambda t)^0 e^{-\lambda t}}{0!} = e^{-\lambda t}
-$$
-
-The cumulative distribution function (CDF) of the waiting time is:
-
-$$
-F_{T_1}(t) = \mathbb{P}(T_1 \le t) = 1 - e^{-\lambda t} \qquad (t \ge 0)
-$$
-
-Differentiating gives the probability density function (PDF):
-
-$$
-f_{T_1}(t) = \lambda e^{-\lambda t}
-$$
-
-The waiting time between Poisson arrivals follows an **Exponential distribution** with mean $$\mathbb{E}[T_1] = \frac{1}{\lambda}$$.
-
-#### Memorylessness
-The exponential waiting time satisfies the memoryless property:
-
-$$
-\mathbb{P}(T_1 > s + t \mid T_1 > s) = \frac{\mathbb{P}(T_1 > s + t)}{\mathbb{P}(T_1 > s)} = \frac{e^{-\lambda(s + t)}}{e^{-\lambda s}} = e^{-\lambda t} = \mathbb{P}(T_1 > t)
-$$
-
-No matter how long you have already waited for an event to happen, the probability distribution of the remaining time until the next arrival is identical to the day you started waiting.
-
----
-
-### 5. Summary: Discrete Counts and Continuous Time
+### 3. Summary
 
 | Property | Value | Interpretation |
 | :--- | :--- | :--- |
 | **Support** | $$k \in \{0, 1, 2, \dots\}$$ | Discrete count of occurrences. |
-| **Parameter** | $$\lambda > 0$$ | Mean arrival rate per unit time. |
-| **PMF** | $$\frac{\lambda^k e^{-\lambda}}{k!}$$ | Law of rare events in the limit of small intervals. |
-| **Mean & Variance** | $$\mathbb{E}[K] = \operatorname{Var}(K) = \lambda$$ | Hallmark of purely uncorrelated random arrivals. |
-| **Inter-Arrival Time** | $$\operatorname{Exp}(\lambda)$$ | Continuous, memoryless waiting time between consecutive events. |
-| **Sum of Streams** | $$\sum \lambda_i$$ | Independent Poisson sources aggregate additively. |
+| **Expected Count** | $$\mu = \lambda T$$ | Expected events in observation window $$T$$. |
+| **PMF** | $$\frac{\mu^k e^{-\mu}}{k!}$$ | Law of rare events in the limit of infinitesimal slices. |
+| **Mean & Variance** | $$\mathbb{E}[K] = \operatorname{Var}(K) = \mu$$ | Hallmark of purely uncorrelated random arrivals ($$F = 1$$). |
