@@ -1,5 +1,5 @@
 ---
-title:  "Poisson Distribution: From Rare Events to Counting Processes"
+title:  "Poisson Distribution"
 date:   2026-11-07 14:00:00 +0800
 categories:
   - math

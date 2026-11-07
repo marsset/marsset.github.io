@@ -73,6 +73,9 @@ excerpt: >
    - **Do NOT use Mermaid code blocks (` ```mermaid `)**: the Jekyll theme's kramdown markdown parser does not load or bundle `mermaid.js`, causing Mermaid diagrams to render as raw unformatted text blocks in the browser. See `_posts/2026-11-03-virtual-memory-translation.markdown` for reference SVG styling.
 4. **Formula Clarity:**
    - Clearly label units and words when showing calculations (e.g. $\frac{8192\text{ bits}}{64\text{ bits/word}} = 128\text{ words} = 1024\text{ bytes (1 KB)}$).
+5. **Short, Concise Titles (Mandatory Memory):**
+   - Always prefer short, punchy titles (e.g. *"Poisson Distribution"*, *"Page Cache Thrashing"*, *"Zero-Copy Binary Parsing"*, *"Memory Ordering"*).
+   - Avoid long compound titles, academic subtitles, or run-on explanatory clauses. Keep titles strictly under 3–4 words whenever possible, placing extended summaries into the `excerpt:` field.
 
 ---
 

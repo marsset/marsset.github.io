@@ -1,5 +1,5 @@
 ---
-title:  "The Linux Physical Page Taxonomy: Decoding /proc/meminfo, Dual-LRU Lists, and Kernel Memory Architecture"
+title:  "Linux Physical Page Taxonomy"
 date:  2026-11-06 15:00:00 +0800
 categories:
   - system

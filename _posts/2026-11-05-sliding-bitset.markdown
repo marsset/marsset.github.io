@@ -1,5 +1,5 @@
 ---
-title:  "Low-Latency Market Data Deduplication: The Sliding Bitset"
+title:  "The Sliding Bitset"
 date:  2026-11-05 13:30:00 +0800
 categories:
   - system

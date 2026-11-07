@@ -1,5 +1,5 @@
 ---
-title:  "The Page Fault Bottleneck: Inside Linux mmap_lock Contention"
+title:  "mmap_lock Contention"
 date:  2026-11-05 14:00:00 +0800
 categories:
   - system

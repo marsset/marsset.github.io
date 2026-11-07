@@ -1,5 +1,5 @@
 ---
-title:  "Autonomous Driving Data Loop: Practice Problems"
+title:  "Autonomous Driving Data Loop"
 date:  2026-10-26 09:00:00 +0800
 categories:
   - ai

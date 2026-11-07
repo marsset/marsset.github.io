@@ -1,5 +1,5 @@
 ---
-title:  "Zero-Copy In-Place Binary Parsing: Unaligned Memory Access and Hardware Endianness (BSWAP/MOVBE)"
+title:  "Zero-Copy Binary Parsing"
 date:  2026-11-06 16:30:00 +0800
 categories:
   - system

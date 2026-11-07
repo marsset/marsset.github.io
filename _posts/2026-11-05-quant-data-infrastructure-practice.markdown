@@ -1,5 +1,5 @@
 ---
-title:  "Quantitative Financial Data Infrastructure: Practice Problems"
+title:  "Data Infrastructure Practice"
 date:  2026-11-05 10:00:00 +0800
 categories:
   - system

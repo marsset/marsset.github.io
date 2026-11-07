@@ -1,5 +1,5 @@
 ---
-title:  "Direct Reclaim and Page Cache Thrashing: Anatomy of Linux Memory Eviction Storms"
+title:  "Page Cache Thrashing"
 date:  2026-11-05 16:00:00 +0800
 categories:
   - system

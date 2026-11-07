@@ -1,5 +1,5 @@
 ---
-title:  "PyTorch by Example: A Small CNN on CIFAR-10"
+title:  "Small CNN on CIFAR-10"
 date:  2026-10-24 12:00:00 +0800
 categories:
   - ai

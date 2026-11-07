@@ -1,5 +1,5 @@
 ---
-title:  "Engineering a Zero-Allocation io_uring Pipeline: Lockless SPSC Rings, 4KB Buffer Arenas, and Compute Overlap"
+title:  "Zero-Allocation io_uring"
 date:  2026-11-06 11:30:00 +0800
 categories:
   - system

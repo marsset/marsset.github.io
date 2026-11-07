@@ -1,5 +1,5 @@
 ---
-title:  "Why Modern SSDs Demand io_uring: Hardware Parallelism, Ring Buffers, and Empirical Benchmarks"
+title:  "io_uring on Modern SSDs"
 date:  2026-11-06 09:30:00 +0800
 categories:
   - system

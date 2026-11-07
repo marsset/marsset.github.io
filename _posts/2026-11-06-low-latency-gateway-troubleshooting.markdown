@@ -1,5 +1,5 @@
 ---
-title:  "Dissecting Sub-Microsecond Tail Latency: DDIO Thrashing, Cross-NUMA Interconnects, and Hardware Jitter in Solarflare EF_VI Gateways"
+title:  "Sub-Microsecond Tail Latency"
 date:   2026-11-06 17:00:00 +0800
 categories:
   - system

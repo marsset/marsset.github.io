@@ -1,5 +1,5 @@
 ---
-title:  "Storage Layouts for Financial Ticks: Why Parquet Falls Short for Quant Replay, and How PAX, KDB+, and DolphinDB Bridge the Gap"
+title:  "Financial Tick Storage"
 date:  2026-11-05 11:30:00 +0800
 categories:
   - system

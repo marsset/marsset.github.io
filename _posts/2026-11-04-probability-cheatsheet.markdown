@@ -1,5 +1,5 @@
 ---
-title:  "Probability Formulas Cheatsheet"
+title:  "Probability Cheatsheet"
 date:  2026-11-04 12:18:00 +0800
 categories:
   - math
