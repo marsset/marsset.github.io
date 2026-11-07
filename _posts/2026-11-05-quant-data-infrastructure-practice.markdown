@@ -8,10 +8,10 @@ classes: wide
 layout: single
 use_math: true
 excerpt: >
-  fourteen practice problems for a quantitative data infrastructure and financial market data engineer role: ten to talk through, four to code.
+  fifteen practice problems for a quantitative data infrastructure and financial market data engineer role: eleven to talk through, four to code.
 ---
 
-Fourteen practice problems for a quantitative financial data infrastructure and market data engineer role (focused on high-throughput historical and real-time tick/order-book data pipelines, low-level systems, and replay engines). The first ten are discussion questions covering the pipeline from exchange feed ingestion to historical replay; the last four are coding problems. Only the questions are listed, for self-testing and repeated practice. A good shape for each answer: clarify → framework → detail → metrics → risks.
+Fifteen practice problems for a quantitative financial data infrastructure and market data engineer role (focused on high-throughput historical and real-time tick/order-book data pipelines, low-level systems, and replay engines). The first eleven are discussion questions covering the pipeline from exchange feed ingestion to historical replay; the last four are coding problems. Only the questions are listed, for self-testing and repeated practice. A good shape for each answer: clarify → framework → detail → metrics → risks.
 
 ### 1. The market data pipeline end to end
 
@@ -87,9 +87,29 @@ A data platform handles heterogeneous asset classes: cash equities, perpetual fu
 1. How do you design the storage partitioning strategy (e.g. in a Parquet/Arrow-based data lake) across `(Asset Class, Exchange, Date, Symbol)` to optimize for both broad market-wide scans and single-asset microsecond time-series queries?
 2. Exchange protocols update their binary formats periodically (e.g. adding new order flags, nanosecond precision timestamps, or match reason codes). How do you design schema evolution so that historic petabytes do not need full rewriting whenever a schema version updates?
 
+### 11. Production gateway troubleshooting: tail spikes, DDIO, and cross-NUMA bus saturation
+
+An ultra-low-latency market data gateway operates on a dedicated bare-metal Linux server equipped with a Solarflare NIC running the EF_VI user-space zero-copy kernel-bypass network stack.
+
+The pipeline architecture is minimal:
+* **Core 1 (Ingest & Poll):** Pinned to an isolated CPU core (`isolcpus`), spinning on the NIC receive ring via `ef_eventq_poll()`, passing raw UDP payloads to a lock-free Single-Producer Single-Consumer (SPSC) ring buffer.
+* **Core 2 (Order Book & Dispatch):** Pinned to a separate isolated core, popping packets from the SPSC buffer, updating an in-memory L2 limit order book, and dispatching normalized internal ticks.
+* **Hardware & OS Configuration:** Hyper-Threading disabled, C-states and P-states locked to maximum non-turbo frequency in BIOS to prevent power-state transition jitter.
+
+**The Production Incident:**  
+During normal trading sessions, end-to-end P99 packet-to-order-book latency remains stable at $1.2\,\mu\text{s}$. However, during market open (09:30:00 burst traffic with a $10\times$ instantaneous volume spike), monitoring records a catastrophic degradation:
+1. CPU utilization on both cores remains between $70\%\text{–}80\%$ (neither core reaches $100\%$ saturation).
+2. Dynamic memory allocation rate is strictly zero (`malloc`/`new` hooks record 0 allocations).
+3. The SPSC queue backs up instantaneously, Core 1 experiences severe packet drops (`rx_nodesc_drop`), and P99.99 latency explodes from $1.2\,\mu\text{s}$ into hundreds of microseconds and milliseconds.
+
+**System Engineering Questions:**
+1. From the perspectives of **hardware interconnects (PCIe / UPI)**, **NUMA memory topology**, **CPU microarchitecture (Intel DDIO cache thrashing, pipeline stalls, and branch misprediction)**, and **kernel/firmware interrupts (SMI, timer ticks)**: what root bottlenecks explain why performance collapsed despite low measured CPU utilization?
+2. What diagnostic toolchain (`perf`, `turbostat`, `ethtool`, Intel PCM) and methodology would you employ in production to pinpoint the root cause within minutes?
+3. What architectural remediation would you deploy across hardware slot topology, Intel Cache Allocation Technology (CAT), kernel boot arguments, and data structures to guarantee deterministic sub-microsecond latency through market open bursts?
+
 ---
 
-### 11. Multi-stream K-way merge of monotonic ticks (coding)
+### 12. Multi-stream K-way merge of monotonic ticks (coding)
 
 In a market data normalization engine, multiple independent data collectors ingest ticks for the same market session from $K$ parallel feeds. Each feed produces a pre-sorted stream of ticks ordered strictly by timestamp.
 
@@ -122,7 +142,7 @@ def merge_k_tick_streams(streams: List[Iterator[Tick]]) -> Iterator[Tick]:
 1. What happens if an upstream feed stalls or experiences network delay? How does standard min-heap merge block, and how would you incorporate a sliding watermark/timeout to unblock healthy feeds?
 2. In C++, how would you implement this using a cache-friendly flat array (loser tree or tournament tree) rather than a pointer-based heap to minimize branch mispredictions and memory indirection?
 
-### 12. Rolling time-window VWAP aggregator (coding)
+### 13. Rolling time-window VWAP aggregator (coding)
 
 Volume-Weighted Average Price (VWAP) is a benchmark execution metric defined as:
 
@@ -161,7 +181,7 @@ class RollingVWAP:
 1. What happens when tick timestamps arrive out of order (e.g. timestamp $T_2 < T_1$ due to packet interleaving)? How does this break the FIFO deque assumption, and how would you handle microsecond-level late arrivals?
 2. If you need to query VWAP over multiple arbitrary window lengths (1 min, 5 min, 1 hour) concurrently, how would you optimize storage using hierarchical time buckets?
 
-### 13. Lock-free SPSC circular buffer (coding)
+### 14. Lock-free SPSC circular buffer (coding)
 
 Implement the core mechanics of a **Single-Producer Single-Consumer (SPSC)** lock-free circular buffer for streaming fixed-size tick structures between two dedicated threads.
 
@@ -196,7 +216,7 @@ class SPSCQueue:
   1. Which variables must be `std::atomic`? What memory orderings (`memory_order_relaxed`, `memory_order_acquire`, `memory_order_release`) should be used on `head` and `tail`?
   2. Why must `head` and `tail` reside on separate CPU cache lines (e.g. `alignas(64)`), and what performance pathology occurs if they share a cache line?
 
-### 14. Floating-point Gorilla XOR compression (coding)
+### 15. Floating-point Gorilla XOR compression (coding)
 
 Financial tick prices for a single asset often remain identical or fluctuate by only a few price increments across consecutive updates. Facebook's Gorilla paper (2015) introduced XOR-based floating-point compression for time series.
 
