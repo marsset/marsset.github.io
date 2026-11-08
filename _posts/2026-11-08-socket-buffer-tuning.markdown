@@ -399,40 +399,72 @@ On high-bandwidth WAN connections (such as Frankfurt to London, BDP $\approx 5\,
 
 Linux 3.12 resolved this trade-off with the introduction of **`TCP_NOTSENT_LOWAT`** (RFC 7684). *(For a complete breakdown of kernel sequence pointers and the unsent queue threshold, see: [TCP Send Queue Anatomy](/system/2026/11/08/tcp-send-queue.html)).*
 
-### How `TCP_NOTSENT_LOWAT` Works
+### 5.1 The Bouncer at the Socket Door
 
-Normally, the Linux socket layer marks a socket as writable (`EPOLLOUT`) whenever:
+At its core, `TCP_NOTSENT_LOWAT` plays a single, vital role: **it prevents unsent data from piling up in local RAM by simply refusing excess incoming application writes.**
 
-$$
-\text{sk_wmem_alloc} < \text{sk_sndbuf}
-$$
+```
+[ Application writes data ] ===► [ BOUNCER: TCP_NOTSENT_LOWAT ] ===► [ sk_write_queue ]
+                                          │
+                  "Stop! You already gave me 16 KB that the 
+                   NIC hasn't sent yet. I REFUSE to take more!"
+```
 
-If `sk_sndbuf` is 8MB, `epoll` signals that the socket is writable even if millions of bytes are already queued and waiting for transmission.
-
-`TCP_NOTSENT_LOWAT` changes this behavior. It inspects **only the unsent bytes** waiting in `sk_write_queue`:
-
-$$
-\text{Unsent Bytes} = \text{Buffered Bytes} - \text{In-Flight Bytes}
-$$
-
-The kernel triggers `EPOLLOUT` only when:
+Normally, the Linux kernel determines whether a socket is writable (`EPOLLOUT`) based on total allocated socket memory:
 
 $$
-\text{Unsent Bytes} < \text{TCP_NOTSENT_LOWAT}
+\text{Writable if: } \text{sk_wmem_alloc} < \text{sk_sndbuf}
 $$
+
+If `sk_sndbuf` is configured to $8\,\text{MB}$ to support a WAN link, the kernel happily lets an aggressive C++ thread dump up to $8\,\text{MB}$ of speculative, unsent quotes into `sk_write_queue` before generating any backpressure.
+
+`TCP_NOTSENT_LOWAT` changes this rule entirely. It inspects **only the unsent bytes** waiting in local RAM:
+
+$$
+\text{Unsent Bytes} = \text{write_seq} - \text{snd_nxt}
+$$
+
+$$
+\text{Writable if: } \text{Unsent Bytes} < \text{TCP_NOTSENT_LOWAT}
+$$
+
+### 5.2 How the Kernel Refuses Excess Writes
+
+When unsent bytes reach the configured threshold (e.g., $16\,\text{KB}$):
+
+1. **Non-Blocking I/O (`epoll`):**  
+   The kernel withholds the `EPOLLOUT` event. If the application ignores epoll and calls `send()` or `write()` anyway, the kernel immediately refuses the write with:
+   $$\texttt{EWOULDBLOCK} \quad / \quad \texttt{EAGAIN}$$
+2. **Blocking I/O:**  
+   The calling thread is put to sleep until the network card physically transmits enough packets to drain the unsent backlog below $16\,\text{KB}$.
+
+### 5.3 Crucial Distinction: The Wire NEVER Pauses
+
+A common misconception is that refusing writes throttles network throughput. **It does not.**
+
+* **Physical Transmission (NIC $\to$ Wire):** The NIC and kernel TCP stack continue transmitting at full $10\,\text{Gbps}$ line rate. Data never stops leaving the machine.
+* **Application Writing (App $\to$ Kernel):** Only the application CPU thread is paused from getting more than $16\,\text{KB}$ ahead of the physical wire.
+
+Because a $10\,\text{GbE}$ NIC transmits at $1.25\,\text{GB/s}$, it drains that $16\,\text{KB}$ backlog in just **$12.8\,\mu\text{s}$**:
+
+$$
+T_{\text{drain}} = \frac{16 \times 1024 \times 8 \text{ bits}}{10 \times 10^9 \text{ bps}} = \mathbf{12.8\,\mu\text{s}}
+$$
+
+### 5.4 Production C/C++ Configuration
 
 ```c
 /* Enable high BDP throughput without bufferbloat */
-int notsent_lowat = 16384; // 16KB threshold
+int notsent_lowat = 16384; // 16KB unsent threshold
 if (setsockopt(fd, IPPROTO_TCP, TCP_NOTSENT_LOWAT, &notsent_lowat, sizeof(notsent_lowat)) < 0) {
     perror("setsockopt TCP_NOTSENT_LOWAT");
 }
 ```
 
 With `TCP_NOTSENT_LOWAT`:
-- The socket buffer can be configured to **10MB** or **20MB**, allowing TCP to advertise a massive window and utilize 100% of the $10\,\text{Gbps}$ line rate across long-distance links.
-- The application thread is backpressured whenever more than **16KB** of data is backlogged in the local kernel queue.
-- When an emergency cancel needs to be sent, it enters a queue with only 16KB of backlog rather than 8MB, reducing dispatch delay from **$3.2\,\text{ms}$ to under $13\,\mu\text{s}$**!
+* The socket send buffer can be sized generously to **$10\,\text{MB}$**, allowing the TCP sliding window to keep $5\,\text{MB}$ of data in flight across the WAN fiber at full line rate.
+* The local waiting room is capped at **$\le 16\,\text{KB}$**.
+* When an emergency order cancel is generated, it is placed at the tail of a sleek $16\,\text{KB}$ queue rather than an $8\,\text{MB}$ backlog, reducing local dispatch latency from **$6.4\,\text{ms}$ to under $13\,\mu\text{s}$**!
 
 ---
 
