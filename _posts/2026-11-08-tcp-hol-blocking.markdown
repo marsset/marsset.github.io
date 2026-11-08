@@ -1,5 +1,5 @@
 ---
-title: "TCP Head-of-Line Blocking: Why Strict FIFO Breaks Low Latency and How to Overcome It"
+title: "TCP Head-of-Line Blocking"
 date: 2026-11-08 15:30:00 +0800
 categories:
   - system

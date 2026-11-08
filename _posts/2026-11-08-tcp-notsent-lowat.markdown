@@ -1,5 +1,5 @@
 ---
-title: "TCP_NOTSENT_LOWAT: Decoupling Network Throughput from Queuing Latency"
+title: "TCP_NOTSENT_LOWAT"
 date: 2026-11-08 14:00:00 +0800
 categories:
   - system
@@ -318,4 +318,4 @@ kprobe:tcp_write_xmit {
 | **Emergency Cancel Latency** | **$3{,}200\,\mu\text{s} - 6{,}400\,\mu\text{s}$** ($3.2 - 6.4\,\text{ms}$) | **$< 13\,\mu\text{s}$** |
 | **Execution Risk** | Severe: stale quotes filled during volatility | Negligible: order cancels hit the wire instantly |
 
-By setting `TCP_NOTSENT_LOWAT` to $16\,\text{KB}$ alongside a generous `SO_SNDBUF`, low-latency execution systems eliminate the trade-off between throughput and determinism, ensuring that urgent market signals never wait behind a bloated local buffer. *(For a broader architectural survey on overcoming TCP's strict FIFO byte order, packet loss gaps, and protocol-level solutions like QUIC, SCTP, and Dual Sessions, see our companion post: [TCP Head-of-Line Blocking: Why Strict FIFO Breaks Low Latency and How to Overcome It](/system/2026/11/08/tcp-head-of-line-blocking.html)).*
+By setting `TCP_NOTSENT_LOWAT` to $16\,\text{KB}$ alongside a generous `SO_SNDBUF`, low-latency execution systems eliminate the trade-off between throughput and determinism, ensuring that urgent market signals never wait behind a bloated local buffer. *(For a broader architectural survey on overcoming TCP's strict FIFO byte order, packet loss gaps, and protocol-level solutions like QUIC, SCTP, and Dual Sessions, see our companion post: [TCP Head-of-Line Blocking](/system/2026/11/08/tcp-hol-blocking.html)).*
