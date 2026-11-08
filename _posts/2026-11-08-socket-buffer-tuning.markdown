@@ -397,7 +397,7 @@ $$
 
 On high-bandwidth WAN connections (such as Frankfurt to London, BDP $\approx 5\,\text{MB}$), setting `SO_SNDBUF` small causes throughput collapse because the sliding window cannot expand to fill the pipe. However, setting `SO_SNDBUF` large exposes the application to bufferbloat during microbursts.
 
-Linux 3.12 resolved this trade-off with the introduction of **`TCP_NOTSENT_LOWAT`** (RFC 7684).
+Linux 3.12 resolved this trade-off with the introduction of **`TCP_NOTSENT_LOWAT`** (RFC 7684). *(For a dedicated mental model and kernel source walk-through, see our companion post: [TCP_NOTSENT_LOWAT: Decoupling Network Throughput from Queuing Latency](/system/2026/11/08/tcp-notsent-lowat.html)).*
 
 ### How `TCP_NOTSENT_LOWAT` Works
 
