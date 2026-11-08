@@ -14,7 +14,7 @@ For file transfers, web browsing, and bulk data synchronization, this FIFO (Firs
 
 In modern low-latency systems—such as high-frequency trading (HFT) execution gateways, autonomous vehicle telemetry, and real-time gaming engines—**strict FIFO byte ordering is one of the most punishing architectural bottlenecks in computer networking**.
 
-This phenomenon is known as **Head-of-Line (HOL) Blocking (队头阻塞)**:
+This phenomenon is known as **Head-of-Line (HOL) Blocking**:
 * If a single routine packet is delayed or dropped, every subsequent critical packet behind it is held hostage.
 * If a high-frequency trading algorithm fires an **Emergency Cancel** to pull quotes before a market crash, the cancel message cannot jump the queue; it is stuck behind thousands of obsolete quotes.
 

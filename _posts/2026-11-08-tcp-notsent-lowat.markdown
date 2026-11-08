@@ -13,7 +13,7 @@ In high-throughput, low-latency financial systems—such as cross-region order r
 1. **To saturate a 10GbE long-haul line**, the TCP sliding window requires a **large send buffer** (e.g., $4\,\text{MB}$ to $16\,\text{MB}$) to keep the fiber pipe full.
 2. **To react to market events instantly**, an algorithm requires an **empty send buffer**, so that an emergency order cancellation isn't trapped behind megabytes of backlogged quotes.
 
-Historically, Linux offered only a single knob for both: `SO_SNDBUF`. Setting it large delivered wire-speed throughput but introduced catastrophic **Bufferbloat (缓冲区膨胀)**. Setting it small bound latency to microseconds but caused **Throughput Collapse (吞吐量崩溃)**.
+Historically, Linux offered only a single knob for both: `SO_SNDBUF`. Setting it large delivered wire-speed throughput but introduced catastrophic **Bufferbloat**. Setting it small bound latency to microseconds but caused **Throughput Collapse**.
 
 Linux 3.12 resolved this decade-old architectural conflict with **`TCP_NOTSENT_LOWAT`** (RFC 7684). This post breaks down why this socket option is indispensable in modern trading gateways, how it works inside the kernel TCP stack, and how to configure it in production C++ execution engines. *(For an exhaustive derivation of the underlying Bandwidth-Delay Product and `2x` truesize inflation, see our foundational guide: [Socket Buffer Tuning: Physics of Bufferbloat, ZeroWindow, and BDP](/system/2026/11/08/socket-buffer-tuning.html)).*
 
