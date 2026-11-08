@@ -193,7 +193,7 @@ In high-frequency trading gateways, several default Linux kernel mechanisms desi
 When memory usage exceeds `sk_rcvbuf`, the Linux kernel does not immediately drop packets. Instead, it enters **Emergency Buffer Collapse ([`tcp_collapse()`](/system/2026/11/09/tcp-collapse.html))**:
 * It walks all `sk_buff`s in `sk_receive_queue` and `out_of_order_queue`.
 * It re-allocates memory and copies smaller chunks into contiguous larger buffers to eliminate slab allocator padding and header overhead.
-* **Impact:** In trading systems, `tcp_collapse()` can lock the socket and freeze the CPU core for **hundreds of microseconds to milliseconds**, occurring exactly during a market burst when latency matters most! See the full deep dive in [TCP Collapse](/system/2026/11/09/tcp-collapse.html).
+* **Impact:** In trading systems, `tcp_collapse()` can lock the socket and freeze the CPU core for **hundreds of microseconds to milliseconds**, occurring exactly during a market burst when latency matters most!
 * **Diagnostics:** Check if `TCPRcvCollapsed` is incrementing:
   ```bash
   nstat -z | grep -i collapse
