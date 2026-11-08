@@ -1,0 +1,86 @@
+<script>
+  (function() {
+    function getStoredTheme() {
+      return localStorage.getItem('theme');
+    }
+
+    function isSystemDark() {
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+
+    function isDarkActive() {
+      var stored = getStoredTheme();
+      if (stored === 'dark') return true;
+      if (stored === 'light') return false;
+      return isSystemDark();
+    }
+
+    function updateUI(isDark) {
+      var icon = document.getElementById('theme-icon');
+      var btn = document.getElementById('theme-toggle');
+      if (icon) {
+        if (isDark) {
+          icon.className = 'fas fa-sun';
+          if (btn) {
+            btn.setAttribute('title', 'Switch to light mode');
+            btn.setAttribute('aria-label', 'Switch to light mode');
+          }
+        } else {
+          icon.className = 'fas fa-moon';
+          if (btn) {
+            btn.setAttribute('title', 'Switch to dark mode');
+            btn.setAttribute('aria-label', 'Switch to dark mode');
+          }
+        }
+      }
+    }
+
+    function applyTheme(targetTheme) {
+      var darkCss = document.getElementById('theme-css-dark');
+      if (darkCss) {
+        darkCss.media = (targetTheme === 'dark') ? 'all' : 'not all';
+      }
+      document.documentElement.setAttribute('data-theme', targetTheme);
+      updateUI(targetTheme === 'dark');
+    }
+
+    function toggleTheme() {
+      var currentlyDark = isDarkActive();
+      var nextTheme = currentlyDark ? 'light' : 'dark';
+      localStorage.setItem('theme', nextTheme);
+      applyTheme(nextTheme);
+    }
+
+    function init() {
+      var currentlyDark = isDarkActive();
+      updateUI(currentlyDark);
+
+      var btn = document.getElementById('theme-toggle');
+      if (btn) {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          toggleTheme();
+        });
+      }
+
+      if (window.matchMedia) {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+          if (!getStoredTheme()) {
+            var darkCss = document.getElementById('theme-css-dark');
+            if (darkCss) {
+              darkCss.media = '(prefers-color-scheme: dark)';
+            }
+            document.documentElement.removeAttribute('data-theme');
+            updateUI(e.matches);
+          }
+        });
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+</script>

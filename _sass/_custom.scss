@@ -232,4 +232,43 @@ mjx-container[jax="SVG"][display="true"],
   pointer-events: none;
 }
 
+/* ==========================================================================
+   Dark / Light Mode Theme Toggle Button (Masthead)
+   ========================================================================== */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-inline: 0.5rem;
+  height: 2rem;
+  width: 2rem;
+  border-radius: 50%;
+  border: 1px solid rgba(125, 125, 125, 0.24);
+  outline: none;
+  background-color: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-size: 0.95rem;
+  padding: 0;
+  transition: background-color 0.2s ease, transform 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  user-select: none;
+  align-self: center;
+
+  &:hover {
+    background-color: rgba(125, 125, 125, 0.16);
+    border-color: rgba(125, 125, 125, 0.45);
+    transform: scale(1.08);
+  }
+
+  &:active {
+    transform: scale(0.94);
+  }
+
+  i {
+    pointer-events: none;
+    line-height: 1;
+  }
+}
+
+
 
