@@ -13,14 +13,14 @@ The Memory Management Unit (MMU), a dedicated hardware unit inside the CPU, and 
 <svg viewBox="0 0 716 156" width="100%" style="max-width:716px;display:block;margin:1.5em auto;" role="img" aria-label="Memory access flow, typical sizes, and latencies: inside the CPU chip, Core sends VA to MMU (~1 ns TLB), then PA to L1 (64–128 KB, ~1 ns), L2 (4–16 MB, ~4 ns), and L3 (24–32 MB, ~15 ns); on an L3 miss, it goes off-chip to DRAM (16–64 GB, ~80 ns)">
   <!-- On-chip CPU boundary -->
   <rect x="6" y="18" width="574" height="128" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.2" stroke-dasharray="4,4"/>
-  <text x="16" y="12" text-anchor="start" font-size="11" fill="currentColor" fill-opacity="0.5">CPU (on-chip)</text>
+  <text x="16" y="12" text-anchor="start" font-size="12.0" fill="currentColor" fill-opacity="0.5">CPU (on-chip)</text>
 
   <!-- Typical latencies -->
-  <text x="176" y="36" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.55">~1 ns (TLB)</text>
-  <text x="298" y="36" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.55">~1 ns</text>
-  <text x="416" y="36" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.55">~4 ns</text>
-  <text x="534" y="36" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.55">~15 ns</text>
-  <text x="669" y="36" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.55">~80 ns</text>
+  <text x="176" y="36" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">~1 ns (TLB)</text>
+  <text x="298" y="36" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">~1 ns</text>
+  <text x="416" y="36" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">~4 ns</text>
+  <text x="534" y="36" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">~15 ns</text>
+  <text x="669" y="36" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">~80 ns</text>
 
   <!-- Nodes -->
   <rect x="20" y="44" width="68" height="44" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1.2"/>
@@ -31,50 +31,50 @@ The Memory Management Unit (MMU), a dedicated hardware unit inside the CPU, and 
 
   <rect x="264" y="44" width="68" height="44" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1.2"/>
   <text x="298" y="62" text-anchor="middle" font-size="12.5" font-weight="600" fill="currentColor" fill-opacity="0.95">L1</text>
-  <text x="298" y="77" text-anchor="middle" font-size="9.5" fill="currentColor" fill-opacity="0.6">64–128 KB</text>
+  <text x="298" y="77" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.6">64–128 KB</text>
 
   <rect x="382" y="44" width="68" height="44" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1.2"/>
   <text x="416" y="62" text-anchor="middle" font-size="12.5" font-weight="600" fill="currentColor" fill-opacity="0.95">L2</text>
-  <text x="416" y="77" text-anchor="middle" font-size="9.5" fill="currentColor" fill-opacity="0.6">4–16 MB</text>
+  <text x="416" y="77" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.6">4–16 MB</text>
 
   <rect x="500" y="44" width="68" height="44" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1.2"/>
   <text x="534" y="62" text-anchor="middle" font-size="12.5" font-weight="600" fill="currentColor" fill-opacity="0.95">L3</text>
-  <text x="534" y="77" text-anchor="middle" font-size="9.5" fill="currentColor" fill-opacity="0.6">24–32 MB</text>
+  <text x="534" y="77" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.6">24–32 MB</text>
 
   <rect x="632" y="44" width="74" height="44" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1.2"/>
   <text x="669" y="62" text-anchor="middle" font-size="12.5" font-weight="600" fill="currentColor" fill-opacity="0.95">DRAM</text>
-  <text x="669" y="77" text-anchor="middle" font-size="9.5" fill="currentColor" fill-opacity="0.6">16–64 GB</text>
+  <text x="669" y="77" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.6">16–64 GB</text>
 
   <!-- Forward arrows -->
   <line x1="88" y1="66" x2="132" y2="66" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
   <path d="M130,62.5 L136,66 L130,69.5" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
-  <text x="112" y="58" text-anchor="middle" font-size="11.5" fill="currentColor" fill-opacity="0.65">VA</text>
+  <text x="112" y="58" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.65">VA</text>
 
   <line x1="214" y1="66" x2="258" y2="66" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
   <path d="M256,62.5 L262,66 L256,69.5" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
-  <text x="238" y="58" text-anchor="middle" font-size="11.5" fill="currentColor" fill-opacity="0.65">PA</text>
+  <text x="238" y="58" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.65">PA</text>
 
   <line x1="332" y1="66" x2="376" y2="66" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
   <path d="M374,62.5 L380,66 L374,69.5" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
-  <text x="356" y="58" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.55">miss</text>
+  <text x="356" y="58" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">miss</text>
 
   <line x1="450" y1="66" x2="494" y2="66" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
   <path d="M492,62.5 L498,66 L492,69.5" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
-  <text x="474" y="58" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.55">miss</text>
+  <text x="474" y="58" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">miss</text>
 
   <line x1="568" y1="66" x2="626" y2="66" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
   <path d="M624,62.5 L630,66 L624,69.5" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
-  <text x="600" y="58" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.55">miss</text>
+  <text x="600" y="58" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">miss</text>
 
   <!-- Return path (hit / data return to Core) -->
   <line x1="298" y1="88" x2="298" y2="128" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2"/>
-  <text x="310" y="112" text-anchor="start" font-size="11" fill="currentColor" fill-opacity="0.55">hit</text>
+  <text x="310" y="112" text-anchor="start" font-size="12.0" fill="currentColor" fill-opacity="0.55">hit</text>
 
   <line x1="416" y1="88" x2="416" y2="128" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2"/>
-  <text x="428" y="112" text-anchor="start" font-size="11" fill="currentColor" fill-opacity="0.55">hit</text>
+  <text x="428" y="112" text-anchor="start" font-size="12.0" fill="currentColor" fill-opacity="0.55">hit</text>
 
   <line x1="534" y1="88" x2="534" y2="128" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2"/>
-  <text x="546" y="112" text-anchor="start" font-size="11" fill="currentColor" fill-opacity="0.55">hit</text>
+  <text x="546" y="112" text-anchor="start" font-size="12.0" fill="currentColor" fill-opacity="0.55">hit</text>
 
   <line x1="669" y1="88" x2="669" y2="128" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2"/>
 
@@ -96,17 +96,17 @@ To translate the VPN into a Physical Frame Number (PFN), the MMU follows three p
 <svg viewBox="0 0 716 324" width="100%" style="max-width:716px;display:block;margin:1.5em auto;" role="img" aria-label="Virtual memory translation inside and outside the CPU chip: on-chip, VA splits into VPN and Offset; VPN checks the TLB (hit ~1 ns -> PFN, miss -> Page Table Walk -> L1/L2/L3 Cache, hit ~1-15 ns -> PTE). On a cache miss, the walk goes off-chip to DRAM (Page Table) (~80 ns) to fetch the PTE. Non-leaf PTEs loop back to the Page Table Walk across 4 levels; once the leaf PTE is reached with P=1, it loads the TLB and outputs PFN; if P=0, it raises a Page Fault (#PF) that goes off-chip to Disk / Swap (~us-ms).">
   <!-- On-chip CPU boundary -->
   <rect x="6" y="18" width="704" height="224" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.2" stroke-dasharray="4,4"/>
-  <text x="16" y="12" text-anchor="start" font-size="11" fill="currentColor" fill-opacity="0.5">CPU (on-chip)</text>
+  <text x="16" y="12" text-anchor="start" font-size="12.0" fill="currentColor" fill-opacity="0.5">CPU (on-chip)</text>
 
   <!-- VA (VPN | Offset) -->
-  <text x="98" y="30" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.55">VA</text>
+  <text x="98" y="30" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">VA</text>
   <rect x="20" y="36" width="92" height="36" rx="4" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1.2"/>
   <text x="66" y="58" text-anchor="middle" font-size="13" fill="currentColor" fill-opacity="0.9">VPN</text>
   <rect x="112" y="36" width="64" height="36" rx="4" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1.2"/>
   <text x="144" y="58" text-anchor="middle" font-size="13" fill="currentColor" fill-opacity="0.9">Offset</text>
 
   <!-- PA (PFN | Offset) -->
-  <text x="510" y="78" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.55">PA</text>
+  <text x="510" y="78" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">PA</text>
   <rect x="444" y="84" width="92" height="36" rx="4" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1.2"/>
   <text x="490" y="106" text-anchor="middle" font-size="13" fill="currentColor" fill-opacity="0.9">PFN</text>
   <rect x="536" y="84" width="64" height="36" rx="4" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1.2"/>
@@ -129,17 +129,17 @@ To translate the VPN into a Physical Frame Number (PFN), the MMU follows three p
   <!-- TLB --hit--> PFN -->
   <line x1="212" y1="102" x2="438" y2="102" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
   <path d="M436,98.5 L442,102 L436,105.5" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
-  <text x="328" y="94" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.55">hit (~1 ns)</text>
+  <text x="328" y="94" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">hit (~1 ns)</text>
 
   <!-- TLB --miss--> Page Table Walk -->
   <line x1="128" y1="120" x2="128" y2="178" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
   <path d="M124.5,176 L128,182 L131.5,176" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
-  <text x="118" y="154" text-anchor="end" font-size="11" fill="currentColor" fill-opacity="0.55">miss</text>
+  <text x="118" y="154" text-anchor="end" font-size="12.0" fill="currentColor" fill-opacity="0.55">miss</text>
 
   <!-- Page Table Walk -->
   <rect x="44" y="184" width="136" height="44" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1.2"/>
   <text x="112" y="203" text-anchor="middle" font-size="13" fill="currentColor" fill-opacity="0.9">Page Table Walk</text>
-  <text x="112" y="219" text-anchor="middle" font-size="10.5" fill="currentColor" fill-opacity="0.55">MMU (CR3 / TTBR)</text>
+  <text x="112" y="219" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">MMU (CR3 / TTBR)</text>
 
   <!-- Page Table Walk -> L1/L2/L3 Cache -->
   <line x1="180" y1="206" x2="210" y2="206" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
@@ -152,12 +152,12 @@ To translate the VPN into a Physical Frame Number (PFN), the MMU follows three p
   <!-- Cache --hit--> PTE -->
   <line x1="344" y1="206" x2="440" y2="206" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
   <path d="M438,202.5 L444,206 L438,209.5" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
-  <text x="395" y="198" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.55">hit (~1–15 ns)</text>
+  <text x="395" y="198" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">hit (~1–15 ns)</text>
 
   <!-- Cache --miss--> DRAM (Page Table) (off-chip) -->
   <line x1="280" y1="226" x2="280" y2="268" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
   <path d="M276.5,266 L280,272 L283.5,266" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
-  <text x="290" y="260" text-anchor="start" font-size="11" fill="currentColor" fill-opacity="0.55">miss</text>
+  <text x="290" y="260" text-anchor="start" font-size="12.0" fill="currentColor" fill-opacity="0.55">miss</text>
 
   <!-- 2. DRAM (Page Table) (off-chip) -->
   <rect x="216" y="274" width="128" height="40" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1.2"/>
@@ -167,7 +167,7 @@ To translate the VPN into a Physical Frame Number (PFN), the MMU follows three p
   <line x1="344" y1="294" x2="490" y2="294" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
   <line x1="490" y1="294" x2="490" y2="232" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
   <path d="M486.5,234 L490,228 L493.5,234" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
-  <text x="417" y="286" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.55">~80 ns</text>
+  <text x="417" y="286" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">~80 ns</text>
 
   <!-- PTE -->
   <rect x="446" y="186" width="88" height="40" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1.2"/>
@@ -178,22 +178,22 @@ To translate the VPN into a Physical Frame Number (PFN), the MMU follows three p
   <line x1="464" y1="162" x2="158" y2="162" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2"/>
   <line x1="158" y1="162" x2="158" y2="178" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2"/>
   <path d="M154.5,176 L158,182 L161.5,176" fill="none" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2"/>
-  <text x="311" y="156" text-anchor="middle" font-size="10.5" fill="currentColor" fill-opacity="0.55">next level (×4)</text>
+  <text x="311" y="156" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">next level (×4)</text>
 
   <!-- PTE --leaf (P=1)--> PFN & Load into TLB -->
   <line x1="504" y1="186" x2="504" y2="126" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
   <path d="M500.5,128 L504,122 L507.5,128" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
-  <text x="514" y="160" text-anchor="start" font-size="11" fill="currentColor" fill-opacity="0.55">P = 1 (leaf)</text>
+  <text x="514" y="160" text-anchor="start" font-size="12.0" fill="currentColor" fill-opacity="0.55">P = 1 (leaf)</text>
 
   <line x1="504" y1="136" x2="188" y2="136" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2" stroke-dasharray="4,3"/>
   <line x1="188" y1="136" x2="188" y2="126" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2" stroke-dasharray="4,3"/>
   <path d="M184.5,128 L188,122 L191.5,128" fill="none" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2"/>
-  <text x="346" y="130" text-anchor="middle" font-size="10.5" fill="currentColor" fill-opacity="0.55">load into TLB</text>
+  <text x="346" y="130" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">load into TLB</text>
 
   <!-- PTE --P=0--> Page Fault (#PF) -->
   <line x1="534" y1="206" x2="582" y2="206" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
   <path d="M580,202.5 L586,206 L580,209.5" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
-  <text x="560" y="198" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.55">P = 0</text>
+  <text x="560" y="198" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">P = 0</text>
 
   <!-- Page Fault (#PF) -->
   <rect x="588" y="186" width="108" height="40" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1.2"/>
@@ -202,7 +202,7 @@ To translate the VPN into a Physical Frame Number (PFN), the MMU follows three p
   <!-- Page Fault (#PF) -> Disk / Swap (off-chip) -->
   <line x1="642" y1="226" x2="642" y2="268" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
   <path d="M638.5,266 L642,272 L645.5,266" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
-  <text x="652" y="260" text-anchor="start" font-size="11" fill="currentColor" fill-opacity="0.55">~µs–ms</text>
+  <text x="652" y="260" text-anchor="start" font-size="12.0" fill="currentColor" fill-opacity="0.55">~µs–ms</text>
 
   <!-- Disk / Swap (off-chip) -->
   <rect x="594" y="274" width="96" height="40" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1.2"/>
@@ -221,40 +221,40 @@ For a typical 32 KB, 8-way set-associative L1 cache with 64-byte cache lines and
 
 <svg viewBox="0 0 716 248" width="100%" style="max-width:716px;display:block;margin:1.5em auto;" role="img" aria-label="Set-associative cache lookup: 64-bit Physical Address splits into Tag (52 bits, key), Index (6 bits, set), and Offset (6 bits, byte). Index decodes 1 of 64 sets containing 8 ways; Tag is compared in parallel across all 8 ways in a single cycle; on a hit, Offset selects the requested bytes from the matching 64-byte cache line.">
   <!-- PA Bitfields -->
-  <text x="88" y="16" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.55">key (bits 63:12)</text>
+  <text x="88" y="16" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">key (bits 63:12)</text>
   <rect x="20" y="24" width="136" height="36" rx="4" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1.2"/>
   <text x="88" y="46" text-anchor="middle" font-size="13" fill="currentColor" fill-opacity="0.9">Tag (52b)</text>
 
-  <text x="204" y="16" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.55">bucket (bits 11:6)</text>
+  <text x="204" y="16" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">bucket (bits 11:6)</text>
   <rect x="156" y="24" width="96" height="36" rx="4" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1.2"/>
   <text x="204" y="46" text-anchor="middle" font-size="13" fill="currentColor" fill-opacity="0.9">Index (6b)</text>
 
-  <text x="298" y="16" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.55">byte (bits 5:0)</text>
+  <text x="298" y="16" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">byte (bits 5:0)</text>
   <rect x="252" y="24" width="92" height="36" rx="4" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1.2"/>
   <text x="298" y="46" text-anchor="middle" font-size="13" fill="currentColor" fill-opacity="0.9">Offset (6b)</text>
 
   <!-- Step 1: Index -> Activated Set -->
   <line x1="204" y1="60" x2="204" y2="98" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
   <path d="M200.5,96 L204,102 L207.5,96" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
-  <text x="214" y="84" text-anchor="start" font-size="11" fill="currentColor" fill-opacity="0.55">1. decode 1 of 64 sets</text>
+  <text x="214" y="84" text-anchor="start" font-size="12.0" fill="currentColor" fill-opacity="0.55">1. decode 1 of 64 sets</text>
 
   <!-- Activated Set (8 Ways) -->
   <rect x="128" y="104" width="388" height="72" rx="6" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.2" stroke-dasharray="4,4"/>
-  <text x="322" y="120" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.55">Activated Set (8-Way Bucket in SRAM)</text>
+  <text x="322" y="120" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">Activated Set (8-Way Bucket in SRAM)</text>
 
   <rect x="140" y="128" width="104" height="38" rx="4" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1.2"/>
   <text x="192" y="145" text-anchor="middle" font-size="12" fill="currentColor" fill-opacity="0.9">Way 0</text>
-  <text x="192" y="159" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.55">V | Tag | 64B</text>
+  <text x="192" y="159" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">V | Tag | 64B</text>
 
   <rect x="256" y="128" width="104" height="38" rx="4" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1.2"/>
   <text x="308" y="145" text-anchor="middle" font-size="12" fill="currentColor" fill-opacity="0.9">Way 1</text>
-  <text x="308" y="159" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.55">V | Tag | 64B</text>
+  <text x="308" y="159" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">V | Tag | 64B</text>
 
   <text x="379" y="151" text-anchor="middle" font-size="13" fill="currentColor" fill-opacity="0.6">...</text>
 
   <rect x="398" y="128" width="104" height="38" rx="4" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1.2"/>
   <text x="450" y="145" text-anchor="middle" font-size="12" fill="currentColor" fill-opacity="0.9">Way 7</text>
-  <text x="450" y="159" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.55">V | Tag | 64B</text>
+  <text x="450" y="159" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">V | Tag | 64B</text>
 
   <!-- Ways -> Parallel Tag Comparators -->
   <line x1="192" y1="166" x2="192" y2="192" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
@@ -277,12 +277,12 @@ For a typical 32 KB, 8-way set-associative L1 cache with 64-byte cache lines and
   <!-- Step 3: Hit + Offset -> Target Data -->
   <line x1="502" y1="216" x2="564" y2="216" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
   <path d="M562,212.5 L568,216 L562,219.5" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
-  <text x="534" y="208" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.55">hit (64B)</text>
+  <text x="534" y="208" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">hit (64B)</text>
 
   <line x1="344" y1="42" x2="634" y2="42" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2"/>
   <line x1="634" y1="42" x2="634" y2="192" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2"/>
   <path d="M630.5,190 L634,196 L637.5,190" fill="none" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2"/>
-  <text x="624" y="120" text-anchor="end" font-size="11" fill="currentColor" fill-opacity="0.55">3. select byte</text>
+  <text x="624" y="120" text-anchor="end" font-size="12.0" fill="currentColor" fill-opacity="0.55">3. select byte</text>
 
   <rect x="570" y="198" width="128" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.55" stroke-width="1.2"/>
   <text x="634" y="220" text-anchor="middle" font-size="12.5" fill="currentColor" fill-opacity="0.9">Target Data</text>

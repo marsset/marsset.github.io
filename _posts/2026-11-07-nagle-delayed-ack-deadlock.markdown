@@ -120,15 +120,15 @@ Now, let us trace the exact timeline when our trading strategy performs two sequ
 
   <!-- Step 1 Badge -->
   <rect x="285" y="75" width="390" height="26" rx="13" fill="#1890ff" fill-opacity="0.12" stroke="#1890ff" stroke-width="1.2"/>
-  <text x="480" y="92" text-anchor="middle" font-size="11" font-weight="700" fill="#1890ff">TCP Seg 1: 64B NewOrder (unacked = 0 → Sent immediately)</text>
+  <text x="480" y="92" text-anchor="middle" font-size="12.0" font-weight="700" fill="#1890ff">TCP Seg 1: 64B NewOrder (unacked = 0 → Sent immediately)</text>
 
   <!-- Step 1 Arrow -->
   <line x1="240" y1="112" x2="712" y2="160" stroke="#1890ff" stroke-width="2" marker-end="url(#arrow-blue)"/>
 
   <!-- Step 1 Receiver Box: Delayed ACK Armed -->
   <rect x="740" y="138" width="205" height="46" rx="5" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25" stroke-width="1.2"/>
-  <text x="842" y="157" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor">Delayed ACK Armed</text>
-  <text x="842" y="173" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.7">Waits for 2nd segment / data</text>
+  <text x="842" y="157" text-anchor="middle" font-size="12.0" font-weight="700" fill="currentColor">Delayed ACK Armed</text>
+  <text x="842" y="173" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.7">Waits for 2nd segment / data</text>
 
   <!-- Step 2: Write CancelOrder -->
   <rect x="15" y="155" width="205" height="36" rx="5" fill="#fa8c16" fill-opacity="0.1" stroke="#fa8c16" stroke-width="1.2"/>
@@ -136,8 +136,8 @@ Now, let us trace the exact timeline when our trading strategy performs two sequ
 
   <!-- Step 2 Sender Box: Nagle Buffers -->
   <rect x="15" y="205" width="205" height="48" rx="5" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25" stroke-width="1.2"/>
-  <text x="117" y="225" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor">Nagle Buffers in Kernel</text>
-  <text x="117" y="241" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.7">80B &lt; MSS &amp; unacked &gt; 0</text>
+  <text x="117" y="225" text-anchor="middle" font-size="12.0" font-weight="700" fill="currentColor">Nagle Buffers in Kernel</text>
+  <text x="117" y="241" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.7">80B &lt; MSS &amp; unacked &gt; 0</text>
 
   <!-- Deadlock Zone Shading -->
   <rect x="255" y="205" width="450" height="180" rx="8" fill="#ff4d4f" fill-opacity="0.06" stroke="#ff4d4f" stroke-opacity="0.4" stroke-dasharray="6,6" stroke-width="1.5"/>
@@ -147,35 +147,35 @@ Now, let us trace the exact timeline when our trading strategy performs two sequ
   <text x="480" y="278" text-anchor="middle" font-size="18" font-weight="800" fill="#ff4d4f">40ms (Linux) — 200ms (BSD/Win)</text>
   <text x="480" y="308" text-anchor="middle" font-size="12" fill="currentColor" fill-opacity="0.85">Sender: Waiting for ACK of Seg 1 before transmitting Seg 2</text>
   <text x="480" y="330" text-anchor="middle" font-size="12" fill="currentColor" fill-opacity="0.85">Receiver: Waiting for Seg 2 before sending cumulative ACK</text>
-  <text x="480" y="360" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" fill-opacity="0.55">─── Wire sits completely idle ───</text>
+  <text x="480" y="360" text-anchor="middle" font-size="12.0" font-style="italic" fill="currentColor" fill-opacity="0.55">─── Wire sits completely idle ───</text>
 
   <!-- Receiver Timeout Box -->
   <rect x="740" y="388" width="205" height="46" rx="5" fill="#ff4d4f" fill-opacity="0.1" stroke="#ff4d4f" stroke-width="1.2"/>
-  <text x="842" y="407" text-anchor="middle" font-size="11" font-weight="700" fill="#ff4d4f">Delayed ACK Timer Expires</text>
-  <text x="842" y="423" text-anchor="middle" font-size="10" fill="#ff4d4f">TCP_DELACK_MIN timeout (40ms)</text>
+  <text x="842" y="407" text-anchor="middle" font-size="12.0" font-weight="700" fill="#ff4d4f">Delayed ACK Timer Expires</text>
+  <text x="842" y="423" text-anchor="middle" font-size="12.0" fill="#ff4d4f">TCP_DELACK_MIN timeout (40ms)</text>
 
   <!-- Delayed ACK Badge -->
   <rect x="290" y="398" width="380" height="26" rx="13" fill="#ff4d4f" fill-opacity="0.12" stroke="#ff4d4f" stroke-width="1.2"/>
-  <text x="480" y="415" text-anchor="middle" font-size="11" font-weight="700" fill="#ff4d4f">Delayed ACK (Empty TCP header: 40B, acking Seg 1)</text>
+  <text x="480" y="415" text-anchor="middle" font-size="12.0" font-weight="700" fill="#ff4d4f">Delayed ACK (Empty TCP header: 40B, acking Seg 1)</text>
 
   <!-- Delayed ACK Arrow -->
   <line x1="720" y1="434" x2="248" y2="478" stroke="#ff4d4f" stroke-width="2" marker-end="url(#arrow-red)"/>
 
   <!-- Step 4 Sender Box: ACK Received -->
   <rect x="15" y="460" width="205" height="46" rx="5" fill="#52c41a" fill-opacity="0.1" stroke="#52c41a" stroke-width="1.2"/>
-  <text x="117" y="479" text-anchor="middle" font-size="11" font-weight="700" fill="#52c41a">ACK Received: unacked = 0</text>
-  <text x="117" y="495" text-anchor="middle" font-size="10" fill="#52c41a">Nagle algorithm unblocks!</text>
+  <text x="117" y="479" text-anchor="middle" font-size="12.0" font-weight="700" fill="#52c41a">ACK Received: unacked = 0</text>
+  <text x="117" y="495" text-anchor="middle" font-size="12.0" fill="#52c41a">Nagle algorithm unblocks!</text>
 
   <!-- Step 4 Seg 2 Badge -->
   <rect x="285" y="480" width="390" height="26" rx="13" fill="#fa8c16" fill-opacity="0.12" stroke="#fa8c16" stroke-width="1.2"/>
-  <text x="480" y="497" text-anchor="middle" font-size="11" font-weight="700" fill="#fa8c16">TCP Seg 2: 80B CancelOrder (Delivered 40ms late! Stale fill!)</text>
+  <text x="480" y="497" text-anchor="middle" font-size="12.0" font-weight="700" fill="#fa8c16">TCP Seg 2: 80B CancelOrder (Delivered 40ms late! Stale fill!)</text>
 
   <!-- Step 4 Seg 2 Arrow -->
   <line x1="240" y1="514" x2="712" y2="558" stroke="#fa8c16" stroke-width="2" marker-end="url(#arrow-orange)"/>
 
   <!-- Receiver Final Box -->
   <rect x="740" y="538" width="205" height="38" rx="5" fill="#fa8c16" fill-opacity="0.1" stroke="#fa8c16" stroke-width="1.2"/>
-  <text x="842" y="561" text-anchor="middle" font-size="11" font-weight="700" fill="#fa8c16">Cancel Arrives (40ms Late!)</text>
+  <text x="842" y="561" text-anchor="middle" font-size="12.0" font-weight="700" fill="#fa8c16">Cancel Arrives (40ms Late!)</text>
 </svg>
 
 ### Phase 1: $t = 0.00\,\mu\text{s}$ — The First `write()`

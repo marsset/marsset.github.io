@@ -154,11 +154,11 @@ As arrival intensity $$\lambda$$ increases, the Poisson distribution undergoes a
     <style>
       .p-axis { stroke: currentColor; stroke-opacity: 0.5; stroke-width: 1.2; }
       .p-grid { stroke: currentColor; stroke-opacity: 0.08; stroke-dasharray: 3,3; stroke-width: 1; }
-      .p-tick { fill: currentColor; font-size: 11.5px; fill-opacity: 0.65; }
+      .p-tick { fill: currentColor; font-size:12.0px; fill-opacity: 0.65; }
       .p-axis-title { fill: currentColor; font-size: 13px; font-weight: 500; fill-opacity: 0.85; }
       .p-legend-title { fill: currentColor; font-size: 12px; font-weight: 600; fill-opacity: 0.9; }
-      .p-legend-text { fill: currentColor; font-size: 11.5px; fill-opacity: 0.8; }
-      .p-annot { font-size: 11px; font-weight: 500; }
+      .p-legend-text { fill: currentColor; font-size:12.0px; fill-opacity: 0.8; }
+      .p-annot { font-size:12.0px; font-weight: 500; }
     </style>
   </defs>
   <line x1="70" y1="373.75" x2="805" y2="373.75" class="p-grid" />

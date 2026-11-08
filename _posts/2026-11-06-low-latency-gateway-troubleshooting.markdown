@@ -42,7 +42,7 @@ To minimize contention and eliminate locks on the critical path, the gateway spl
 
   <!-- SPSC Connection -->
   <path d="M 400 157 L 480 157" stroke="#ff4d4f" stroke-width="2.5" stroke-dasharray="5,5"/>
-  <text x="440" y="145" text-anchor="middle" font-size="11" font-weight="700" fill="#ff4d4f">Lock-Free SPSC</text>
+  <text x="440" y="145" text-anchor="middle" font-size="12.0" font-weight="700" fill="#ff4d4f">Lock-Free SPSC</text>
 
   <!-- Core 2 Box -->
   <rect x="480" y="30" width="360" height="170" rx="8" fill="currentColor" fill-opacity="0.05" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5"/>
@@ -120,12 +120,12 @@ On Intel Xeon processors, **Intel Data Direct I/O (DDIO)** allows PCIe network c
   <!-- DDIO Partition (10%) -->
   <rect x="70" y="85" width="200" height="100" rx="6" fill="#ff4d4f" fill-opacity="0.15" stroke="#ff4d4f" stroke-width="2"/>
   <text x="170" y="125" text-anchor="middle" font-size="13" font-weight="700" fill="#ff4d4f">DDIO Ways (Default 10%)</text>
-  <text x="170" y="150" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.8">NIC RX/TX DMA Buffers</text>
+  <text x="170" y="150" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.8">NIC RX/TX DMA Buffers</text>
 
   <!-- Application Partition (90%) -->
   <rect x="290" y="85" width="520" height="100" rx="6" fill="#52c41a" fill-opacity="0.1" stroke="#52c41a" stroke-width="1.5"/>
   <text x="550" y="125" text-anchor="middle" font-size="13" font-weight="700" fill="#52c41a">Application Working Set (90%)</text>
-  <text x="550" y="150" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.8">L2 Limit Order Book, Price Ladders, Lookup Tables</text>
+  <text x="550" y="150" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.8">L2 Limit Order Book, Price Ladders, Lookup Tables</text>
 
   <!-- Eviction arrow -->
   <path d="M 270 135 L 290 135" stroke="#ff4d4f" stroke-width="3" marker-end="url(#arrow)"/>

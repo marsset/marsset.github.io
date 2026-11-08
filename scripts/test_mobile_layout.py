@@ -19,6 +19,10 @@ Checks:
 4. CSS Mobile Safeguards:
    - Validates that _sass/_custom.scss includes horizontal scrolling rules for MathJax
      (.MathJax_Display), responsive SVGs, and table scrolling.
+5. SVG Font Size Legibility:
+   - Font sizes in <svg> diagrams must be >= 12.0px to remain legible when scaled down
+     on desktop and mobile screens.
+   - Auto-fix: automatically bumps sub-12px font sizes to 12.0px.
 """
 
 import sys
@@ -191,6 +195,46 @@ def audit_and_fix_post(filepath: Path, fix: bool = False):
         alert_type = match.group(1)
         notice_class = alert_map.get(alert_type, "warning")
         issues.append(f"GFM alert syntax > [!{alert_type}] found. Use <div class=\"notice--{notice_class}\" markdown=\"1\">")
+
+    # -------------------------------------------------------------------------
+    # 5. SVG Font Size Legibility Check & Auto-Fix
+    # -------------------------------------------------------------------------
+    # In scaled SVGs (viewBox ~800-960px), font sizes below 12.0px scale down to
+    # sub-8pt on laptops and sub-4pt on phones, rendering text unreadable.
+    # Minimum allowed font-size in any SVG is 12.0px.
+    MIN_SVG_FONT_SIZE = 12.0
+    def check_and_fix_font_sizes(svg_match):
+        svg_text = svg_match.group(0)
+        
+        def replace_attr_font(m):
+            val_str = m.group(1)
+            try:
+                val = float(val_str)
+                if val < MIN_SVG_FONT_SIZE:
+                    issues.append(f"SVG font-size=\"{val_str}\" is illegibly small (< {MIN_SVG_FONT_SIZE}px)")
+                    if fix:
+                        return f'font-size="{MIN_SVG_FONT_SIZE:.1f}"'
+            except ValueError:
+                pass
+            return m.group(0)
+            
+        def replace_style_font(m):
+            val_str = m.group(1)
+            try:
+                val = float(val_str)
+                if val < MIN_SVG_FONT_SIZE:
+                    issues.append(f"SVG style font-size:{val_str}px is illegibly small (< {MIN_SVG_FONT_SIZE}px)")
+                    if fix:
+                        return f'font-size:{MIN_SVG_FONT_SIZE:.1f}px'
+            except ValueError:
+                pass
+            return m.group(0)
+
+        new_svg = re.sub(r'font-size=["\']([0-9\.]+)["\']', replace_attr_font, svg_text)
+        new_svg = re.sub(r'font-size\s*:\s*([0-9\.]+)px', replace_style_font, new_svg)
+        return new_svg
+
+    content = re.sub(r'<svg\b[^>]*>.*?</svg>', check_and_fix_font_sizes, content, flags=re.DOTALL)
 
     if fix and math_modified:
         content = '\n'.join(new_lines)

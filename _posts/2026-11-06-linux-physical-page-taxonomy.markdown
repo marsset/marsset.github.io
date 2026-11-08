@@ -73,46 +73,46 @@ To understand why a page cannot be simply classified as "used", the Linux virtua
   <path d="M 140 160 L 100 205" stroke="currentColor" stroke-width="1.5" marker-end="url(#tax-arrow)"/>
   <rect x="20" y="205" width="160" height="60" rx="4" fill="currentColor" fill-opacity="0.05" stroke="currentColor" stroke-opacity="0.4"/>
   <text x="100" y="228" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">Anonymous Pages</text>
-  <text x="100" y="248" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.7">Heap / Stack / mmap</text>
+  <text x="100" y="248" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.7">Heap / Stack / mmap</text>
 
   <path d="M 220 160 L 220 205" stroke="currentColor" stroke-width="1.5" marker-end="url(#tax-arrow)"/>
   <rect x="190" y="205" width="160" height="60" rx="4" fill="currentColor" fill-opacity="0.05" stroke="currentColor" stroke-opacity="0.4"/>
   <text x="270" y="228" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">File Pages (Page Cache)</text>
-  <text x="270" y="248" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.7">ext4/XFS Disk Caches</text>
+  <text x="270" y="248" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.7">ext4/XFS Disk Caches</text>
 
   <path d="M 300 160 L 370 205" stroke="currentColor" stroke-width="1.5" marker-end="url(#tax-arrow)"/>
   <rect x="360" y="205" width="140" height="60" rx="4" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-opacity="0.5"/>
   <text x="430" y="228" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">Unevictable</text>
-  <text x="430" y="248" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.7">mlock / Pinned DMA</text>
+  <text x="430" y="248" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.7">mlock / Pinned DMA</text>
 
   <!-- Sub-branches under Non-LRU -->
   <path d="M 600 160 L 560 205" stroke="currentColor" stroke-width="1.5" marker-end="url(#tax-arrow)"/>
   <rect x="520" y="205" width="140" height="60" rx="4" fill="currentColor" fill-opacity="0.05" stroke="currentColor" stroke-opacity="0.4"/>
   <text x="590" y="228" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">Slab Allocator</text>
-  <text x="590" y="248" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.7">dentries / inodes</text>
+  <text x="590" y="248" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.7">dentries / inodes</text>
 
   <path d="M 680 160 L 680 205" stroke="currentColor" stroke-width="1.5" marker-end="url(#tax-arrow)"/>
   <rect x="670" y="205" width="130" height="60" rx="4" fill="currentColor" fill-opacity="0.05" stroke="currentColor" stroke-opacity="0.4"/>
   <text x="735" y="228" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">Page Tables</text>
-  <text x="735" y="248" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.7">PGD/PUD/PMD/PTE</text>
+  <text x="735" y="248" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.7">PGD/PUD/PMD/PTE</text>
 
   <path d="M 760 160 L 820 205" stroke="currentColor" stroke-width="1.5" marker-end="url(#tax-arrow)"/>
   <rect x="810" y="205" width="80" height="60" rx="4" fill="currentColor" fill-opacity="0.05" stroke="currentColor" stroke-opacity="0.4"/>
-  <text x="850" y="228" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor">KernelStack</text>
-  <text x="850" y="248" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.7">16KB / th</text>
+  <text x="850" y="228" text-anchor="middle" font-size="12.0" font-weight="700" fill="currentColor">KernelStack</text>
+  <text x="850" y="248" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.7">16KB / th</text>
 
   <!-- Details below -->
   <rect x="20" y="290" width="480" height="110" rx="6" fill="currentColor" fill-opacity="0.03" stroke="currentColor" stroke-opacity="0.2"/>
   <text x="35" y="315" font-size="13" font-weight="700" fill="currentColor">Dual-LRU Lists Breakdown:</text>
-  <text x="35" y="340" font-size="11" fill="currentColor">• Active(anon) + Inactive(anon) = Total Anonymous Memory (AnonPages)</text>
-  <text x="35" y="360" font-size="11" fill="currentColor">• Active(file) + Inactive(file) = Total Page Cache (Cached + Buffers)</text>
-  <text x="35" y="380" font-size="11" fill="currentColor">• Unevictable = Memory pinned against kswapd eviction</text>
+  <text x="35" y="340" font-size="12.0" fill="currentColor">• Active(anon) + Inactive(anon) = Total Anonymous Memory (AnonPages)</text>
+  <text x="35" y="360" font-size="12.0" fill="currentColor">• Active(file) + Inactive(file) = Total Page Cache (Cached + Buffers)</text>
+  <text x="35" y="380" font-size="12.0" fill="currentColor">• Unevictable = Memory pinned against kswapd eviction</text>
 
   <rect x="520" y="290" width="370" height="110" rx="6" fill="currentColor" fill-opacity="0.03" stroke="currentColor" stroke-opacity="0.2"/>
   <text x="535" y="315" font-size="13" font-weight="700" fill="currentColor">Non-LRU Reclaim Mechanics:</text>
-  <text x="535" y="340" font-size="11" fill="currentColor">• SReclaimable: Shrinkable dentries &amp; inode caches</text>
-  <text x="535" y="360" font-size="11" fill="currentColor">• SUnreclaim: Fixed kernel structs (mm_struct, task_struct)</text>
-  <text x="535" y="380" font-size="11" fill="currentColor">• PageTables &amp; KernelStack: Hard structural overhead</text>
+  <text x="535" y="340" font-size="12.0" fill="currentColor">• SReclaimable: Shrinkable dentries &amp; inode caches</text>
+  <text x="535" y="360" font-size="12.0" fill="currentColor">• SUnreclaim: Fixed kernel structs (mm_struct, task_struct)</text>
+  <text x="535" y="380" font-size="12.0" fill="currentColor">• PageTables &amp; KernelStack: Hard structural overhead</text>
 </svg>
 
 ---

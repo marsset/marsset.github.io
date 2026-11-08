@@ -39,12 +39,12 @@ Before analyzing memory watermarks and page eviction, we must understand how the
   <!-- Node 0: Cores & Memory Controller -->
   <rect x="38" y="60" width="170" height="54" rx="5" fill="#38bdf8" fill-opacity="0.08" stroke="#0284c7" stroke-opacity="0.4" stroke-width="1"/>
   <text x="123" y="83" text-anchor="middle" font-size="13" font-weight="600" fill="#38bdf8">CPU Cores 0–31</text>
-  <text x="123" y="101" text-anchor="middle" font-size="11.5" fill="currentColor" fill-opacity="0.7">Memory Controller (IMC)</text>
+  <text x="123" y="101" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.7">Memory Controller (IMC)</text>
 
   <!-- Node 0: Local DRAM -->
   <rect x="230" y="60" width="170" height="54" rx="5" fill="#10b981" fill-opacity="0.08" stroke="#10b981" stroke-opacity="0.4" stroke-width="1"/>
   <text x="315" y="83" text-anchor="middle" font-size="13" font-weight="600" fill="#10b981">Local DRAM (64 GB)</text>
-  <text x="315" y="101" text-anchor="middle" font-size="11.5" fill="currentColor" fill-opacity="0.7">~60–80 ns Access Latency</text>
+  <text x="315" y="101" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.7">~60–80 ns Access Latency</text>
 
   <line x1="208" y1="87" x2="228" y2="87" stroke="#10b981" stroke-width="1.6" marker-end="url(#numa-arrow)"/>
 
@@ -55,7 +55,7 @@ Before analyzing memory watermarks and page eviction, we must understand how the
   <!-- ZONE_DMA32 -->
   <rect x="52" y="170" width="334" height="52" rx="4" fill="currentColor" fill-opacity="0.04" stroke="currentColor" stroke-opacity="0.3" stroke-width="1"/>
   <text x="68" y="192" font-size="13" font-weight="700" fill="currentColor" fill-opacity="0.9">ZONE_DMA32 (0 – 4 GB)</text>
-  <text x="68" y="210" font-size="11.5" fill="currentColor" fill-opacity="0.6">Legacy 32-bit DMA addressable range</text>
+  <text x="68" y="210" font-size="12.0" fill="currentColor" fill-opacity="0.6">Legacy 32-bit DMA addressable range</text>
 
   <!-- ZONE_NORMAL -->
   <rect x="52" y="234" width="334" height="142" rx="4" fill="#38bdf8" fill-opacity="0.08" stroke="#0284c7" stroke-opacity="0.5" stroke-width="1.2"/>
@@ -68,8 +68,8 @@ Before analyzing memory watermarks and page eviction, we must understand how the
   <!-- Interconnect in Middle -->
   <line x1="415" y1="87" x2="465" y2="87" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="3,2"/>
   <rect x="420" y="145" width="40" height="90" rx="5" fill="#0b0f16" stroke="#f59e0b" stroke-width="1.2"/>
-  <text x="440" y="180" text-anchor="middle" font-size="11" font-weight="700" fill="#f59e0b">UPI / IF</text>
-  <text x="440" y="202" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.7">~250ns</text>
+  <text x="440" y="180" text-anchor="middle" font-size="12.0" font-weight="700" fill="#f59e0b">UPI / IF</text>
+  <text x="440" y="202" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.7">~250ns</text>
 
   <!-- NUMA Node 1 Container -->
   <rect x="465" y="15" width="395" height="395" rx="8" fill="currentColor" fill-opacity="0.04" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.4"/>
@@ -78,12 +78,12 @@ Before analyzing memory watermarks and page eviction, we must understand how the
   <!-- Node 1: Cores & Memory Controller -->
   <rect x="483" y="60" width="170" height="54" rx="5" fill="#38bdf8" fill-opacity="0.08" stroke="#0284c7" stroke-opacity="0.4" stroke-width="1"/>
   <text x="568" y="83" text-anchor="middle" font-size="13" font-weight="600" fill="#38bdf8">CPU Cores 32–63</text>
-  <text x="568" y="101" text-anchor="middle" font-size="11.5" fill="currentColor" fill-opacity="0.7">Memory Controller (IMC)</text>
+  <text x="568" y="101" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.7">Memory Controller (IMC)</text>
 
   <!-- Node 1: Local DRAM -->
   <rect x="675" y="60" width="170" height="54" rx="5" fill="#10b981" fill-opacity="0.08" stroke="#10b981" stroke-opacity="0.4" stroke-width="1"/>
   <text x="760" y="83" text-anchor="middle" font-size="13" font-weight="600" fill="#10b981">Local DRAM (64 GB)</text>
-  <text x="760" y="101" text-anchor="middle" font-size="11.5" fill="currentColor" fill-opacity="0.7">~60–80 ns Access Latency</text>
+  <text x="760" y="101" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.7">~60–80 ns Access Latency</text>
 
   <line x1="653" y1="87" x2="673" y2="87" stroke="#10b981" stroke-width="1.6" marker-end="url(#numa-arrow)"/>
 
@@ -94,7 +94,7 @@ Before analyzing memory watermarks and page eviction, we must understand how the
   <!-- ZONE_DMA32 -->
   <rect x="497" y="170" width="334" height="52" rx="4" fill="currentColor" fill-opacity="0.04" stroke="currentColor" stroke-opacity="0.3" stroke-width="1"/>
   <text x="513" y="192" font-size="13" font-weight="700" fill="currentColor" fill-opacity="0.9">ZONE_DMA32 (0 – 4 GB)</text>
-  <text x="513" y="210" font-size="11.5" fill="currentColor" fill-opacity="0.6">Present if node spans lower 4 GB</text>
+  <text x="513" y="210" font-size="12.0" fill="currentColor" fill-opacity="0.6">Present if node spans lower 4 GB</text>
 
   <!-- ZONE_NORMAL -->
   <rect x="497" y="234" width="334" height="142" rx="4" fill="#38bdf8" fill-opacity="0.08" stroke="#0284c7" stroke-opacity="0.5" stroke-width="1.2"/>
@@ -157,40 +157,40 @@ Inside each memory zone, the kernel tracks free memory against three fundamental
   <!-- Above WMARK_HIGH: Plenty of RAM -->
   <rect x="30" y="60" width="226" height="84" rx="4" fill="#10b981" fill-opacity="0.12" stroke="#10b981" stroke-opacity="0.5" stroke-width="1"/>
   <text x="143" y="88" text-anchor="middle" font-size="13.5" font-weight="600" fill="#10b981">Zone Calm (Ample Free RAM)</text>
-  <text x="143" y="110" text-anchor="middle" font-size="11.5" fill="currentColor" fill-opacity="0.7">Allocations succeed instantly</text>
-  <text x="143" y="128" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.55">(~0 ns overhead)</text>
+  <text x="143" y="110" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.7">Allocations succeed instantly</text>
+  <text x="143" y="128" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">(~0 ns overhead)</text>
 
   <!-- WMARK_HIGH Line & Badge -->
   <line x1="20" y1="149" x2="268" y2="149" stroke="#10b981" stroke-width="2" stroke-dasharray="4,3"/>
   <rect x="270" y="137" width="98" height="24" rx="4" fill="#064e3b" fill-opacity="0.3" stroke="#10b981" stroke-width="1"/>
-  <text x="319" y="153" text-anchor="middle" font-size="11.5" font-weight="700" fill="#10b981">WMARK_HIGH</text>
+  <text x="319" y="153" text-anchor="middle" font-size="12.0" font-weight="700" fill="#10b981">WMARK_HIGH</text>
 
   <!-- Between HIGH and LOW: kswapd recovery band -->
   <rect x="30" y="155" width="226" height="68" rx="4" fill="#38bdf8" fill-opacity="0.08" stroke="#0284c7" stroke-opacity="0.3" stroke-width="1"/>
   <text x="143" y="184" text-anchor="middle" font-size="13" font-weight="600" fill="#38bdf8">kswapd Recovery Band</text>
-  <text x="143" y="205" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.65">Reclaims until RAM &gt; WMARK_HIGH</text>
+  <text x="143" y="205" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.65">Reclaims until RAM &gt; WMARK_HIGH</text>
 
   <!-- WMARK_LOW Line & Badge -->
   <line x1="20" y1="228" x2="268" y2="228" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4,3"/>
   <rect x="270" y="216" width="98" height="24" rx="4" fill="#451a03" fill-opacity="0.3" stroke="#f59e0b" stroke-width="1"/>
-  <text x="319" y="232" text-anchor="middle" font-size="11.5" font-weight="700" fill="#f59e0b">WMARK_LOW</text>
+  <text x="319" y="232" text-anchor="middle" font-size="12.0" font-weight="700" fill="#f59e0b">WMARK_LOW</text>
 
   <!-- Between LOW and MIN: kswapd active trigger zone -->
   <rect x="30" y="234" width="226" height="96" rx="4" fill="#f59e0b" fill-opacity="0.12" stroke="#f59e0b" stroke-opacity="0.4" stroke-width="1"/>
   <text x="143" y="266" text-anchor="middle" font-size="13.5" font-weight="600" fill="#f59e0b">Background Reclaim</text>
-  <text x="143" y="288" text-anchor="middle" font-size="11.5" fill="currentColor" fill-opacity="0.7">kswapd scans &amp; reclaims</text>
-  <text x="143" y="306" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.55">in background (async)</text>
+  <text x="143" y="288" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.7">kswapd scans &amp; reclaims</text>
+  <text x="143" y="306" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">in background (async)</text>
 
   <!-- WMARK_MIN Line & Badge -->
   <line x1="20" y1="336" x2="268" y2="336" stroke="#ef4444" stroke-width="2.2"/>
   <rect x="270" y="324" width="98" height="24" rx="4" fill="#450a0a" fill-opacity="0.4" stroke="#ef4444" stroke-width="1"/>
-  <text x="319" y="340" text-anchor="middle" font-size="11.5" font-weight="700" fill="#ef4444">WMARK_MIN</text>
+  <text x="319" y="340" text-anchor="middle" font-size="12.0" font-weight="700" fill="#ef4444">WMARK_MIN</text>
 
   <!-- Below WMARK_MIN: Direct Reclaim -->
   <rect x="30" y="342" width="226" height="118" rx="4" fill="#ef4444" fill-opacity="0.22" stroke="#ef4444" stroke-opacity="0.7" stroke-width="1.2"/>
   <text x="143" y="380" text-anchor="middle" font-size="12" font-weight="700" fill="#f87171">DIRECT RECLAIM CRITICAL</text>
-  <text x="143" y="406" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.75">Allocating threads blocked</text>
-  <text x="143" y="426" text-anchor="middle" font-size="11" font-weight="600" fill="#fca5a5">Latency spikes to 50–200+ ms</text>
+  <text x="143" y="406" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.75">Allocating threads blocked</text>
+  <text x="143" y="426" text-anchor="middle" font-size="12.0" font-weight="600" fill="#fca5a5">Latency spikes to 50–200+ ms</text>
 
   <!-- Narrative Action Cards (Right: x=415 to x=860, width=445) -->
 
@@ -281,7 +281,7 @@ To prevent single-pass scans from destroying the operating working set, Linux sp
   
   <!-- Demotion Card (Sitting in clear open gap between x=280 and x=595; no line passes through it) -->
   <rect x="280" y="26" width="315" height="28" rx="5" fill="#451a03" stroke="#f59e0b" stroke-opacity="0.8" stroke-width="1.2"/>
-  <text x="437" y="44" text-anchor="middle" font-size="11.5" font-weight="600" fill="#f59e0b">Demotion: Inactive deficit &middot; unreferenced page</text>
+  <text x="437" y="44" text-anchor="middle" font-size="12.0" font-weight="600" fill="#f59e0b">Demotion: Inactive deficit &middot; unreferenced page</text>
   
   <!-- Segment 2: from left side of Demotion Card down into Inactive HEAD at x=100 (52px clear of Inactive List title) -->
   <path d="M 274 40 H 100 V 126" fill="none" stroke="#f59e0b" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#lru-arrow-orange)"/>
@@ -290,52 +290,52 @@ To prevent single-pass scans from destroying the operating working set, Linux sp
   <rect x="25" y="70" width="400" height="275" rx="8" fill="currentColor" fill-opacity="0.04" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.2"/>
   <!-- Container Header (Centered in open gap x=152..298, maintaining 52px of clear air to the vertical line at x=100) -->
   <text x="225" y="96" text-anchor="middle" font-size="14.5" font-weight="700" fill="currentColor" fill-opacity="0.95">Inactive List</text>
-  <text x="225" y="114" text-anchor="middle" font-size="11.5" fill="currentColor" fill-opacity="0.6">Probationary Cold Candidates</text>
+  <text x="225" y="114" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.6">Probationary Cold Candidates</text>
 
   <!-- Head of Inactive List -->
   <rect x="45" y="132" width="150" height="52" rx="5" fill="#38bdf8" fill-opacity="0.1" stroke="#0284c7" stroke-width="1.2"/>
   <text x="120" y="154" text-anchor="middle" font-size="13" font-weight="700" fill="#38bdf8">HEAD</text>
-  <text x="120" y="172" text-anchor="middle" font-size="11.5" fill="currentColor" fill-opacity="0.75">New Page Enters</text>
+  <text x="120" y="172" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.75">New Page Enters</text>
 
   <!-- Tail of Inactive List -->
   <rect x="250" y="132" width="150" height="52" rx="5" fill="#ef4444" fill-opacity="0.12" stroke="#ef4444" stroke-width="1.2"/>
   <text x="325" y="154" text-anchor="middle" font-size="13" font-weight="700" fill="#f87171">TAIL</text>
-  <text x="325" y="172" text-anchor="middle" font-size="11.5" fill="currentColor" fill-opacity="0.75">Eviction Target</text>
+  <text x="325" y="172" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.75">Eviction Target</text>
 
   <!-- Inactive Aging Arrow (Text cleanly separated 12px above line) -->
-  <text x="220" y="148" text-anchor="middle" font-size="10.5" fill="currentColor" fill-opacity="0.55">aging</text>
+  <text x="220" y="148" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">aging</text>
   <line x1="195" y1="158" x2="242" y2="158" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.4" marker-end="url(#lru-arrow-gray)"/>
 
   <!-- Eviction Arrow out of Inactive Tail (terminates at top of EVICTED card) -->
   <line x1="325" y1="184" x2="325" y2="218" stroke="#ef4444" stroke-width="1.6" marker-end="url(#lru-arrow-red)"/>
   <rect x="235" y="224" width="180" height="54" rx="5" fill="#450a0a" stroke="#ef4444" stroke-opacity="0.8" stroke-width="1.2"/>
   <text x="325" y="245" text-anchor="middle" font-size="12.5" font-weight="700" fill="#f87171">EVICTED / RECLAIMED</text>
-  <text x="325" y="265" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.75">Clean: Freed | Dirty: Writeback</text>
+  <text x="325" y="265" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.75">Clean: Freed | Dirty: Writeback</text>
 
   <!-- Active List Container (Right) -->
   <rect x="455" y="70" width="400" height="275" rx="8" fill="currentColor" fill-opacity="0.04" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.2"/>
   <!-- Container Header (Centered in open gap x=585..725, maintaining 45px of clear air to the vertical line at x=770) -->
   <text x="655" y="96" text-anchor="middle" font-size="14.5" font-weight="700" fill="#10b981">Active List</text>
-  <text x="655" y="114" text-anchor="middle" font-size="11.5" fill="currentColor" fill-opacity="0.6">Protected Working Set</text>
+  <text x="655" y="114" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.6">Protected Working Set</text>
 
   <!-- Head of Active List -->
   <rect x="475" y="132" width="150" height="52" rx="5" fill="#10b981" fill-opacity="0.12" stroke="#10b981" stroke-width="1.2"/>
   <text x="550" y="154" text-anchor="middle" font-size="13" font-weight="700" fill="#10b981">HEAD</text>
-  <text x="550" y="172" text-anchor="middle" font-size="11.5" fill="currentColor" fill-opacity="0.75">Promoted Hot Pages</text>
+  <text x="550" y="172" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.75">Promoted Hot Pages</text>
 
   <!-- Tail of Active List -->
   <rect x="680" y="132" width="150" height="52" rx="5" fill="#f59e0b" fill-opacity="0.1" stroke="#f59e0b" stroke-width="1.2"/>
   <text x="755" y="154" text-anchor="middle" font-size="13" font-weight="700" fill="#f59e0b">TAIL</text>
-  <text x="755" y="172" text-anchor="middle" font-size="11.5" fill="currentColor" fill-opacity="0.75">Demotion Candidate</text>
+  <text x="755" y="172" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.75">Demotion Candidate</text>
 
   <!-- Active Aging Arrow (Text cleanly separated 12px above line) -->
-  <text x="650" y="148" text-anchor="middle" font-size="10.5" fill="currentColor" fill-opacity="0.55">aging</text>
+  <text x="650" y="148" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">aging</text>
   <line x1="625" y1="158" x2="672" y2="158" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.4" marker-end="url(#lru-arrow-gray)"/>
 
   <!-- Active Protection Status Card (Symmetric counterpart to EVICTED card) -->
   <rect x="665" y="224" width="180" height="54" rx="5" fill="#064e3b" stroke="#10b981" stroke-opacity="0.8" stroke-width="1.2"/>
   <text x="755" y="245" text-anchor="middle" font-size="12.5" font-weight="700" fill="#10b981">PROTECTED CACHE</text>
-  <text x="755" y="265" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.75">Shielded from normal reclaim</text>
+  <text x="755" y="265" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.75">Shielded from normal reclaim</text>
 
   <!-- Bottom Promotion Flow: Truly segmented arrows entering & leaving Promotion Card with ZERO overlap -->
   <!-- Segment 1: from Inactive HEAD bottom into left side of Promotion Card -->
@@ -343,7 +343,7 @@ To prevent single-pass scans from destroying the operating working set, Linux sp
 
   <!-- Promotion Card (Sitting in clear open gap between x=205 and x=485; no line passes through it) -->
   <rect x="205" y="301" width="280" height="28" rx="5" fill="#064e3b" stroke="#10b981" stroke-opacity="0.8" stroke-width="1.2"/>
-  <text x="345" y="319" text-anchor="middle" font-size="11.5" font-weight="600" fill="#10b981">Promotion: 2nd Touch (PTE Accessed=1)</text>
+  <text x="345" y="319" text-anchor="middle" font-size="12.0" font-weight="600" fill="#10b981">Promotion: 2nd Touch (PTE Accessed=1)</text>
 
   <!-- Segment 2: from right side of Promotion Card up into Active HEAD (90° turn at x=550 is 65px clear of card) -->
   <path d="M 491 315 H 550 V 190" fill="none" stroke="#10b981" stroke-width="1.8" marker-end="url(#lru-arrow-green)"/>
@@ -480,7 +480,7 @@ Because kernel heuristics cannot anticipate application-level intent, high-perfo
 
   <rect x="35" y="220" width="235" height="58" rx="5" fill="#10b981" fill-opacity="0.1" stroke="#10b981" stroke-opacity="0.5" stroke-width="1.2"/>
   <text x="152" y="244" text-anchor="middle" font-size="13" font-weight="600" fill="#10b981">User-Space Pinned Cache</text>
-  <text x="152" y="262" text-anchor="middle" font-size="11.5" fill="currentColor" fill-opacity="0.7">Off-Heap / mlock (Hot Tables)</text>
+  <text x="152" y="262" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.7">Off-Heap / mlock (Hot Tables)</text>
 
   <!-- Middle: Linux Kernel Page Cache -->
   <rect x="325" y="75" width="230" height="190" rx="8" fill="currentColor" fill-opacity="0.04" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.2"/>
@@ -497,7 +497,7 @@ Because kernel heuristics cannot anticipate application-level intent, high-perfo
   <rect x="610" y="80" width="235" height="85" rx="5" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.2"/>
   <text x="727" y="112" text-anchor="middle" font-size="14" font-weight="600" fill="#currentColor" fill-opacity="0.9">Historical Tick Lake</text>
   <text x="727" y="134" text-anchor="middle" font-size="12" fill="currentColor" fill-opacity="0.65">Parquet / Compressed Ticks</text>
-  <text x="727" y="152" text-anchor="middle" font-size="11" fill="#10b981">Direct DMA Target</text>
+  <text x="727" y="152" text-anchor="middle" font-size="12.0" fill="#10b981">Direct DMA Target</text>
 
   <rect x="610" y="185" width="235" height="85" rx="5" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.2"/>
   <text x="727" y="217" text-anchor="middle" font-size="14" font-weight="600" fill="currentColor" fill-opacity="0.9">Reference Data Files</text>

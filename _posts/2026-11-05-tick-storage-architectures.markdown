@@ -100,36 +100,36 @@ To eliminate the row-stitching stall while retaining columnar compression, high-
   <!-- Chunk Header -->
   <rect x="35" y="85" width="120" height="185" rx="4" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-opacity="0.4" stroke-width="1"/>
   <text x="95" y="115" font-size="12" font-weight="700" text-anchor="middle" fill="currentColor">Chunk Header</text>
-  <text x="95" y="140" font-size="11" text-anchor="middle" fill="currentColor" fill-opacity="0.7">• Magic &amp; CRC32</text>
-  <text x="95" y="160" font-size="11" text-anchor="middle" fill="currentColor" fill-opacity="0.7">• T_min / T_max</text>
-  <text x="95" y="180" font-size="11" text-anchor="middle" fill="currentColor" fill-opacity="0.7">• Row Count (64K)</text>
-  <text x="95" y="200" font-size="11" text-anchor="middle" fill="currentColor" fill-opacity="0.7">• Col Offsets</text>
-  <text x="95" y="235" font-size="10" text-anchor="middle" fill="currentColor" fill-opacity="0.5">Fixed 512B Block</text>
+  <text x="95" y="140" font-size="12.0" text-anchor="middle" fill="currentColor" fill-opacity="0.7">• Magic &amp; CRC32</text>
+  <text x="95" y="160" font-size="12.0" text-anchor="middle" fill="currentColor" fill-opacity="0.7">• T_min / T_max</text>
+  <text x="95" y="180" font-size="12.0" text-anchor="middle" fill="currentColor" fill-opacity="0.7">• Row Count (64K)</text>
+  <text x="95" y="200" font-size="12.0" text-anchor="middle" fill="currentColor" fill-opacity="0.7">• Col Offsets</text>
+  <text x="95" y="235" font-size="12.0" text-anchor="middle" fill="currentColor" fill-opacity="0.5">Fixed 512B Block</text>
 
   <!-- Column mini-blocks -->
   <rect x="170" y="85" width="150" height="185" rx="4" fill="currentColor" fill-opacity="0.08" stroke="currentColor" stroke-opacity="0.3" stroke-width="1"/>
   <text x="245" y="115" font-size="12" font-weight="700" text-anchor="middle" fill="currentColor">Timestamp Col</text>
-  <text x="245" y="140" font-size="11" text-anchor="middle" fill="currentColor" fill-opacity="0.7">Gorilla Delta-of-Delta</text>
-  <text x="245" y="165" font-size="11" text-anchor="middle" fill="currentColor" fill-opacity="0.7">Dense Bit-Packing</text>
-  <text x="245" y="235" font-size="10" text-anchor="middle" fill="currentColor" fill-opacity="0.5">~32 KB Compressed</text>
+  <text x="245" y="140" font-size="12.0" text-anchor="middle" fill="currentColor" fill-opacity="0.7">Gorilla Delta-of-Delta</text>
+  <text x="245" y="165" font-size="12.0" text-anchor="middle" fill="currentColor" fill-opacity="0.7">Dense Bit-Packing</text>
+  <text x="245" y="235" font-size="12.0" text-anchor="middle" fill="currentColor" fill-opacity="0.5">~32 KB Compressed</text>
 
   <rect x="335" y="85" width="150" height="185" rx="4" fill="currentColor" fill-opacity="0.08" stroke="currentColor" stroke-opacity="0.3" stroke-width="1"/>
   <text x="410" y="115" font-size="12" font-weight="700" text-anchor="middle" fill="currentColor">Price Column</text>
-  <text x="410" y="140" font-size="11" text-anchor="middle" fill="currentColor" fill-opacity="0.7">Fixed-Point int64</text>
-  <text x="410" y="165" font-size="11" text-anchor="middle" fill="currentColor" fill-opacity="0.7">XOR / FoR Packing</text>
-  <text x="410" y="235" font-size="10" text-anchor="middle" fill="currentColor" fill-opacity="0.5">~48 KB Compressed</text>
+  <text x="410" y="140" font-size="12.0" text-anchor="middle" fill="currentColor" fill-opacity="0.7">Fixed-Point int64</text>
+  <text x="410" y="165" font-size="12.0" text-anchor="middle" fill="currentColor" fill-opacity="0.7">XOR / FoR Packing</text>
+  <text x="410" y="235" font-size="12.0" text-anchor="middle" fill="currentColor" fill-opacity="0.5">~48 KB Compressed</text>
 
   <rect x="500" y="85" width="150" height="185" rx="4" fill="currentColor" fill-opacity="0.08" stroke="currentColor" stroke-opacity="0.3" stroke-width="1"/>
   <text x="575" y="115" font-size="12" font-weight="700" text-anchor="middle" fill="currentColor">Size Column</text>
-  <text x="575" y="140" font-size="11" text-anchor="middle" fill="currentColor" fill-opacity="0.7">Integer Bit-Packing</text>
-  <text x="575" y="165" font-size="11" text-anchor="middle" fill="currentColor" fill-opacity="0.7">Frame-of-Reference</text>
-  <text x="575" y="235" font-size="10" text-anchor="middle" fill="currentColor" fill-opacity="0.5">~32 KB Compressed</text>
+  <text x="575" y="140" font-size="12.0" text-anchor="middle" fill="currentColor" fill-opacity="0.7">Integer Bit-Packing</text>
+  <text x="575" y="165" font-size="12.0" text-anchor="middle" fill="currentColor" fill-opacity="0.7">Frame-of-Reference</text>
+  <text x="575" y="235" font-size="12.0" text-anchor="middle" fill="currentColor" fill-opacity="0.5">~32 KB Compressed</text>
 
   <rect x="665" y="85" width="160" height="185" rx="4" fill="currentColor" fill-opacity="0.08" stroke="currentColor" stroke-opacity="0.3" stroke-width="1"/>
   <text x="745" y="115" font-size="12" font-weight="700" text-anchor="middle" fill="currentColor">Side &amp; Flags Col</text>
-  <text x="745" y="140" font-size="11" text-anchor="middle" fill="currentColor" fill-opacity="0.7">Byte / Bit Vectors</text>
-  <text x="745" y="165" font-size="11" text-anchor="middle" fill="currentColor" fill-opacity="0.7">SIMD Maskable</text>
-  <text x="745" y="235" font-size="10" text-anchor="middle" fill="currentColor" fill-opacity="0.5">~8 KB Compressed</text>
+  <text x="745" y="140" font-size="12.0" text-anchor="middle" fill="currentColor" fill-opacity="0.7">Byte / Bit Vectors</text>
+  <text x="745" y="165" font-size="12.0" text-anchor="middle" fill="currentColor" fill-opacity="0.7">SIMD Maskable</text>
+  <text x="745" y="235" font-size="12.0" text-anchor="middle" fill="currentColor" fill-opacity="0.5">~8 KB Compressed</text>
 </svg>
 
 Under PAX, data is partitioned horizontally into small, fixed-size chunks (e.g., 2 MB, perfectly aligning with CPU HugePages and NVMe flash blocks). Within that 2 MB chunk, attributes are stored columnarly. 

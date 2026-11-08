@@ -78,91 +78,91 @@ Altogether, standard Linux kernel networking on EC2 yields an average one-way fr
 
 The Data Plane Development Kit (DPDK) eliminates the guest OS kernel, system calls, virtual interrupts, and hypervisor traps by running a **Poll Mode Driver (PMD)** entirely within user space.
 
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" width="100%" style="max-width:960px;display:block;margin:1.8em auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;" role="img" aria-label="Cloud HFT Kernel Bypass with DPDK">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" width="100%" style="max-width:960px;display:block;margin:1.8em auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;" role="img" aria-label="Cloud HFT Kernel Bypass with DPDK">
   <!-- Background Columns -->
   <!-- Left: Standard Cloud Path -->
-  <rect x="30" y="20" width="430" height="480" rx="8" fill="currentColor" fill-opacity="0.03" stroke="currentColor" stroke-opacity="0.15" stroke-width="1.5"/>
-  <text x="245" y="52" text-anchor="middle" font-size="15" font-weight="700" fill="#ff4d4f">Standard EC2 Networking (Kernel &amp; IRQs)</text>
-  <text x="245" y="72" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.6">Typical RTT: 45µs | P99.9: 400µs – 1.5ms</text>
+  <rect x="25" y="15" width="440" height="530" rx="10" fill="currentColor" fill-opacity="0.03" stroke="currentColor" stroke-opacity="0.15" stroke-width="1.5"/>
+  <text x="245" y="48" text-anchor="middle" font-size="17" font-weight="800" fill="#ff4d4f">Standard EC2 Networking (Kernel &amp; IRQs)</text>
+  <text x="245" y="72" text-anchor="middle" font-size="13" fill="currentColor" fill-opacity="0.7">Typical RTT: 45µs | P99.9: 400µs – 1.5ms</text>
 
   <!-- Right: DPDK Kernel-Bypass Path -->
-  <rect x="500" y="20" width="430" height="480" rx="8" fill="currentColor" fill-opacity="0.03" stroke="currentColor" stroke-opacity="0.15" stroke-width="1.5"/>
-  <text x="715" y="52" text-anchor="middle" font-size="15" font-weight="700" fill="#52c41a">Cloud HFT Path (DPDK ENA PMD)</text>
-  <text x="715" y="72" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.6">Typical RTT: 8µs | P99.9: 15µs – 25µs</text>
+  <rect x="495" y="15" width="440" height="530" rx="10" fill="currentColor" fill-opacity="0.03" stroke="currentColor" stroke-opacity="0.15" stroke-width="1.5"/>
+  <text x="715" y="48" text-anchor="middle" font-size="17" font-weight="800" fill="#52c41a">Cloud HFT Path (DPDK ENA PMD)</text>
+  <text x="715" y="72" text-anchor="middle" font-size="13" fill="currentColor" fill-opacity="0.7">Typical RTT: 8µs | P99.9: 15µs – 25µs</text>
 
   <!-- Left Stack Elements -->
   <!-- Layer 1: Hardware -->
-  <rect x="55" y="95" width="380" height="52" rx="6" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.2" stroke-width="1"/>
-  <text x="245" y="118" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">AWS Nitro Card / Physical NIC</text>
-  <text x="245" y="136" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.7">Incoming Exchange Packet (WebSocket / TCP)</text>
+  <rect x="45" y="95" width="400" height="56" rx="6" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.2" stroke-width="1"/>
+  <text x="245" y="120" text-anchor="middle" font-size="14.5" font-weight="700" fill="currentColor">AWS Nitro Card / Physical NIC</text>
+  <text x="245" y="140" text-anchor="middle" font-size="13" fill="currentColor" fill-opacity="0.75">Incoming Exchange Packet (WebSocket / TCP)</text>
 
   <!-- Arrow down -->
-  <line x1="245" y1="147" x2="245" y2="175" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <line x1="245" y1="151" x2="245" y2="175" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.5" stroke-dasharray="3,3"/>
 
   <!-- Layer 2: Hypervisor Trap -->
-  <rect x="55" y="175" width="380" height="62" rx="6" fill="#ff4d4f" fill-opacity="0.08" stroke="#ff4d4f" stroke-opacity="0.3" stroke-width="1"/>
-  <text x="245" y="198" text-anchor="middle" font-size="12" font-weight="700" fill="#ff4d4f">Hypervisor VM-Exit &amp; IRQ Injection</text>
-  <text x="245" y="216" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.8">Virtual Interrupt (MSI-X) causes CPU Context Switch</text>
-  <text x="245" y="230" text-anchor="middle" font-size="10" font-weight="600" fill="#ff4d4f">Penalty: +5µs to +50µs jitter</text>
+  <rect x="45" y="175" width="400" height="68" rx="6" fill="#ff4d4f" fill-opacity="0.08" stroke="#ff4d4f" stroke-opacity="0.3" stroke-width="1"/>
+  <text x="245" y="199" text-anchor="middle" font-size="14.5" font-weight="700" fill="#ff4d4f">Hypervisor VM-Exit &amp; IRQ Injection</text>
+  <text x="245" y="219" text-anchor="middle" font-size="13" fill="currentColor" fill-opacity="0.85">Virtual Interrupt (MSI-X) Context Switch</text>
+  <text x="245" y="235" text-anchor="middle" font-size="12.5" font-weight="700" fill="#ff4d4f">Penalty: +5µs to +50µs jitter</text>
 
   <!-- Arrow down -->
-  <line x1="245" y1="237" x2="245" y2="265" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <line x1="245" y1="243" x2="245" y2="265" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.5" stroke-dasharray="3,3"/>
 
   <!-- Layer 3: Guest Kernel Stack -->
-  <rect x="55" y="265" width="380" height="80" rx="6" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.2" stroke-width="1"/>
-  <text x="245" y="288" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">Guest Linux Kernel (ena.ko)</text>
-  <text x="245" y="306" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.7">NET_RX_SOFTIRQ -> sk_buff allocation -> socket lock</text>
-  <text x="245" y="322" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.7">TCP state machine &amp; delayed ACK timers</text>
-  <text x="245" y="338" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.7">KPTI user-kernel page table swap</text>
+  <rect x="45" y="265" width="400" height="95" rx="6" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.2" stroke-width="1"/>
+  <text x="245" y="289" text-anchor="middle" font-size="14.5" font-weight="700" fill="currentColor">Guest Linux Kernel (ena.ko)</text>
+  <text x="245" y="310" text-anchor="middle" font-size="13" fill="currentColor" fill-opacity="0.75">NET_RX_SOFTIRQ -> sk_buff allocation -> socket lock</text>
+  <text x="245" y="330" text-anchor="middle" font-size="13" fill="currentColor" fill-opacity="0.75">TCP state machine &amp; delayed ACK timers</text>
+  <text x="245" y="350" text-anchor="middle" font-size="13" fill="currentColor" fill-opacity="0.75">KPTI user-kernel page table swap</text>
 
   <!-- Arrow down -->
-  <line x1="245" y1="345" x2="245" y2="375" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <line x1="245" y1="360" x2="245" y2="385" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.5" stroke-dasharray="3,3"/>
 
   <!-- Layer 4: Application -->
-  <rect x="55" y="375" width="380" height="52" rx="6" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.2" stroke-width="1"/>
-  <text x="245" y="398" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">Trading Application (epoll / read)</text>
-  <text x="245" y="416" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.7">User space copy from kernel socket buffer</text>
+  <rect x="45" y="385" width="400" height="56" rx="6" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.2" stroke-width="1"/>
+  <text x="245" y="410" text-anchor="middle" font-size="14.5" font-weight="700" fill="currentColor">Trading Application (epoll / read)</text>
+  <text x="245" y="430" text-anchor="middle" font-size="13" fill="currentColor" fill-opacity="0.75">User space copy from kernel socket buffer</text>
 
   <!-- Total Time Box Left -->
-  <rect x="95" y="445" width="300" height="34" rx="17" fill="#ff4d4f" fill-opacity="0.15" stroke="#ff4d4f" stroke-width="1"/>
-  <text x="245" y="467" text-anchor="middle" font-size="12" font-weight="800" fill="#ff4d4f">Total Ingest: 25µs – 80µs (High Jitter)</text>
+  <rect x="85" y="460" width="320" height="44" rx="22" fill="#ff4d4f" fill-opacity="0.15" stroke="#ff4d4f" stroke-width="1.5"/>
+  <text x="245" y="487" text-anchor="middle" font-size="14" font-weight="800" fill="#ff4d4f">Total Ingest: 25µs – 80µs (High Jitter)</text>
 
 
   <!-- Right Stack Elements (DPDK) -->
   <!-- Layer 1: Hardware -->
-  <rect x="525" y="95" width="380" height="52" rx="6" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.2" stroke-width="1"/>
-  <text x="715" y="118" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">AWS Nitro Card / ENA Hardware Ring</text>
-  <text x="715" y="136" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.7">Direct PCIe DMA into Pinned HugePages</text>
+  <rect x="515" y="95" width="400" height="56" rx="6" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.2" stroke-width="1"/>
+  <text x="715" y="120" text-anchor="middle" font-size="14.5" font-weight="700" fill="currentColor">AWS Nitro Card / ENA Hardware Ring</text>
+  <text x="715" y="140" text-anchor="middle" font-size="13" fill="currentColor" fill-opacity="0.75">Direct PCIe DMA into Pinned HugePages</text>
 
   <!-- Fast Direct Arrow -->
-  <line x1="715" y1="147" x2="715" y2="195" stroke="#52c41a" stroke-width="2.5"/>
-  <text x="795" y="175" font-size="10" font-weight="700" fill="#52c41a">Zero-Copy DMA</text>
+  <line x1="715" y1="151" x2="715" y2="195" stroke="#52c41a" stroke-width="2.5"/>
+  <text x="795" y="178" font-size="13" font-weight="700" fill="#52c41a">Zero-Copy DMA</text>
 
   <!-- Layer 2: VFIO & PMD -->
-  <rect x="525" y="195" width="380" height="62" rx="6" fill="#52c41a" fill-opacity="0.08" stroke="#52c41a" stroke-opacity="0.3" stroke-width="1"/>
-  <text x="715" y="218" text-anchor="middle" font-size="12" font-weight="700" fill="#52c41a">User-Space DPDK ENA PMD (librte_pmd_ena)</text>
-  <text x="715" y="236" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.8">Continuous Polling on Isolated Core (rte_eth_rx_burst)</text>
-  <text x="715" y="250" text-anchor="middle" font-size="10" font-weight="600" fill="#52c41a">Zero Interrupts • Zero Hypervisor Exits</text>
+  <rect x="515" y="195" width="400" height="72" rx="6" fill="#52c41a" fill-opacity="0.08" stroke="#52c41a" stroke-opacity="0.3" stroke-width="1"/>
+  <text x="715" y="220" text-anchor="middle" font-size="14.5" font-weight="700" fill="#52c41a">User-Space DPDK ENA PMD (librte_pmd_ena)</text>
+  <text x="715" y="240" text-anchor="middle" font-size="13" fill="currentColor" fill-opacity="0.85">Continuous Polling on Isolated Core (rte_eth_rx_burst)</text>
+  <text x="715" y="256" text-anchor="middle" font-size="12.5" font-weight="700" fill="#52c41a">Zero Interrupts • Zero Hypervisor Exits</text>
 
   <!-- Fast Direct Arrow -->
-  <line x1="715" y1="257" x2="715" y2="295" stroke="#52c41a" stroke-width="2.5"/>
+  <line x1="715" y1="267" x2="715" y2="295" stroke="#52c41a" stroke-width="2.5"/>
 
   <!-- Layer 3: User Space TCP -->
-  <rect x="525" y="295" width="380" height="60" rx="6" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.2" stroke-width="1"/>
-  <text x="715" y="318" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">User-Space TCP Stack (F-Stack / Seastar / In-House)</text>
-  <text x="715" y="336" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.7">Zero-Copy Frame Parse • Custom TCP State Machine</text>
-  <text x="715" y="350" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.7">No KPTI swaps • No Kernel Locks</text>
+  <rect x="515" y="295" width="400" height="75" rx="6" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.2" stroke-width="1"/>
+  <text x="715" y="320" text-anchor="middle" font-size="14.5" font-weight="700" fill="currentColor">User-Space TCP Stack (F-Stack / Seastar / In-House)</text>
+  <text x="715" y="342" text-anchor="middle" font-size="13" fill="currentColor" fill-opacity="0.75">Zero-Copy Frame Parse • Custom TCP State Machine</text>
+  <text x="715" y="360" text-anchor="middle" font-size="13" fill="currentColor" fill-opacity="0.75">No KPTI swaps • No Kernel Locks</text>
 
   <!-- Fast Direct Arrow -->
-  <line x1="715" y1="355" x2="715" y2="385" stroke="#52c41a" stroke-width="2.5"/>
+  <line x1="715" y1="370" x2="715" y2="395" stroke="#52c41a" stroke-width="2.5"/>
 
   <!-- Layer 4: Strategy Engine -->
-  <rect x="525" y="385" width="380" height="42" rx="6" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.2" stroke-width="1"/>
-  <text x="715" y="411" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">Pinned Trading Strategy Core</text>
+  <rect x="515" y="395" width="400" height="46" rx="6" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.2" stroke-width="1"/>
+  <text x="715" y="424" text-anchor="middle" font-size="14.5" font-weight="700" fill="currentColor">Pinned Trading Strategy Core</text>
 
   <!-- Total Time Box Right -->
-  <rect x="565" y="445" width="300" height="34" rx="17" fill="#52c41a" fill-opacity="0.15" stroke="#52c41a" stroke-width="1"/>
-  <text x="715" y="467" text-anchor="middle" font-size="12" font-weight="800" fill="#52c41a">Total Ingest: 1.5µs – 3.0µs (Deterministic)</text>
+  <rect x="555" y="460" width="320" height="44" rx="22" fill="#52c41a" fill-opacity="0.15" stroke="#52c41a" stroke-width="1.5"/>
+  <text x="715" y="487" text-anchor="middle" font-size="14" font-weight="800" fill="#52c41a">Total Ingest: 1.5µs – 3.0µs (Deterministic)</text>
 </svg>
 
 ### 2.1 ENA and gVNIC Poll Mode Drivers

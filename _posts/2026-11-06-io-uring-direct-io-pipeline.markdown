@@ -83,34 +83,34 @@ Today, **`io_uring`** is the standard Linux asynchronous I/O engine. Instead of 
   <rect x="180" y="80" width="520" height="90" rx="6" fill="currentColor" fill-opacity="0.08" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.8"/>
   <text x="440" y="105" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor" fill-opacity="0.9">Shared Memory: Submission Queue Ring (SQ)</text>
   <rect x="200" y="120" width="110" height="35" rx="4" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-opacity="0.5"/>
-  <text x="255" y="142" text-anchor="middle" font-size="11" fill="currentColor">SQE 0 (Read)</text>
+  <text x="255" y="142" text-anchor="middle" font-size="12.0" fill="currentColor">SQE 0 (Read)</text>
   <rect x="325" y="120" width="110" height="35" rx="4" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-opacity="0.5"/>
-  <text x="380" y="142" text-anchor="middle" font-size="11" fill="currentColor">SQE 1 (Read)</text>
+  <text x="380" y="142" text-anchor="middle" font-size="12.0" fill="currentColor">SQE 1 (Read)</text>
   <rect x="450" y="120" width="110" height="35" rx="4" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-opacity="0.5"/>
-  <text x="505" y="142" text-anchor="middle" font-size="11" fill="currentColor">SQE 2 (Read)</text>
+  <text x="505" y="142" text-anchor="middle" font-size="12.0" fill="currentColor">SQE 2 (Read)</text>
   <text x="600" y="142" font-size="14" fill="currentColor" fill-opacity="0.6">...</text>
 
   <!-- Shared Completion Ring -->
   <rect x="180" y="200" width="520" height="90" rx="6" fill="currentColor" fill-opacity="0.08" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.8"/>
   <text x="440" y="225" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor" fill-opacity="0.9">Shared Memory: Completion Queue Ring (CQ)</text>
   <rect x="200" y="240" width="110" height="35" rx="4" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-opacity="0.6"/>
-  <text x="255" y="262" text-anchor="middle" font-size="11" fill="currentColor">CQE 0 (Done)</text>
+  <text x="255" y="262" text-anchor="middle" font-size="12.0" fill="currentColor">CQE 0 (Done)</text>
   <rect x="325" y="240" width="110" height="35" rx="4" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-opacity="0.6"/>
-  <text x="380" y="262" text-anchor="middle" font-size="11" fill="currentColor">CQE 1 (Done)</text>
+  <text x="380" y="262" text-anchor="middle" font-size="12.0" fill="currentColor">CQE 1 (Done)</text>
   <text x="475" y="262" font-size="14" fill="currentColor" fill-opacity="0.6">...</text>
 
   <!-- Pointers -->
   <path d="M 120 137 L 190 137" stroke="currentColor" stroke-width="2" marker-end="url(#ring-arrow)"/>
-  <text x="110" y="132" text-anchor="end" font-size="11" fill="currentColor">App writes SQE</text>
+  <text x="110" y="132" text-anchor="end" font-size="12.0" fill="currentColor">App writes SQE</text>
 
   <path d="M 690 137 L 760 137" stroke="currentColor" stroke-width="2" marker-end="url(#ring-arrow)"/>
-  <text x="770" y="132" text-anchor="start" font-size="11" fill="currentColor">Kernel polls SQE</text>
+  <text x="770" y="132" text-anchor="start" font-size="12.0" fill="currentColor">Kernel polls SQE</text>
 
   <path d="M 760 257 L 690 257" stroke="currentColor" stroke-width="2" marker-end="url(#ring-arrow)"/>
-  <text x="770" y="252" text-anchor="start" font-size="11" fill="currentColor">Kernel posts CQE</text>
+  <text x="770" y="252" text-anchor="start" font-size="12.0" fill="currentColor">Kernel posts CQE</text>
 
   <path d="M 190 257 L 120 257" stroke="currentColor" stroke-width="2" marker-end="url(#ring-arrow)"/>
-  <text x="110" y="252" text-anchor="end" font-size="11" fill="currentColor">App reaps CQE</text>
+  <text x="110" y="252" text-anchor="end" font-size="12.0" fill="currentColor">App reaps CQE</text>
 </svg>
 
 ### Zero-Allocation Buffer Engineering

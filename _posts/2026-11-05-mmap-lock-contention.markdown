@@ -32,43 +32,43 @@ A page fault is not an ordinary software function call; it is a hardware-initiat
   <!-- Step 1: Hardware Trap -->
   <rect x="230" y="10" width="300" height="46" rx="6" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
   <text x="380" y="28" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor" fill-opacity="0.95">1. Hardware MMU Exception (#PF)</text>
-  <text x="380" y="44" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.65">PTE Present = 0 &rarr; Save CR2 &amp; Error Code &rarr; Vector 14</text>
+  <text x="380" y="44" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.65">PTE Present = 0 &rarr; Save CR2 &amp; Error Code &rarr; Vector 14</text>
 
   <line x1="380" y1="56" x2="380" y2="76" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2" marker-end="url(#arrow)"/>
 
   <!-- Step 2: Kernel Entry -->
   <rect x="230" y="78" width="300" height="46" rx="6" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
   <text x="380" y="96" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor" fill-opacity="0.95">2. Architecture Entry &amp; Dispatch</text>
-  <text x="380" y="112" text-anchor="middle" font-size="10" font-family="monospace" fill="currentColor" fill-opacity="0.65">exc_page_fault &rarr; do_user_addr_fault</text>
+  <text x="380" y="112" text-anchor="middle" font-size="12.0" font-family="monospace" fill="currentColor" fill-opacity="0.65">exc_page_fault &rarr; do_user_addr_fault</text>
 
   <line x1="380" y1="124" x2="380" y2="144" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2" marker-end="url(#arrow)"/>
 
   <!-- Step 3: Address Space Lock -->
   <rect x="210" y="146" width="340" height="46" rx="6" fill="currentColor" fill-opacity="0.1" stroke="currentColor" stroke-opacity="0.75" stroke-width="1.4"/>
   <text x="380" y="164" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor" fill-opacity="0.95">3. Acquire Address Space Read Lock</text>
-  <text x="380" y="180" text-anchor="middle" font-size="10.5" font-family="monospace" fill="currentColor" fill-opacity="0.75">down_read(&amp;mm-&gt;mmap_lock)  [Contention Point!]</text>
+  <text x="380" y="180" text-anchor="middle" font-size="12.0" font-family="monospace" fill="currentColor" fill-opacity="0.75">down_read(&amp;mm-&gt;mmap_lock)  [Contention Point!]</text>
 
   <line x1="380" y1="192" x2="380" y2="212" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2" marker-end="url(#arrow)"/>
 
   <!-- Step 4: VMA Search -->
   <rect x="230" y="214" width="300" height="46" rx="6" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
   <text x="380" y="232" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor" fill-opacity="0.95">4. VMA Lookup &amp; Permission Check</text>
-  <text x="380" y="248" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.65">Maple Tree (Linux 6.1+) / Red-Black Tree Search</text>
+  <text x="380" y="248" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.65">Maple Tree (Linux 6.1+) / Red-Black Tree Search</text>
 
   <!-- Branch: Invalid -> SIGSEGV -->
   <line x1="530" y1="237" x2="610" y2="237" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2" marker-end="url(#arrow)"/>
-  <text x="566" y="230" text-anchor="middle" font-size="9" fill="currentColor" fill-opacity="0.6">invalid</text>
+  <text x="566" y="230" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.6">invalid</text>
   <rect x="612" y="218" width="130" height="38" rx="5" fill="currentColor" fill-opacity="0.04" stroke="currentColor" stroke-opacity="0.4" stroke-width="1"/>
-  <text x="677" y="236" text-anchor="middle" font-size="10.5" font-weight="600" fill="currentColor" fill-opacity="0.8">SIGSEGV</text>
-  <text x="677" y="248" text-anchor="middle" font-size="8.5" fill="currentColor" fill-opacity="0.5">Segfault to process</text>
+  <text x="677" y="236" text-anchor="middle" font-size="12.0" font-weight="600" fill="currentColor" fill-opacity="0.8">SIGSEGV</text>
+  <text x="677" y="248" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.5">Segfault to process</text>
 
   <line x1="380" y1="260" x2="380" y2="280" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2" marker-end="url(#arrow)"/>
-  <text x="395" y="273" text-anchor="start" font-size="9" fill="currentColor" fill-opacity="0.6">valid</text>
+  <text x="395" y="273" text-anchor="start" font-size="12.0" fill="currentColor" fill-opacity="0.6">valid</text>
 
   <!-- Step 5: Page Table Walk -->
   <rect x="230" y="282" width="300" height="46" rx="6" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
   <text x="380" y="300" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor" fill-opacity="0.95">5. Multi-Level Page Table Walk</text>
-  <text x="380" y="316" text-anchor="middle" font-size="10" font-family="monospace" fill="currentColor" fill-opacity="0.65">PGD &rarr; P4D &rarr; PUD &rarr; PMD &rarr; PTE</text>
+  <text x="380" y="316" text-anchor="middle" font-size="12.0" font-family="monospace" fill="currentColor" fill-opacity="0.65">PGD &rarr; P4D &rarr; PUD &rarr; PMD &rarr; PTE</text>
 
   <!-- Split into 3 cases -->
   <path d="M 380 328 L 380 344 L 130 344 L 130 360" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2" marker-end="url(#arrow)"/>
@@ -77,21 +77,21 @@ A page fault is not an ordinary software function call; it is a hardware-initiat
 
   <!-- Step 6A: Anonymous -->
   <rect x="20" y="362" width="220" height="54" rx="6" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
-  <text x="130" y="380" text-anchor="middle" font-size="11.5" font-weight="600" fill="currentColor" fill-opacity="0.95">Anonymous Page (Minor)</text>
-  <text x="130" y="396" text-anchor="middle" font-size="9.5" fill="currentColor" fill-opacity="0.65">Buddy Allocator Frame</text>
-  <text x="130" y="408" text-anchor="middle" font-size="9.5" font-family="monospace" fill="currentColor" fill-opacity="0.65">+ CPU memset(0)</text>
+  <text x="130" y="380" text-anchor="middle" font-size="12.0" font-weight="600" fill="currentColor" fill-opacity="0.95">Anonymous Page (Minor)</text>
+  <text x="130" y="396" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.65">Buddy Allocator Frame</text>
+  <text x="130" y="408" text-anchor="middle" font-size="12.0" font-family="monospace" fill="currentColor" fill-opacity="0.65">+ CPU memset(0)</text>
 
   <!-- Step 6B: File-Backed -->
   <rect x="270" y="362" width="220" height="54" rx="6" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
-  <text x="380" y="380" text-anchor="middle" font-size="11.5" font-weight="600" fill="currentColor" fill-opacity="0.95">File-Backed Page (Major)</text>
-  <text x="380" y="396" text-anchor="middle" font-size="9.5" fill="currentColor" fill-opacity="0.65">Page Cache Miss &rarr; Disk I/O</text>
-  <text x="380" y="408" text-anchor="middle" font-size="9.5" fill="currentColor" fill-opacity="0.65">Thread sleeps on wait queue</text>
+  <text x="380" y="380" text-anchor="middle" font-size="12.0" font-weight="600" fill="currentColor" fill-opacity="0.95">File-Backed Page (Major)</text>
+  <text x="380" y="396" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.65">Page Cache Miss &rarr; Disk I/O</text>
+  <text x="380" y="408" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.65">Thread sleeps on wait queue</text>
 
   <!-- Step 6C: COW -->
   <rect x="520" y="362" width="220" height="54" rx="6" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
-  <text x="630" y="380" text-anchor="middle" font-size="11.5" font-weight="600" fill="currentColor" fill-opacity="0.95">Copy-on-Write (COW)</text>
-  <text x="630" y="396" text-anchor="middle" font-size="9.5" fill="currentColor" fill-opacity="0.65">Allocate New Page Frame</text>
-  <text x="630" y="408" text-anchor="middle" font-size="9.5" font-family="monospace" fill="currentColor" fill-opacity="0.65">+ CPU memcpy(4KB)</text>
+  <text x="630" y="380" text-anchor="middle" font-size="12.0" font-weight="600" fill="currentColor" fill-opacity="0.95">Copy-on-Write (COW)</text>
+  <text x="630" y="396" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.65">Allocate New Page Frame</text>
+  <text x="630" y="408" text-anchor="middle" font-size="12.0" font-family="monospace" fill="currentColor" fill-opacity="0.65">+ CPU memcpy(4KB)</text>
 
   <!-- Converge to Step 7 -->
   <path d="M 130 416 L 130 436 L 380 436" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
@@ -101,13 +101,13 @@ A page fault is not an ordinary software function call; it is a hardware-initiat
   <!-- Step 7: PTE Install & Unlock -->
   <rect x="180" y="450" width="400" height="46" rx="6" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
   <text x="380" y="468" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor" fill-opacity="0.95">6. PTE Install, RMAP &amp; Unlock</text>
-  <text x="380" y="484" text-anchor="middle" font-size="10" font-family="monospace" fill="currentColor" fill-opacity="0.65">Spinlock PTL &rarr; set_pte_at &rarr; up_read(&amp;mm-&gt;mmap_lock)</text>
+  <text x="380" y="484" text-anchor="middle" font-size="12.0" font-family="monospace" fill="currentColor" fill-opacity="0.65">Spinlock PTL &rarr; set_pte_at &rarr; up_read(&amp;mm-&gt;mmap_lock)</text>
 
   <line x1="380" y1="496" x2="380" y2="512" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2" marker-end="url(#arrow)"/>
 
   <!-- Step 8: Return -->
   <rect x="250" y="514" width="260" height="24" rx="4" fill="currentColor" fill-opacity="0.04" stroke="currentColor" stroke-opacity="0.35" stroke-width="1"/>
-  <text x="380" y="530" text-anchor="middle" font-size="10.5" fill="currentColor" fill-opacity="0.8">Hardware iret: Resume instruction in user space</text>
+  <text x="380" y="530" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.8">Hardware iret: Resume instruction in user space</text>
 </svg>
 
 #### Step 1: Hardware Trap & Architectural Dispatch
@@ -162,40 +162,40 @@ Why does this become catastrophic in concurrent applications? The fundamental ar
   <!-- Worker Threads -->
   <rect x="30" y="20" width="160" height="60" rx="6" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
   <text x="110" y="44" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor" fill-opacity="0.95">Thread 1 (Core 0)</text>
-  <text x="110" y="62" text-anchor="middle" font-size="10" font-family="monospace" fill="currentColor" fill-opacity="0.65">task_struct &rarr; mm</text>
+  <text x="110" y="62" text-anchor="middle" font-size="12.0" font-family="monospace" fill="currentColor" fill-opacity="0.65">task_struct &rarr; mm</text>
 
   <rect x="230" y="20" width="160" height="60" rx="6" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2"/>
   <text x="310" y="44" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor" fill-opacity="0.95">Thread 2 (Core 1)</text>
-  <text x="310" y="62" text-anchor="middle" font-size="10" font-family="monospace" fill="currentColor" fill-opacity="0.65">task_struct &rarr; mm</text>
+  <text x="310" y="62" text-anchor="middle" font-size="12.0" font-family="monospace" fill="currentColor" fill-opacity="0.65">task_struct &rarr; mm</text>
 
   <text x="440" y="55" text-anchor="middle" font-size="20" fill="currentColor" fill-opacity="0.5">&bull;&bull;&bull;</text>
 
   <rect x="490" y="20" width="240" height="60" rx="6" fill="currentColor" fill-opacity="0.08" stroke="currentColor" stroke-opacity="0.65" stroke-width="1.2"/>
   <text x="610" y="44" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor" fill-opacity="0.95">Thread N (Allocator / Core 63)</text>
-  <text x="610" y="62" text-anchor="middle" font-size="10" font-family="monospace" fill="currentColor" fill-opacity="0.65">calls mmap() / munmap()</text>
+  <text x="610" y="62" text-anchor="middle" font-size="12.0" font-family="monospace" fill="currentColor" fill-opacity="0.65">calls mmap() / munmap()</text>
 
   <!-- Arrows to shared mm_struct -->
   <line x1="110" y1="80" x2="250" y2="136" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2" marker-end="url(#arrow2)"/>
-  <text x="156" y="116" text-anchor="middle" font-size="9.5" fill="currentColor" fill-opacity="0.6">down_read</text>
+  <text x="156" y="116" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.6">down_read</text>
 
   <line x1="310" y1="80" x2="330" y2="136" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2" marker-end="url(#arrow2)"/>
-  <text x="340" y="116" text-anchor="start" font-size="9.5" fill="currentColor" fill-opacity="0.6">down_read</text>
+  <text x="340" y="116" text-anchor="start" font-size="12.0" fill="currentColor" fill-opacity="0.6">down_read</text>
 
   <line x1="610" y1="80" x2="490" y2="136" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.4" stroke-dasharray="3,3" marker-end="url(#arrow2)"/>
-  <text x="580" y="116" text-anchor="middle" font-size="9.5" font-weight="600" fill="currentColor" fill-opacity="0.8">down_write (exclusive!)</text>
+  <text x="580" y="116" text-anchor="middle" font-size="12.0" font-weight="600" fill="currentColor" fill-opacity="0.8">down_write (exclusive!)</text>
 
   <!-- Process mm_struct Box -->
   <rect x="180" y="140" width="400" height="110" rx="8" fill="currentColor" fill-opacity="0.04" stroke="currentColor" stroke-opacity="0.7" stroke-width="1.4"/>
   <text x="380" y="162" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor" fill-opacity="0.95">Single Shared struct mm_struct (Process Address Space)</text>
 
   <rect x="200" y="174" width="360" height="34" rx="4" fill="currentColor" fill-opacity="0.08" stroke="currentColor" stroke-opacity="0.4" stroke-width="1"/>
-  <text x="380" y="195" text-anchor="middle" font-size="11" font-weight="600" fill="currentColor" fill-opacity="0.9">rw_semaphore mmap_lock (Single 64-byte Cacheline)</text>
+  <text x="380" y="195" text-anchor="middle" font-size="12.0" font-weight="600" fill="currentColor" fill-opacity="0.9">rw_semaphore mmap_lock (Single 64-byte Cacheline)</text>
 
   <rect x="200" y="214" width="175" height="26" rx="4" fill="currentColor" fill-opacity="0.05" stroke="currentColor" stroke-opacity="0.3" stroke-width="1"/>
-  <text x="287" y="231" text-anchor="middle" font-size="10" font-family="monospace" fill="currentColor" fill-opacity="0.75">maple_tree mm_mt</text>
+  <text x="287" y="231" text-anchor="middle" font-size="12.0" font-family="monospace" fill="currentColor" fill-opacity="0.75">maple_tree mm_mt</text>
 
   <rect x="385" y="214" width="175" height="26" rx="4" fill="currentColor" fill-opacity="0.05" stroke="currentColor" stroke-opacity="0.3" stroke-width="1"/>
-  <text x="472" y="231" text-anchor="middle" font-size="10" font-family="monospace" fill="currentColor" fill-opacity="0.75">pgd_t* pgd</text>
+  <text x="472" y="231" text-anchor="middle" font-size="12.0" font-family="monospace" fill="currentColor" fill-opacity="0.75">pgd_t* pgd</text>
 </svg>
 
 In Linux, threads are light-weight processes (`task_struct`). All threads within the same process share **the exact same pointer to `mm_struct`**.
