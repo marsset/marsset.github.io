@@ -166,15 +166,26 @@ If bloated buffers introduce catastrophic queueing delays, why not simply reduce
 
 This strategy triggers the opposite pathology: **TCP Window Exhaustion and ZeroWindow Freezes**.
 
-### 2.1 The Sliding Window Equation
+### 2.1 The Two Bottlenecks: Network Highway vs. Receiver Porch
 
-The maximum amount of unacknowledged data a sender can have in flight across the network is governed by the minimum of the Congestion Window ($\text{CWND}$) and the Receiver's Advertised Window ($\text{RWND}$):
+To understand why undersized buffers freeze execution, consider how TCP decides how much data can be in transit ("in flight") simultaneously without getting lost.
+
+Every TCP connection is constrained by two independent physical boundaries:
+
+1. **The Network Highway (`CWND` — Congestion Window):**
+   How much data the physical network fabric (switches, routers, optical cross-connects) can carry without congestion drops. This is estimated dynamically by the sender.
+2. **The Receiver's Porch (`RWND` — Receiver Advertised Window):**
+   How much free memory space remains in the receiver's kernel socket receive buffer (`sk_rcvbuf`). The receiver explicitly measures this and advertises it back to the sender in every single ACK packet.
+
+To prevent overflowing either the network or the receiver's memory, the sender is legally forbidden from exceeding whichever limit is smaller:
 
 $$
-\text{Max In-Flight Bytes} \le \min(\text{CWND}, \text{RWND})
+\text{Max In-Flight Bytes} \le \min(\underbrace{\text{CWND}}_{\text{Highway Capacity}}, \underbrace{\text{RWND}}_{\text{Receiver Porch Space}})
 $$
 
-The receiver's TCP stack advertises $\text{RWND}$ in every ACK packet. This value represents the currently free space in its socket receive buffer:
+On dedicated 10GbE trading cross-connects, the network highway is a private, multi-gigabit clear path with virtually zero public congestion, meaning `CWND` quickly scales to be enormous.
+
+Therefore, **`RWND` is almost always the active bottleneck**. The receiver calculates its available porch space as:
 
 $$
 \text{RWND} = \text{sk_rcvbuf} - \text{Buffered Unread Bytes}
