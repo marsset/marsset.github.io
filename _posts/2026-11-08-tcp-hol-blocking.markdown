@@ -276,7 +276,7 @@ When packets traverse an enterprise network:
 TCP's strict FIFO ordering was designed for an era when reliable byte-stream reconstruction was the primary challenge of internetworking. In high-stakes distributed systems, however, treating all data as an indistinguishable sequential stream creates catastrophic tail latency.
 
 To eliminate Head-of-Line blocking in modern architectures:
-1. **At the Host Layer:** Deploy [TCP_NOTSENT_LOWAT](/system/2026/11/08/tcp-notsent-lowat.html) to keep local unsent queues under $16\,\text{KB}$ (see our deep dive on [TCP Send Queue Anatomy](/system/2026/11/08/tcp-send-queue.html)).
+1. **At the Host Layer:** Deploy `TCP_NOTSENT_LOWAT` to keep local unsent queues under $16\,\text{KB}$ (see our deep dive on [TCP Send Queue Anatomy](/system/2026/11/08/tcp-send-queue.html)).
 2. **At the Session Layer:** Split urgent signals from bulk volume using **Dual TCP Sessions** (the HFT standard).
 3. **At the Protocol Layer:** Migrate toward multiplexed, stream-independent protocols like **QUIC** and **SCTP**.
 4. **At the Network Layer:** Tag urgent traffic with **DSCP Expedited Forwarding** to ensure physical switch queues prioritize emergency signals over routine bulk flow.
