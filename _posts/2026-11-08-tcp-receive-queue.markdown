@@ -141,22 +141,46 @@ When the sender retransmits the missing Packet 1 (sequence 1000):
 
 ## 4. Sequence Pointers on the Receive Side
 
-Just as the send queue is bounded by pointers, the receive stack tracks state using three core 32-bit sequence boundaries:
+Just as the send queue is bounded by pointers, the receive stack tracks state using four core 32-bit sequence boundaries:
+
+$$
+\text{copied_seq} \le \text{rcv_wup} \le \text{rcv_nxt} \le \text{Right Edge } (\text{rcv_wup} + \text{rcv_wnd})
+$$
 
 ```
-0                       copied_seq           rcv_nxt             rcv_wup + rcv_wnd
-├───────────────────────────┼───────────────────┼────────────────────────┤
-│     Read by User Space    │  In Receive Queue │  Advertised Window     │
-│   (Delivered to Engine)   │ (Ready for recv)  │ (Free Buffer Space)    │
-└───────────────────────────┴───────────────────┴────────────────────────┘
+0              copied_seq        rcv_wup                 rcv_nxt             rcv_wup + rcv_wnd
+├───────────────────┼───────────────┼───────────────────────┼────────────────────────┤
+│  Read by App      │ ACKed to peer,│ Un-ACKed packets      │ Remaining allowance    │
+│  (Freed by user)  │ not read yet  │ arrived from wire     │ sender can still emit  │
+└───────────────────┴───────────────┴───────────────────────┴────────────────────────┘
+                    ▲                                       ▲
+                    │ ◄────── In Receive Queue ───────────► │
+                    │   (Unread Backlog in RAM)             │
+                    │                                       │
+                    │               ◄── Advertised Window (rcv_wnd) ───────────────► │
+                    │                 (Promised to sender at last ACK)               │
 ```
 
-1. **`copied_seq`:** The sequence number up to which the user-space application has read data via `recv()`.
-2. **`rcv_nxt`:** The next sequence number expected from the wire.
-   * The unread backlog sitting in `sk_receive_queue` is exactly:
-     $$\text{Unread Backlog} = \text{rcv_nxt} - \text{copied_seq}$$
-3. **`rcv_wnd` (Advertised Window):** The remaining free space inside `sk_rcvbuf`. This is the exact number sent in outgoing ACK packets (`RWND`).
-4. **`rcv_wup` (Receive Window Update Pointer):** The sequence number at which the receiver last advertised its window to the peer.
+### 1. `copied_seq` (Application Read Pointer)
+* **What it is:** The sequence number up to which user-space application code has read data via `read()` or `recvmsg()`.
+* **The Boundary:** Everything to the left ($< \text{copied_seq}$) has been copied to user-space buffers and reaped from kernel memory.
+
+### 2. `rcv_wup` (Receive Window Update Pointer)
+* **What it is:** The sequence number acknowledged the **last time an ACK packet was actually transmitted** to the sender.
+* **Why it is NOT simply `rcv_nxt`:** Packets arrive continuously from the wire, advancing `rcv_nxt`. However, ACKs are not emitted on every byte (e.g., Delayed ACK or packet coalescing). `rcv_wup` serves as the historical anchor of what the sender currently knows.
+
+### 3. `rcv_nxt` (Receive Next Expected Byte)
+* **What it is:** The next sequence number expected from the physical wire.
+* **The In-Memory Backlog:** The total volume of unread packets sitting in `sk_receive_queue` is:
+  $$\text{Unread Backlog} = \text{rcv_nxt} - \text{copied_seq}$$
+* **Un-ACKed Inbound Data:** The bytes that have physically arrived in host RAM but have not yet been acknowledged back to the peer:
+  $$\text{Un-ACKed Data} = \text{rcv_nxt} - \text{rcv_wup}$$
+
+### 4. `rcv_wup + rcv_wnd` (The Advertised Right Edge)
+* **What it is:** The absolute sequence ceiling that the sender is legally permitted to transmit without stalling.
+* **The Sender's Remaining Budget:** The volume of data the sender is still permitted to emit before hitting the window limit:
+  $$\text{Remaining Allowance} = (\text{rcv_wup} + \text{rcv_wnd}) - \text{rcv_nxt}$$
+* **The Golden Rule of Window Updates:** The kernel compares $\text{rcv_nxt} + \text{free_space}$ against $\text{rcv_wup} + \text{rcv_wnd}$. It sends a window update only when the right edge can advance by at least 1 MSS or half the receive buffer, preventing Silly Window Syndrome (SWS) and illegal window shrinking.
 
 ---
 
