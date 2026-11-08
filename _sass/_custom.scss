@@ -168,3 +168,68 @@ mjx-container[jax="SVG"][display="true"],
   }
 }
 
+/* ==========================================================================
+   Archive Item Date Tag (Next to Post Title on Frontpage & Archive Listings)
+   ========================================================================== */
+.archive__item-date-tag {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 0.55em;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: 0.03em;
+  padding: 0.22em 0.6em;
+  margin-left: 0.5rem;
+  border-radius: 9999px;
+  background-color: rgba(125, 125, 125, 0.12);
+  color: inherit;
+  opacity: 0.75;
+  border: 1px solid rgba(125, 125, 125, 0.24);
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   Page Title Date Tag (Single Post Layout, Right Aligned on Same Line)
+   ========================================================================== */
+.page__title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  line-height: 1.25;
+  gap: 0.4rem 1rem;
+
+  a {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+}
+
+.page__title-date-tag {
+  display: inline-flex;
+  align-items: center;
+  margin-left: auto;
+  align-self: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 0.45em;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: 0.03em;
+  padding: 0.25em 0.65em;
+  border-radius: 9999px;
+  background-color: rgba(125, 125, 125, 0.12);
+  color: inherit;
+  opacity: 0.75;
+  border: 1px solid rgba(125, 125, 125, 0.24);
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+}
+
+
