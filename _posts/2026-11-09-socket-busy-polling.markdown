@@ -8,45 +8,15 @@ excerpt: >
   A first-principles deep dive into Linux socket busy polling (SO_BUSY_POLL) and epoll Reactor architecture: how bypassing interrupts rewrites the NIC receive path, CPU cache and thermal trade-offs, Edge vs. Level triggering, and preventing FD starvation during market bursts.
 ---
 
-In our previous explorations of [TCP Receive Queue Anatomy](/system/2026/11/08/tcp-receive-queue.html) and [TCP Collapse](/system/2026/11/09/tcp-collapse.html), we analyzed how packets travel from the physical wire into kernel memory buffers (`sk_receive_queue`).
+In our previous explorations of [TCP Receive Queue Anatomy](/system/2026/11/08/tcp-receive-queue.html) and [epoll Anatomy](/system/2026/11/09/epoll-anatomy.html), we analyzed how packets travel from the wire into kernel memory buffers (`sk_receive_queue`) and how `epoll` multiplexes hundreds of connections using kernel Red-Black trees and ready lists.
 
-However, that only solves half the journey. Once a packet lands in kernel memory, a fundamental architectural dilemma emerges:
-
-**How does your application code actually learn that the packet is there?**
-
-If your application only handles one connection, it can simply call `read()` and block. But high-performance trading gateways and market data handlers simultaneously manage dozens or hundreds of sockets: exchange price feeds, broker drop copies, order entry gateways, and risk engines.
-
-To solve this, Linux provides **`epoll` (Event Poll)**—the kernel's event multiplexer. Yet under default configurations, both `epoll` and standard socket I/O rely on hardware interrupts and OS scheduler wakeups that inject $5$ to $20\,\mu\text{s}$ of tail latency into every packet.
+Yet under default Linux network configurations, both `epoll` and standard socket I/O rely on hardware interrupts and OS scheduler wakeups that inject $5$ to $20\,\mu\text{s}$ of tail latency into every packet.
 
 To eliminate this overhead, high-frequency execution stacks turn to **`SO_BUSY_POLL`**.
 
 ---
 
-## 1. What is `epoll` (Event Poll)? (The 60-Second Primer)
-
-If you have never worked with `epoll` (see [epoll Anatomy](/system/2026/11/09/epoll-anatomy.html) for a complete deep dive into its kernel data structures), the concept is straightforward when viewed as an alternative to thread-per-socket architectures.
-
-### The Problem: Multi-Socket Blocking
-Imagine an execution engine managing 50 sockets. If your thread calls a blocking `read()` on Socket 1, the operating system puts the thread to sleep until Socket 1 receives data.
-
-If Socket 5 (an exchange order fill) receives urgent data a microsecond later, **your application is completely blind to it** because the thread is asleep waiting on Socket 1.
-
-```text
-Thread State: [ BLOCKED ON SOCKET 1 ] ──► ASLEEP (TASK_INTERRUPTIBLE)
-Socket 5:     [ CRITICAL ORDER FILL ARRIVES ] ──► WAITING UNNOTICED IN RAM!
-```
-
-### The Solution: Event Multiplexing with `epoll`
-Instead of blocking on individual sockets, your thread gives all 50 socket file descriptors (FDs) to the kernel using `epoll`:
-1. **`epoll_create1()`**: Creates an `epoll` instance inside the kernel (backed by a Red-Black tree of watched file descriptors).
-2. **`epoll_ctl()`**: Adds, modifies, or removes sockets to watch for events (e.g., `EPOLLIN` indicates data is ready to be read).
-3. **`epoll_wait()`**: Puts the thread to sleep **once**, waiting on the entire set of 50 sockets. As soon as *any* socket receives data, `epoll_wait()` returns an array of ready file descriptors.
-
-Your thread wakes up, drains data from the ready sockets, and calls `epoll_wait()` again. This is the foundation of the classic **Reactor Pattern**.
-
----
-
-## 2. The Latency Trap: Traditional NAPI and Interrupts
+## 1. The Latency Trap: Traditional NAPI and Interrupts
 
 Under the default Linux network stack, how does `epoll_wait()` know when to wake up?
 
@@ -76,7 +46,7 @@ This traditional chain introduces severe latency liabilities for high-frequency 
 
 ---
 
-## 3. How `SO_BUSY_POLL` Rewrites the Receive Path
+## 2. How `SO_BUSY_POLL` Rewrites the Receive Path
 
 Linux 3.11 introduced **`SO_BUSY_POLL`** (`SOL_SOCKET`), fundamentally altering the packet delivery pipeline:
 
@@ -117,7 +87,7 @@ If no packet arrives before the `busy_poll_us` timer expires, the thread gracefu
 
 ---
 
-## 4. Architectural Trade-offs: Cache, Core, and Thermals
+## 3. Architectural Trade-offs: Cache, Core, and Thermals
 
 While `SO_BUSY_POLL` eliminates interrupt overhead, it is not a free lunch. It trades hardware efficiency and power for deterministic tail latency.
 
@@ -136,7 +106,7 @@ While `SO_BUSY_POLL` eliminates interrupt overhead, it is not a free lunch. It t
 
 ---
 
-## 5. Reactor Triggering: Edge (`EPOLLET`) vs. Level (`EPOLLLT`)
+## 4. Reactor Triggering: Edge (`EPOLLET`) vs. Level (`EPOLLLT`)
 
 In an `epoll`-based Reactor architecture, the kernel allows you to configure how sockets notify your event loop:
 
@@ -158,7 +128,7 @@ and read in a tight loop until recv() explicitly returns -1 with EAGAIN or EWOUL
 
 ---
 
-## 6. The FD Starvation Catastrophe and Prevention
+## 5. The FD Starvation Catastrophe
 
 The strict requirement of `EPOLLET`—draining a socket until `EAGAIN`—creates one of the most dangerous failure modes in financial market gateways: **File Descriptor Starvation (FD Starvation)**.
 
@@ -192,7 +162,7 @@ Socket B (Order Fill): [ Arrived at 08:30:00.001 ] ─────────�
 
 ---
 
-## 7. How to Prevent FD Starvation in Production
+## 6. How to Prevent FD Starvation in Production
 
 High-performance systems use three battle-tested architectural patterns to prevent single-socket monopolization:
 
