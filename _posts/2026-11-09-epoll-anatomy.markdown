@@ -14,7 +14,7 @@ If an application were to assign one operating system thread to every single con
 
 To solve this, Linux provides **I/O multiplexing**: allowing a single thread to monitor hundreds or thousands of file descriptors (FDs) simultaneously.
 
-While legacy systems relied on `select()` and `poll()`, modern Linux relies almost exclusively on **`epoll`**. 
+While legacy systems relied on `select()` and `poll()`, modern Linux relies almost exclusively on **`epoll` (Event Poll)**. 
 
 To understand why `epoll` works so efficiently—and where its subtle latency pitfalls lie—we must examine how it is implemented inside the Linux kernel.
 
