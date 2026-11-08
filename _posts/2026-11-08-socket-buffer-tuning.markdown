@@ -536,11 +536,3 @@ ethtool -S eth0 | grep -E "drop|miss|over|error"
 #### Memory Locking Caveat in Low Latency
 When setting explicit buffer sizes via `SO_SNDBUF` and `SO_RCVBUF`, the Linux kernel overrides automatic memory management. Ensure that your application locks physical memory using `mlockall(MCL_CURRENT | MCL_FUTURE)` and that your system `memlock` limits (`/etc/security/limits.conf`) are configured to `unlimited`. Otherwise, socket memory allocations during market microbursts can trigger kernel page faults on the critical trading path.
 </div>
-
----
-
-### Related Reading
-- [TCP Nagle and Delayed ACK Deadlock in Low-Latency Gateways](/system/2026/11/07/nagle-delayed-ack-deadlock.html)
-- [Cloud HFT with DPDK: Kernel Bypass over AWS ENA](/system/2026/11/08/cloud-hft-with-dpdk.html)
-- [Sub-Microsecond Tail Latency Troubleshooting](/system/2026/11/06/low-latency-gateway-troubleshooting.html)
-- [Zero-Copy In-Place Parsing](/system/2026/11/06/zero-copy-in-place-parsing.html)
