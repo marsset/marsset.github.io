@@ -93,6 +93,16 @@ excerpt: >
      </div>
      ```
      Available variants: `.notice--warning`, `.notice--info`, `.notice--danger`, `.notice--primary`.
+7. **Effortless Understanding Standard (Mandatory Writing Philosophy):**
+   - Complex Linux kernel, networking, and systems concepts must be structured so comprehension feels effortless.
+   - **Ground with Concrete Mental Models First:** Open with an intuitive, real-world metaphor or physical analogy (e.g. giant shipping crates for pencils in `tcp_collapse`, a nightclub bouncer for `SO_SNDBUF` backpressure, highway lane closures for Head-of-Line blocking) before descending into kernel data structures.
+   - **Step-by-Step Cognitive Architecture:**
+     1. *The Intuitive Mental Model:* Establish the visual/practical dilemma so the reader immediately grasps the core paradox.
+     2. *The Mechanical Reality Under the Hood:* Trace kernel data structures (`struct sk_buff`, `skb_shared_info`, `sk_receive_queue`), memory layouts, and sequence boundaries with crystal clarity.
+     3. *The Production & Latency Consequence:* Explain why this matters in high-performance / HFT environments (e.g. CPU core lockup, cache thrashing, NIC RX ring drops).
+     4. *The Actionable Playbook:* Provide exact diagnostic commands (`nstat`, `bpftrace`, `ethtool`), kernel parameters (`sysctl`), and architectural mitigations (kernel bypass, spinning cores).
+   - **Immediate Jargon Anchoring:** Whenever introducing kernel terms (`truesize`, `sk_rmem_alloc`, `sk_buff`, `tcp_prune_queue`), immediately anchor them with their plain-English meaning and operational purpose.
+   - **Visual Diagrams:** Use clean, immediately readable ASCII schematics and timelines that communicate layout and boundaries at a single glance.
 
 ---
 
@@ -142,8 +152,8 @@ Every systems analysis must be grounded in the machine's physical reality across
 - **NO Toy Code Snippets:** Provide production-grade, compilable, idiomatic C/C++ showing exact flags (`O_DIRECT`, `MAP_HUGETLB`, `IORING_SETUP_SQPOLL`), alignment assertions, and error handling.
 
 ### 3. Structural Anatomy of a Great Post
-1. **The Core Dilemma / Architectural Conflict:** Open with an apparent paradox or engineering failure (e.g. *"Why does a 7 GB/s NVMe drive crawl at 1 GB/s under O_DIRECT?"* or *"Why do sequential scans evict random-access working sets?"*).
-2. **The Battlegrounds:** Frame technical sections as concrete trade-offs (e.g. *Row-Stitching vs. Decompression*, *Synchronous Stall vs. Async Pipeline*).
-3. **Hardware / Data-Flow Diagrams:** Every post must feature at least one custom inline SVG diagram showing memory layouts, kernel/user boundaries, or queue state transitions.
-4. **Summary Rules of Engagement:** Conclude with actionable, battle-tested engineering heuristics for production system architects.
+1. **The Intuitive Analogy & Core Dilemma:** Open with a relatable mental model and an apparent paradox or engineering failure (e.g. *"Why does packing an 80-byte trade fill consume 2 KB of RAM?"* or *"Why do sequential scans evict random-access working sets?"*).
+2. **The Battlegrounds:** Frame technical sections as concrete trade-offs (e.g. *Row-Stitching vs. Decompression*, *Synchronous Stall vs. Async Pipeline*, *truesize vs. Payload Window*).
+3. **Hardware / Data-Flow Diagrams:** Every post must feature clean visual schematics (inline SVG or clean ASCII diagrams) showing memory layouts, kernel/user boundaries, or queue state transitions.
+4. **Summary Rules of Engagement:** Conclude with actionable, battle-tested engineering heuristics and diagnostic commands for production system architects.
 
