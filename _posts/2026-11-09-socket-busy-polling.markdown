@@ -24,7 +24,7 @@ To eliminate this overhead, high-frequency execution stacks turn to **`SO_BUSY_P
 
 ## 1. What is `epoll`? (The 60-Second Primer)
 
-If you have never worked with `epoll`, the concept is straightforward when viewed as an alternative to thread-per-socket architectures.
+If you have never worked with `epoll` (see [epoll Anatomy](/system/2026/11/09/epoll-anatomy.html) for a complete deep dive into its kernel data structures), the concept is straightforward when viewed as an alternative to thread-per-socket architectures.
 
 ### The Problem: Multi-Socket Blocking
 Imagine an execution engine managing 50 sockets. If your thread calls a blocking `read()` on Socket 1, the operating system puts the thread to sleep until Socket 1 receives data.
