@@ -136,46 +136,21 @@ Using these three pointers, all data inside a TCP socket buffer falls into one o
 
 ---
 
-## 3. The Modern Kernel Architecture: Two Independent Queues
-
-Prior to Linux 4.15, the kernel stored all packets—both transmitted and unsent—in a single doubly linked list (`sk->sk_write_queue`). When an ACK arrived, the kernel had to traverse the list linearly to find and delete acknowledged packets.
-
-In Linux 4.15+, kernel developer Eric Dumazet redesigned this subsystem into **two physically separate data structures**:
-
-```
-[ struct sock ]
-       │
-       ├──► sk_write_queue  (struct sk_buff_head: Doubly Linked List)
-       │    └── Holds ONLY Unsent Data (snd_nxt <= seq < write_seq)
-       │
-       └──► tcp_rtx_queue   (struct rb_root: Red-Black Tree)
-            └── Holds ONLY Transmitted In-Flight Data (snd_una <= seq < snd_nxt)
-```
-
-### Why the Red-Black Tree for In-Flight Data?
-When a high-speed $10\,\text{GbE}$ connection has a large Bandwidth-Delay Product (e.g., London to Frankfurt with thousands of packets in flight), packets are frequently acknowledged out-of-order due to Selective ACKs (SACK). 
-
-By indexing in-flight packets inside an augmented **Red-Black Tree (`tcp_rtx_queue`)** ordered by sequence number:
-* Finding, verifying, and deleting SACKed segments runs in $O(\log N)$ time rather than $O(N)$.
-* Fresh outbound packets in `sk_write_queue` are completely decoupled from in-flight retransmission accounting.
-
----
-
-## 4. Cumulative ACKs vs. SACK: How Holes Are Detected in In-Flight Data
+## 3. Cumulative ACKs vs. SACK: How Holes Are Detected in In-Flight Data
 
 A fundamental question arises when observing the in-flight boundary (`snd_una`):
 > *"If `snd_una = 5000`, and the receiver reports that byte `5300` has arrived, does that leave a hole in the queue? How does the kernel detect missing data without losing track of sequence numbers?"*
 
 The answer depends on whether the connection is using **Standard Cumulative ACKs** or **Selective ACKs (SACK)**:
 
-### 4.1 Standard Cumulative ACKs (RFC 793): Strictly Monotonic, Zero Holes
+### 3.1 Standard Cumulative ACKs (RFC 793): Strictly Monotonic, Zero Holes
 
 In the standard TCP header, the 32-bit `Acknowledgment Number` field is **strictly cumulative**:
 * When a receiver emits `ACK = 5300`, RFC 793 defines this unambiguously: *"I have received **every single byte up to 5299** without exception. The next byte I expect from you is 5300."*
 * If bytes $5000\text{--}5299$ were lost in transit, the receiver is **legally forbidden** from advertising $5300$. Instead, it repeats `ACK = 5000` (a Duplicate ACK).
-* Therefore, in standard TCP, an ACK can **never** jump forward and leave a hole in `tcp_rtx_queue`. The sender simply advances `snd_una` from $5000$ to $5300$, and frees all bytes in between from RAM.
+* Therefore, in standard TCP, an ACK can **never** jump forward and leave a hole in the send queue. The sender simply advances `snd_una` from $5000$ to $5300$, and frees all bytes in between from RAM.
 
-### 4.2 SACK (RFC 2018): Exposing Holes in the Retransmission Tree
+### 3.2 SACK (RFC 2018): Exposing Holes in the In-Flight Window
 
 Standard cumulative ACKs are inefficient across high-speed WAN lines. If 1 packet drops out of 100, standard TCP leaves the sender completely blind to whether the other 99 packets made it through.
 
@@ -195,17 +170,43 @@ TCP Packet from Receiver:
 1. **The Primary Header ACK (`snd_una` boundary):** Remains pinned at the earliest missing byte (`ACK = 5000`).
 2. **The TCP Options SACK Blocks:** Carries explicit byte ranges that successfully reached the receiver out of order (e.g., `[5300, 5600]`).
 
-### 4.3 How the Kernel Marks and Repairs the Hole
+### 3.3 Identifying and Repairing the Hole
 
 When the sender's TCP stack processes this SACK packet:
 
 1. **`snd_una` Stays Pinned at 5000:** Because the cumulative ACK is $5000$, `snd_una` cannot advance. Memory cannot be freed yet.
-2. **The Hole is Identified:** Inside `tcp_rtx_queue`, the kernel matches the SACK range:
+2. **The Hole is Identified:** The kernel compares the SACK range with `snd_una`:
    * Packets in $[5300, 5600)$ are flagged as `TCPCB_SACKED_ACKED` (confirmed received; do not retransmit).
    * The gap between `snd_una` and the left edge of the SACK block—the range **$[5000, 5300)$**—is officially **The Hole**.
 3. **Loss Flagging (`TCPCB_LOST`):** When the SACK scoreboard observes that packets beyond the hole have arrived (or after receiving 3 duplicate ACKs), the kernel flags the packets inside $[5000, 5300)$ as `TCPCB_LOST`.
 4. **Fast Retransmit Priority:** As detailed in Section 5 below, the transmission engine immediately re-transmits this missing hole ahead of any fresh unsent data.
-5. **Reaping upon Gap Repair:** Once the retransmitted $[5000, 5300)$ segment reaches the receiver, the receiver emits a new cumulative `ACK = 5600`. `snd_una` jumps to $5600$, and the kernel reaps the entire $[5000, 5600)$ range from `tcp_rtx_queue` in a single operation.
+5. **Reaping upon Gap Repair:** Once the retransmitted $[5000, 5300)$ segment reaches the receiver, the receiver emits a new cumulative `ACK = 5600`. `snd_una` jumps to $5600$, and the kernel reaps the entire $[5000, 5600)$ range from memory in a single operation.
+
+---
+
+## 4. The Modern Kernel Architecture: Why In-Flight Data Uses a Red-Black Tree
+
+Now that we see how SACK creates arbitrary out-of-order holes across thousands of in-flight packets, consider the operating system engineering challenge: **How should the kernel physically store and search these in-flight packets in host memory?**
+
+Prior to Linux 4.15, the kernel stored all packets—both transmitted and unsent—in a single doubly linked list (`sk->sk_write_queue`). When an ACK arrived, the kernel had to traverse the list linearly ($O(N)$) to find and delete acknowledged packets. On 10GbE lines with thousands of packets in flight, this linear traversal caused severe CPU cache misses and lock contention.
+
+In Linux 4.15+, kernel developer Eric Dumazet redesigned this subsystem into **two physically separate data structures**:
+
+```
+[ struct sock ]
+       │
+       ├──► sk_write_queue  (struct sk_buff_head: Doubly Linked List)
+       │    └── Holds ONLY Unsent Data (snd_nxt <= seq < write_seq)
+       │
+       └──► tcp_rtx_queue   (struct rb_root: Red-Black Tree)
+            └── Holds ONLY Transmitted In-Flight Data (snd_una <= seq < snd_nxt)
+```
+
+### Why the Red-Black Tree for In-Flight Data?
+
+By indexing in-flight packets inside an augmented **Red-Black Tree (`tcp_rtx_queue`)** ordered by sequence number:
+* **$O(\log N)$ SACK Processing:** Finding, verifying, and deleting SACKed segments or identifying holes runs in $O(\log N)$ logarithmic time rather than $O(N)$ linear scans.
+* **Decoupled Outbound Queue:** Fresh outbound packets in `sk_write_queue` are completely decoupled from in-flight retransmission accounting.
 
 ---
 
