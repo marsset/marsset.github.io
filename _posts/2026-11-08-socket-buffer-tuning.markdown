@@ -177,7 +177,7 @@ $$
 The receiver's TCP stack advertises $\text{RWND}$ in every ACK packet. This value represents the currently free space in its socket receive buffer:
 
 $$
-\text{RWND} = \text{sk\_rcvbuf} - \text{Buffered Unread Bytes}
+\text{RWND} = \text{sk_rcvbuf} - \text{Buffered Unread Bytes}
 $$
 
 ### 2.2 What Happens When `RWND` Collapses to 0
@@ -331,7 +331,7 @@ Linux 3.12 resolved this trade-off with the introduction of **`TCP_NOTSENT_LOWAT
 Normally, the Linux socket layer marks a socket as writable (`EPOLLOUT`) whenever:
 
 $$
-\text{sk\_wmem\_alloc} < \text{sk\_sndbuf}
+\text{sk_wmem_alloc} < \text{sk_sndbuf}
 $$
 
 If `sk_sndbuf` is 8MB, `epoll` signals that the socket is writable even if millions of bytes are already queued and waiting for transmission.
@@ -345,7 +345,7 @@ $$
 The kernel triggers `EPOLLOUT` only when:
 
 $$
-\text{Unsent Bytes} < \text{TCP\_NOTSENT\_LOWAT}
+\text{Unsent Bytes} < \text{TCP_NOTSENT_LOWAT}
 $$
 
 ```c

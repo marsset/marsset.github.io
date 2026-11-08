@@ -23,6 +23,9 @@ Checks:
    - Font sizes in <svg> diagrams must be >= 12.0px to remain legible when scaled down
      on desktop and mobile screens.
    - Auto-fix: automatically bumps sub-12px font sizes to 12.0px.
+6. Escaped Underscores:
+   - Detects and repairs escaped underscores (e.g. \\text{sk\\_rcvbuf} or prose ident\\_name)
+     that cause MathJax or markdown to render ugly literal backslashes on screen.
 """
 
 import sys
@@ -235,6 +238,67 @@ def audit_and_fix_post(filepath: Path, fix: bool = False):
         return new_svg
 
     content = re.sub(r'<svg\b[^>]*>.*?</svg>', check_and_fix_font_sizes, content, flags=re.DOTALL)
+
+    # -------------------------------------------------------------------------
+    # 6. Escaped Underscores Check & Auto-Fix (\text{sk\_rcvbuf} / ident\_name)
+    # -------------------------------------------------------------------------
+    # In MathJax, writing \_ inside \text{...} causes literal backslashes to render
+    # on screen (e.g. "sk\_rcvbuf" instead of "sk_rcvbuf").
+    # In prose, escaped underscores like variable\_name are formatting artifacts.
+    def fix_escaped_underscores_in_text(match):
+        full_text_block = match.group(0)
+        if r"\_" in full_text_block:
+            issues.append(f"Escaped underscore in MathJax text: {full_text_block[:50]}")
+            if fix:
+                return full_text_block.replace(r"\_", "_")
+        return full_text_block
+
+    content = re.sub(r'\\text\{[^}]*\}', fix_escaped_underscores_in_text, content)
+    content = re.sub(r'\\mathrm\{[^}]*\}', fix_escaped_underscores_in_text, content)
+    content = re.sub(r'\\operatorname\{[^}]*\}', fix_escaped_underscores_in_text, content)
+
+    # In prose outside code blocks, check for word\_word
+    lines_prose = content.split('\n')
+    new_lines_prose = []
+    in_code = False
+    in_math = False
+    prose_modified = False
+    for line in lines_prose:
+        st = line.strip()
+        if st.startswith("```"):
+            in_code = not in_code
+            new_lines_prose.append(line)
+            continue
+        if in_code:
+            new_lines_prose.append(line)
+            continue
+        if st == "$$":
+            in_math = not in_math
+            new_lines_prose.append(line)
+            continue
+        if in_math:
+            new_lines_prose.append(line)
+            continue
+
+        # Look for words with \_ outside inline code `...`
+        parts = line.split('`')
+        line_changed = False
+        for idx in range(0, len(parts), 2):  # even index = outside inline code
+            part = parts[idx]
+            escaped_words = re.findall(r'\b\w+\\_\w+\b', part)
+            for ew in escaped_words:
+                issues.append(f"Escaped underscore in prose: '{ew}'")
+                if fix:
+                    parts[idx] = parts[idx].replace(ew, ew.replace(r'\_', '_'))
+                    line_changed = True
+                    prose_modified = True
+        if line_changed:
+            new_lines_prose.append('`'.join(parts))
+        else:
+            new_lines_prose.append(line)
+
+    if fix and prose_modified:
+        content = '\n'.join(new_lines_prose)
 
     if fix and math_modified:
         content = '\n'.join(new_lines)
