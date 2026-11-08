@@ -40,6 +40,18 @@ plugins:
 sass:
   quiet_deps: true
 
+# Front Matter Defaults
+# Automatically applies standard single layout, wide container, and MathJax
+# across all blog posts so individual posts don't have to duplicate them.
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: single
+      classes: wide
+      use_math: true
+
 # Exclude from processing.
 # The following items will not be processed, by default.
 # Any item listed under the `exclude:` key here will be automatically added to

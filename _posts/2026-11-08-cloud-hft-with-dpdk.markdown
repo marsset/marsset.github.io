@@ -4,9 +4,6 @@ date: 2026-11-08 08:00:00 +0800
 categories:
   - system
 tags: system linux kernel networking cloud dpdk low-latency
-classes: wide
-layout: single
-use_math: true
 excerpt: >
   A deep dive into cloud-native low-latency engineering: how quantitative market makers bypass hypervisor interrupts and VM-exits using DPDK over AWS ENA and Google gVNIC, and solve the Layer 4 user-space TCP/TLS dilemma in crypto trading.
 ---
