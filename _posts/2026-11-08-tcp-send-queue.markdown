@@ -16,7 +16,7 @@ Understanding modern low-latency optimizations—such as `TCP_NOTSENT_LOWAT` and
 * Why does the kernel keep holding data in memory long after the network card has physically transmitted it?
 * When a network loss occurs, how does the kernel prioritize retransmissions versus fresh outbound orders?
 
-This article breaks down the internal anatomy of the Linux TCP send buffer: its sequence pointer boundaries, the packet lifecycle taxonomy, and the kernel scheduling loop that selects what gets transmitted next.
+This article breaks down the internal anatomy of the Linux TCP send buffer: its sequence pointer boundaries, the packet lifecycle taxonomy, and the kernel scheduling loop that selects what gets transmitted next. *(For the inbound market data path, see our companion post: [TCP Receive Queue Anatomy](/system/2026/11/08/tcp-receive-queue.html)).*
 
 ---
 
