@@ -154,7 +154,8 @@ $$
 │  (Freed by user)  │ not read yet  │ arrived from wire     │ sender can still emit  │
 └───────────────────┴───────────────┴───────────────────────┴────────────────────────┘
                     ▲                                       ▲
-                    │ ◄────── In Receive Queue ───────────► │  (Unread Backlog in RAM)
+                    │ ◄────── In Receive Queue ───────────► │
+                    │        (Unread Backlog in RAM)        │
                     │                                       │
                                     ▲                                                ▲
                                     │ ◄────────── Advertised Window (rcv_wnd) ─────► │
