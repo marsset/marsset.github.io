@@ -154,11 +154,11 @@ $$
 │  (Freed by user)  │ not read yet  │ arrived from wire     │ sender can still emit  │
 └───────────────────┴───────────────┴───────────────────────┴────────────────────────┘
                     ▲                                       ▲
-                    │ ◄────── In Receive Queue ───────────► │
-                    │   (Unread Backlog in RAM)             │
+                    │ ◄────── In Receive Queue ───────────► │  (Unread Backlog in RAM)
                     │                                       │
-                    │               ◄── Advertised Window (rcv_wnd) ───────────────► │
-                    │                 (Promised to sender at last ACK)               │
+                                    ▲                                                ▲
+                                    │ ◄────────── Advertised Window (rcv_wnd) ─────► │
+                                    │   (Promised to sender at last ACK: rcv_wnd)    │
 ```
 
 ### 1. `copied_seq` (Application Read Pointer)
