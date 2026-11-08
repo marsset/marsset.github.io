@@ -194,10 +194,6 @@ When memory usage exceeds `sk_rcvbuf`, the Linux kernel does not immediately dro
 * It walks all `sk_buff`s in `sk_receive_queue` and `out_of_order_queue`.
 * It re-allocates memory and copies smaller chunks into contiguous larger buffers to eliminate slab allocator padding and header overhead.
 * **Impact:** In trading systems, `tcp_collapse()` can lock the socket and freeze the CPU core for **hundreds of microseconds to milliseconds**, occurring exactly during a market burst when latency matters most!
-* **Diagnostics:** Check if `TCPRcvCollapsed` is incrementing:
-  ```bash
-  nstat -z | grep -i collapse
-  ```
 
 ### 2. Disable Generic Receive Offload (GRO / LRO)
 Modern NICs use Generic Receive Offload (GRO) to bundle multiple incoming TCP packets into a single giant $64\,\text{KB}$ `sk_buff` before passing it to the kernel.
