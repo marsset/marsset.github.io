@@ -10,7 +10,7 @@ excerpt: >
 
 In high-throughput, low-latency financial systems—such as 10GbE or 25GbE optical cross-connects between exchanges and market maker colocation cages—network bandwidth is rarely the scarce resource. What dictates execution success is **propagation delay ($RTT$)** and **queueing determinism**.
 
-When configuring TCP communication for Order Management Systems (OMS) and market data feeds, systems engineers inevitably confront a classic sizing dilemma between **Bufferbloat (缓冲区膨胀)** and **ZeroWindow (零窗口)**:
+When configuring TCP communication for Order Management Systems (OMS) and market data feeds, systems engineers inevitably confront a classic sizing dilemma between **Bufferbloat (缓冲区膨胀)** and **ZeroWindow**:
 
 $$
 \text{Massive Buffers} \longrightarrow \text{Microburst Bufferbloat (Milliseconds of Queuing)}
@@ -24,7 +24,7 @@ This article explores the kernel-level mechanics of socket send and receive buff
 
 ---
 
-## 1. The Physics of Bufferbloat (缓冲区膨胀): Why Massive Buffers Destroy Determinism
+## 1. The Physics of Bufferbloat: Why Massive Buffers Destroy Determinism
 
 A common misconception inherited from generic web server tuning guides is that larger socket buffers are always better. In high-frequency trading (HFT), setting arbitrarily large socket buffers (e.g., 8MB to 16MB) is disastrous during **network microbursts**.
 
