@@ -4,8 +4,6 @@ date:  2026-02-06 17:00:00 +0800
 categories:
   - system
 tags: system
-classes: wide
-layout: single
 excerpt: >
  cache time difference is an interesting side channel atatck, and out-of-order leaks suprisely.
 ---

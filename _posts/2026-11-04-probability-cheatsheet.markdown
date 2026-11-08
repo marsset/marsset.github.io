@@ -4,9 +4,6 @@ date:  2026-11-04 12:18:00 +0800
 categories:
   - math
 tags: math
-classes: wide
-layout: single
-use_math: true
 excerpt: >
   a compact quick-reference cheatsheet of core probability identities: conditioning, tower property, total variance, covariance, generating functions, and tail inequalities.
 ---

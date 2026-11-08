@@ -4,9 +4,6 @@ date:  2026-02-22 10:00:00 +0800
 categories:
   - math
 tags: math
-classes: wide
-layout: single
-use_math: true
 excerpt: >
   Record some calculus problems met along the daily study.
 ---

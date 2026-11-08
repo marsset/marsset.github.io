@@ -4,9 +4,6 @@ date:  2026-11-06 09:30:00 +0800
 categories:
   - system
 tags: system linux kernel io-uring nvme memory-management
-classes: wide
-layout: single
-use_math: true
 excerpt: >
   a focused architectural deep dive into why modern nvme ssds require high queue depth to saturate, how io_uring's lockless shared rings achieve this inside a single thread, and empirical benchmarks on bare-metal flash vs. cloud storage.
 ---

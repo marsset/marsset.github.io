@@ -4,8 +4,6 @@ date:  2026-02-03 11:33:53 +0800
 categories:
   - system
 tags: system
-classes: wide
-layout: single
 excerpt: memory ordering, memory model, sequential consistency, release/acquire.
 ---
 <!-- Intro memory order concept -->

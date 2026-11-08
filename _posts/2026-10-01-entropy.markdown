@@ -4,9 +4,6 @@ date:  2026-10-01 00:00:00 +0800
 categories:
   - math
 tags: math
-classes: wide
-layout: single
-use_math: true
 excerpt: >
   entropy counts choices, adds up like a physical quantity, lives on the typical set, and splits into
   what the source costs and what being wrong costs.

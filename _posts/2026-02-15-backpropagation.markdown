@@ -4,9 +4,6 @@ date:  2026-02-15 17:00:00 +0800
 categories:
   - ai
 tags: ai
-classes: wide
-layout: single
-use_math: true
 excerpt: back propagation is dynamic programing.
 ---
 Backpropagation is a technique propsed in 1986 [^bp] to train a feedforward neural network

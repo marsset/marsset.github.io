@@ -4,9 +4,6 @@ date:  2026-11-05 16:00:00 +0800
 categories:
   - system
 tags: system linux kernel memory-management io
-classes: wide
-layout: single
-use_math: true
 excerpt: >
   deep dive into linux memory reclamation: zone watermarks, kswapd vs synchronous direct reclaim, dual-lru active/inactive lists, and why sequential scans catastrophically evict random-access working sets.
 ---

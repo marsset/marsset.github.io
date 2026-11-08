@@ -4,8 +4,6 @@ date:  2026-02-08 15:00:00 +0800
 categories:
   - system
 tags: system
-classes: wide
-layout: single
 excerpt: ll/sc, aba, cas
 ---
 

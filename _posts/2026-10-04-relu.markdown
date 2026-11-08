@@ -4,9 +4,6 @@ date:  2026-10-04 12:00:00 +0800
 categories:
   - ai
 tags: ai
-classes: wide
-layout: single
-use_math: true
 excerpt: >
   a network of ReLUs is a polyline. depth buys facets, not curvature.
 ---

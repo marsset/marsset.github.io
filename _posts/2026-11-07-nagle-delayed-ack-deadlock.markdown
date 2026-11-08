@@ -4,9 +4,6 @@ date:   2026-11-07 16:30:00 +0800
 categories:
   - system
 tags: system linux kernel networking tcp low-latency high-frequency-trading
-classes: wide
-layout: single
-use_math: true
 excerpt: >
   A deep dive into the classic microsecond-to-millisecond deadlock: how Nagle's algorithm and TCP Delayed ACK collide during back-to-back small writes, why round-trip latency stalls for 40ms to 200ms, and the low-level kernel mechanics to achieve deterministic sub-microsecond dispatch.
 ---

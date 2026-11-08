@@ -4,9 +4,6 @@ date:  2026-10-24 12:00:00 +0800
 categories:
   - ai
 tags: ai
-classes: wide
-layout: single
-use_math: true
 excerpt: >
   the standard PyTorch training loop, read line by line: what each piece is for, and the few places where it quietly does something other than what it says.
 ---

@@ -4,9 +4,6 @@ date:   2026-11-07 14:00:00 +0800
 categories:
   - math
 tags: [math, probability, stochastic-processes]
-classes: wide
-layout: single
-use_math: true
 excerpt: >
   A first-principles derivation of the Poisson distribution from the binomial limit, defining signatures, and its asymptotic convergence to the Gaussian distribution.
 ---

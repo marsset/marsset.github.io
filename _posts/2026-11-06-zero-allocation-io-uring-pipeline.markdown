@@ -4,9 +4,6 @@ date:  2026-11-06 11:30:00 +0800
 categories:
   - system
 tags: system linux kernel io-uring memory-management concurrency
-classes: wide
-layout: single
-use_math: true
 excerpt: >
   a production engineering blueprint for line-rate direct i/o: designing 4kb-aligned user-space buffer pools, pre-pinning fixed memory to bypass get_user_pages(), and coordinating io_uring with lockless spsc ring queues for 100% compute/i/o overlap.
 ---

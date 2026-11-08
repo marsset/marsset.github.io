@@ -4,9 +4,6 @@ date:  2026-11-05 14:00:00 +0800
 categories:
   - system
 tags: system linux kernel memory-management
-classes: wide
-layout: single
-use_math: true
 excerpt: >
   deep-dive into the linux virtual memory subsystem: hardware page fault execution pipeline, the process-wide mmap_lock (formerly mmap_sem) read/write bottleneck, cacheline bouncing, and modern kernel mitigations (maple tree and per-vma locks).
 ---

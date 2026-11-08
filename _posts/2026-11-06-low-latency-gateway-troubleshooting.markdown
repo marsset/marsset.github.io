@@ -4,9 +4,6 @@ date:   2026-11-06 17:00:00 +0800
 categories:
   - system
 tags: system linux kernel high-frequency-trading microarchitecture solarflare performance
-classes: wide
-layout: single
-use_math: true
 excerpt: >
   an in-depth post-mortem and engineering guide to debugging microsecond tail latency explosions in solarflare ef_vi hft gateways: resolving cross-numa upi saturation, intel ddio l3 cache eviction, branch mispredictions, and bios smi stalls.
 ---

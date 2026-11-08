@@ -4,9 +4,6 @@ date:  2026-02-21 10:00:00 +0800
 categories:
   - math
 tags: math
-classes: wide
-layout: single
-use_math: true
 excerpt: fourier series, dirichlet kernel, fourier transform
 ---
 

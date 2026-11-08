@@ -4,9 +4,6 @@ date:  2026-10-04 08:00:00 +0800
 categories:
   - ai
 tags: ai
-classes: wide
-layout: single
-use_math: true
 excerpt: >
   two things break when networks get deep. Resnet is about the second one.
 ---

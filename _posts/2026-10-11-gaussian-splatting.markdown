@@ -4,9 +4,6 @@ date:  2026-10-11 09:00:00 +0800
 categories:
   - ai
 tags: ai
-classes: wide
-layout: single
-use_math: true
 excerpt: >
   notes, starting from what a rendered pixel is actually measuring.
 ---

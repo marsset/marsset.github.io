@@ -4,9 +4,6 @@ date:  2026-10-24 09:00:00 +0800
 categories:
   - ai
 tags: ai
-classes: wide
-layout: single
-use_math: true
 excerpt: >
   a two-parameter linear regression that goes to nan in twelve steps, and why the fix is to rescale the data rather than the step.
 ---

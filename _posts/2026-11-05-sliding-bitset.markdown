@@ -4,9 +4,6 @@ date:  2026-11-05 13:30:00 +0800
 categories:
   - system
 tags: system algorithm
-classes: wide
-layout: single
-use_math: true
 excerpt: >
   ultra-low-latency market data deduplication and out-of-order ingestion using a fixed-capacity sliding bitset: O(1) state transitions, zero heap allocation, 1 KB L1 cache residency, and 260M+ pkts/s throughput.
 ---

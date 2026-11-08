@@ -4,9 +4,6 @@ date:  2026-11-05 12:00:00 +0800
 categories:
   - system
 tags: system
-classes: wide
-layout: single
-use_math: true
 excerpt: >
   a deep dive into the four foundational data structures for K-way stream merge: binary min-heap, 8-ary heap, winner tree, and loser tree—comparing comparisons, cache lines, and microbenchmarks with complete C++ implementations.
 ---

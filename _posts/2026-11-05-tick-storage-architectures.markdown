@@ -4,9 +4,6 @@ date:  2026-11-05 11:30:00 +0800
 categories:
   - system
 tags: system database architecture time-series memory-management
-classes: wide
-layout: single
-use_math: true
 excerpt: >
   analyzing why general-purpose columnar formats like parquet fall short for high-throughput tick replay, and how pax hybrid layouts, kdb+, and dolphindb resolve the row-stitching penalty, decompression bottlenecks, and page cache thrashing.
 ---

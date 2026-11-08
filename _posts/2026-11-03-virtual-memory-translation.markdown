@@ -4,9 +4,6 @@ date:  2026-11-03 13:00:00 +0800
 categories:
   - system
 tags: system
-classes: wide
-layout: single
-use_math: true
 excerpt: >
   how the MMU and the cache hierarchy fit together on a memory access, and how virtual addresses become physical ones.
 ---

@@ -4,9 +4,6 @@ date:  2026-10-13 09:00:00 +0800
 categories:
   - math
 tags: math
-classes: wide
-layout: single
-use_math: true
 excerpt: >
   the chain rule for Brownian motion, and the extra term that makes stochastic calculus a separate subject.
 ---

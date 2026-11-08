@@ -4,9 +4,6 @@ date:  2026-10-07 07:00:00 +0800
 categories:
   - math
 tags: math
-classes: wide
-layout: single
-use_math: true
 excerpt: >
   solve laplace's equation on a sphere by separating one variable at a time, and they fall out.
 ---

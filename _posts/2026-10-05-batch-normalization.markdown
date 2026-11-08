@@ -4,9 +4,6 @@ date:  2026-10-05 09:00:00 +0800
 categories:
   - ai
 tags: ai
-classes: wide
-layout: single
-use_math: true
 excerpt: >
   standardization with the statistics borrowed from whoever else is in the batch.
 ---

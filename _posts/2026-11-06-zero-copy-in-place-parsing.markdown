@@ -4,9 +4,6 @@ date:  2026-11-06 16:30:00 +0800
 categories:
   - system
 tags: system linux kernel high-frequency-trading cpp memory-management microarchitecture
-classes: wide
-layout: single
-use_math: true
 excerpt: >
   a deep dive into nanosecond-level market data parsing: navigating unaligned memory access, eliminating undefined behavior and simd vector faults, and executing single-cycle hardware byte swapping via bswap and fused movbe instructions.
 ---

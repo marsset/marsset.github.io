@@ -4,9 +4,6 @@ date:  2026-11-06 15:00:00 +0800
 categories:
   - system
 tags: system linux kernel memory-management observability
-classes: wide
-layout: single
-use_math: true
 excerpt: >
   a deep architectural guide to linux physical memory taxonomy: deconstructing /proc/meminfo on a live 64-bit arm server, the dual-lru mechanics (active/inactive anon vs. file), kernel non-lru slabs, and page pinning invariants.
 ---
