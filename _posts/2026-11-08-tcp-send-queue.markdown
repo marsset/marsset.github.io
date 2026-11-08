@@ -241,7 +241,7 @@ In `net/ipv4/tcp_output.c`, the kernel follows a **strict hierarchical priority 
 ### Priority 1: Retransmissions (Repairs First!)
 If Selective ACKs or a retransmission timeout indicates that a packet was lost on the wire, the kernel **always services retransmissions before transmitting any new unsent data**:
 * Function: `tcp_xmit_retransmit_queue()`
-* **Why?** Because of TCP's Head-of-Line blocking contract. The receiver cannot expose *any* subsequent data to the peer application until the missing segment is received. Sending fresh data while a gap exists only wastes receiver buffer space.
+* **Why?** Because of [TCP's Head-of-Line blocking](/system/2026/11/08/tcp-hol-blocking.html) contract. The receiver cannot expose *any* subsequent data to the peer application until the missing segment is received. Sending fresh data while a gap exists only wastes receiver buffer space.
 
 ### Priority 2: Fresh Outbound Data
 If there are no lost packets awaiting retransmission, the transmission loop proceeds to `tcp_write_xmit()`:
