@@ -214,10 +214,10 @@ Ensure your receive memory ceilings have enough slack to absorb high-frequency m
 sysctl -w net.ipv4.tcp_rmem="4096 131072 16777216"
 ```
 
-### 3. Spin Draining with `SO_BUSY_POLL`
+### 3. Spin Draining with [`SO_BUSY_POLL`](/system/2026/11/09/socket-busy-polling.html)
 If the user-space thread drains packets the instant they hit `sk_receive_queue`, memory usage never accumulates to trigger `tcp_prune_queue()`.
 
-Enabling low-latency busy polling bypasses interrupt scheduling delays and keeps the receive queue drained in sub-microsecond time:
+Enabling low-latency busy polling bypasses interrupt scheduling delays and keeps the receive queue drained in sub-microsecond time (see [Socket Busy Polling](/system/2026/11/09/socket-busy-polling.html) for architecture details):
 
 ```c
 int busy_poll_us = 50;

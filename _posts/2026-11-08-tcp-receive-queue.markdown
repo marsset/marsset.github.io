@@ -203,10 +203,10 @@ Modern NICs use Generic Receive Offload (GRO) to bundle multiple incoming TCP pa
   sudo ethtool -K eth0 gro off lro off
   ```
 
-### 3. Eliminate Interrupt Jitter with `SO_BUSY_POLL`
+### 3. Eliminate Interrupt Jitter with [`SO_BUSY_POLL`](/system/2026/11/09/socket-busy-polling.html)
 Traditional packet delivery relies on hardware interrupts $\to$ NAPI softirq scheduling $\to$ context switch to user thread. This introduces $2\,\mu\text{s}$ to $10\,\mu\text{s}$ of unpredictable jitter.
 
-By configuring `SO_BUSY_POLL`, the user-space thread spins directly on the device driver queue, draining packets the nanosecond DMA finishes:
+By configuring [`SO_BUSY_POLL`](/system/2026/11/09/socket-busy-polling.html), the user-space thread spins directly on the device driver queue, draining packets the nanosecond DMA finishes:
 
 ```cpp
 int busy_poll_us = 50; // Poll for 50 microseconds
