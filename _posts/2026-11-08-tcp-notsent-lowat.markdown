@@ -113,6 +113,8 @@ $$
 \text{Total Buffered Data} = \underbrace{\text{In-Flight Bytes}}_{\text{Already on the Wire}} + \underbrace{\text{Unsent Bytes}}_{\text{Idle in Local RAM}}
 $$
 
+*(For a complete breakdown of kernel sequence pointers, RB-tree retransmission storage, and the lifecycle taxonomy of socket memory, see: [TCP Send Queue Anatomy](/system/2026/11/08/tcp-send-queue.html)).*
+
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
 │                      Total Socket Memory (SO_SNDBUF)                   │
