@@ -8,7 +8,7 @@ excerpt: >
   A deep dive into persistent TLS session management for crypto exchange gateways: the catastrophic cost of cold handshakes during disconnects, TLS 1.3 PSK resumption, 0-RTT Early Data replay risks in trading, AES-NI acceleration, and pre-warmed shadow connections.
 ---
 
-In quantitative market making and high-frequency trading (HFT) across centralized exchanges (Binance, OKX, Bybit, Gate) and decentralized perps (such as Hyperliquid), firms maintain hundreds of persistent, bidirectional **WebSocket/TLS** connections. 
+In quantitative market making and high-frequency trading (HFT) across centralized exchanges (Binance, OKX, Bybit, Gate) and decentralized perps (such as Hyperliquid), firms maintain hundreds of persistent, bidirectional [**WebSocket**](/system/2026/11/09/websocket-anatomy.html) / **TLS** connections (see [WebSocket Anatomy](/system/2026/11/09/websocket-anatomy.html) for frame protocol internals). 
 
 These streams handle two missions:
 1. Ingesting high-throughput public market data (L2 order book deltas, BBO quotes, trade ticks).
