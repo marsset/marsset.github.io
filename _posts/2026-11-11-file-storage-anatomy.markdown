@@ -139,7 +139,7 @@ When an application calls `open("new_tick.dat", O_CREAT)`, the kernel attempts t
 
 How does a 256-byte inode connect to actual bytes stored on physical flash or magnetic platters?
 
-### 1. From Inode to Blocks: Extent Trees
+### 4.1 From Inode to Blocks: Extent Trees
 In legacy filesystems (ext2/3), the inode stored an array of block addresses: 12 direct pointers, 1 indirect pointer, 1 double-indirect pointer, and 1 triple-indirect pointer. To read a large file, the disk head had to jump back and forth reading indirect metadata pointer tables—creating massive I/O fragmentation.
 
 Modern filesystems (ext4 / XFS) discarded indirect block pointers in favor of **Extents**.
@@ -167,7 +167,7 @@ Inside the 60-byte `i_block` field of the ext4 inode, the kernel stores an **Ext
 * **Low-Latency Impact:** When your application issues a sequential read, the kernel does not search pointer chains; it calculates the physical LBA with simple arithmetic:
   $$\text{Physical LBA} = \text{Extent.physical_start} + (\text{File Offset} - \text{Extent.logical_start})$$
 
-### 2. The Two Faces of Data Blocks: Regular Files vs. Directory Data Blocks
+### 4.2 The Two Faces of Data Blocks: Regular Files vs. Directory Data Blocks
 
 Once physical 4 KB blocks are mapped via extents, what is stored inside them falls into two fundamentally distinct categories:
 
@@ -281,7 +281,7 @@ By truncating the file descriptor via `/proc/<pid>/fd/<fd>`, the kernel immediat
 
 In high-frequency trading and low-latency databases, several inode mechanics introduce severe tail-latency liabilities:
 
-### 1. The `atime` Catastrophe (Read Becoming a Write)
+### 6.1 The `atime` Catastrophe (Read Becoming a Write)
 By default, the POSIX specification mandates that every time a file is read, its access timestamp (`inode->i_atime`) must be updated.
 
 * **The Trap:** When your market data engine reads an order book historical snapshot, the kernel must execute an **in-memory inode update**, followed by writing the modified inode back to storage.
@@ -292,7 +292,7 @@ By default, the POSIX specification mandates that every time a file is read, its
   /dev/nvme0n1p1  /data  ext4  defaults,noatime,nodiratime  0  2
   ```
 
-### 2. Inode Lock Contention (`i_rwsem`)
+### 6.2 Inode Lock Contention (`i_rwsem`)
 In the Linux kernel, every `struct inode` is protected by a read/write semaphore: **`inode->i_rwsem`**.
 
 * When multiple threads append data concurrently to the same shared log file or trade journal, each thread must acquire `i_rwsem` in exclusive write mode.
