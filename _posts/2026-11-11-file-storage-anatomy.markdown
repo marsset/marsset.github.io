@@ -81,78 +81,11 @@ Performing multiple disk I/O operations for every single directory lookup along 
 
 * Each component is represented as an in-memory `struct dentry` linking the parent directory to the child inode.
 * Path walks are resolved in RAM via lockless **RCU-walk** (`rcu_read_lock`), completing in **nanoseconds with zero disk reads**.
-* If a path component is not cached in RAM, the kernel falls back to the slow path: reading the parent directory's underlying **Directory Data Blocks**.
+* If a path component is not cached in RAM, the kernel falls back to the slow path: reading the parent directory's underlying **Directory Data Blocks** from storage.
 
 ---
 
-## 3. The Two Faces of Data Blocks: Regular Files vs. Directory Data Blocks
-
-Both regular files and directories allocate physical 4 KB storage blocks through their inode's extent tree. However, the Linux kernel treats their payload data blocks as two fundamentally distinct categories:
-
-| Dimension | Regular File Data Blocks | Directory Data Blocks |
-| :--- | :--- | :--- |
-| **Payload Content** | Arbitrary user bytes (binary, text, Parquet, ticks) | Structured records (`ext4_dir_entry_2` or HTree index) |
-| **Kernel Interpretation** | **Opaque:** Kernel does not inspect or validate bytes | **Strictly Parsed:** Kernel reads, hashes, and navigates entries |
-| **User-Space Modification** | **Permitted:** Arbitrary writes via `write()`, `pwrite()`, `mmap` | **Forbidden:** Calling `write()` returns `-EISDIR` (*Is a directory*) |
-| **How Content is Changed** | Direct application data writes | Indirectly via VFS syscalls (`mkdir`, `unlink`, `rename`, `link`) |
-| **Read System Call** | `read()` / `pread()` | `getdents64()` (used by `ls`, `find`) |
-
-### Anatomy of a 4 KB Directory Data Block
-
-Inside an ext4 directory data block, the payload is an array of variable-length directory entries (`struct ext4_dir_entry_2`):
-
-```text
- 0                        4096 Bytes
- ┌──────────────────────────────────────────────────────────────┐
- │ Record 1 │ Record 2 │   Record 3   │     Record 4 ...        │
- └──────────────────────────────────────────────────────────────┘
-```
-
-Each record contains 5 specific fields:
-* **`inode` (4 bytes):** The 32-bit inode number pointing to the file's metadata.
-* **`rec_len` (2 bytes):** Offset to the next record in bytes.
-* **`name_len` (1 byte):** Length of the filename string.
-* **`file_type` (1 byte):** Type code (`1` = Regular, `2` = Directory, `7` = Symlink).
-* **`name` (variable):** Raw filename characters (e.g., `"market.dat"`).
-
-```text
-Offset    Sample Directory Block Payload (/var/log/):
-───────   ────────────────────────────────────────────────────────────────
-0x000     [ Inode: 144208 | rec_len: 12 | name_len: 1 | type: DIR | "."   ]
-0x00C     [ Inode: 144101 | rec_len: 12 | name_len: 2 | type: DIR | ".."  ]
-0x018     [ Inode: 144210 | rec_len: 24 | name_len: 10| type: REG | "market.dat" ]
-0x030     [ Inode: 144211 | rec_len: 4048|name_len: 9 | type: REG | "syslog.log" ... ]
-───────   ────────────────────────────────────────────────────────────────
-Total: 4096 bytes (Last entry's rec_len stretches to pad the 4 KB boundary)
-```
-
-### Why Directory Deletion (`rm`) Never Wipes Bytes
-
-This directory block format explains two counter-intuitive Linux storage phenomena:
-
-```text
-Before Deletion:
-┌─────────────────────┬─────────────────────┬─────────────────────┐
-│ ".." (rec_len: 12)  │ "old.log" (len: 20) │ "new.log" (len: 24) │
-└─────────────────────┴─────────────────────┴─────────────────────┘
-
-After `rm old.log` (unlink):
-┌───────────────────────────────────────────┬─────────────────────┐
-│ ".." (rec_len: 12 + 20 = 32)              │ "new.log" (len: 24) │
-│       [ "old.log" bytes remain intact! ]  │                     │
-└───────────────────────────────────────────┴─────────────────────┘
-```
-
-1. **How `rm` actually works on disk:** When you run `rm old.log`, Linux does **not** zero out the filename or wipe the directory block. It merely adds `old.log`'s `rec_len` to the preceding entry's `rec_len` (`12 + 20 = 32`). When traversing the block, the kernel skips directly over `old.log`. The original filename and inode number remain intact in the block until overwritten, which is why forensics and undelete tools can recover unlinked files.
-2. **Why directory sizes never shrink:** If you create 1,000,000 files in `/tmp/scratch/`, the kernel allocates thousands of 4 KB directory data blocks (e.g., $32\,\text{MB}$ shown in `ls -ld`). If you delete all 1,000,000 files, the directory entries are skipped, but the **$32\,\text{MB}$ of directory data blocks remain allocated**. Linux ext4 does not automatically truncate directory blocks on deletion.
-
-### Scaling to Millions of Files: ext4 HTree Indexing
-* **Small Directories (< ~50 files):** All entries fit in a single 4 KB data block. The kernel performs a linear scan.
-* **Large Directories (> thousands of files):** Linear scans would degrade `open()` latency to hundreds of milliseconds. When a directory exceeds a single block, ext4 converts its directory data blocks into an **HTree** (a specialized 2-level B-tree indexed by filename hash). The root 4 KB block stores 32-bit hashes pointing to leaf 4 KB directory blocks, keeping lookup complexity at $O(1)$ regardless of directory size.
-
----
-
-## 4. Layer 2: The Inode (The True Identity)
+## 3. Layer 2: The Inode (The True Identity)
 
 Once the VFS identifies the inode number (e.g., `144210`), it reads the **`inode`** into memory.
 
@@ -202,17 +135,14 @@ When an application calls `open("new_tick.dat", O_CREAT)`, the kernel attempts t
 
 ---
 
-## 5. Layer 3: From Inode to Physical Storage (Extent Trees)
+## 4. Layer 3: Physical Data Blocks and Storage
 
-How does a 256-byte inode point to a $100\,\text{GB}$ market data file?
+How does a 256-byte inode connect to actual bytes stored on physical flash or magnetic platters?
 
-### Legacy ext2/3: Indirect Block Pointers
-In legacy filesystems, the inode stored an array of block addresses: 12 direct pointers, 1 indirect pointer, 1 double-indirect pointer, and 1 triple-indirect pointer.
+### 1. From Inode to Blocks: Extent Trees
+In legacy filesystems (ext2/3), the inode stored an array of block addresses: 12 direct pointers, 1 indirect pointer, 1 double-indirect pointer, and 1 triple-indirect pointer. To read a large file, the disk head had to jump back and forth reading indirect metadata pointer tables—creating massive I/O fragmentation.
 
-To read a large file, the disk head had to jump back and forth reading indirect metadata pointer tables—creating massive I/O fragmentation.
-
-### Modern ext4 / XFS: Extent Trees
-Modern filesystems discarded indirect block pointers in favor of **Extents**.
+Modern filesystems (ext4 / XFS) discarded indirect block pointers in favor of **Extents**.
 
 An **extent** is a single descriptor that maps a contiguous range of logical file blocks to a contiguous range of physical storage blocks:
 
@@ -237,9 +167,74 @@ Inside the 60-byte `i_block` field of the ext4 inode, the kernel stores an **Ext
 * **Low-Latency Impact:** When your application issues a sequential read, the kernel does not search pointer chains; it calculates the physical LBA with simple arithmetic:
   $$\text{Physical LBA} = \text{Extent.physical_start} + (\text{File Offset} - \text{Extent.logical_start})$$
 
+### 2. The Two Faces of Data Blocks: Regular Files vs. Directory Data Blocks
+
+Once physical 4 KB blocks are mapped via extents, what is stored inside them falls into two fundamentally distinct categories:
+
+| Dimension | Regular File Data Blocks | Directory Data Blocks |
+| :--- | :--- | :--- |
+| **Payload Content** | Arbitrary user bytes (binary, text, Parquet, ticks) | Structured records (`ext4_dir_entry_2` or HTree index) |
+| **Kernel Interpretation** | **Opaque:** Kernel does not inspect or validate bytes | **Strictly Parsed:** Kernel reads, hashes, and navigates entries |
+| **User-Space Modification** | **Permitted:** Arbitrary writes via `write()`, `pwrite()`, `mmap` | **Forbidden:** Calling `write()` returns `-EISDIR` (*Is a directory*) |
+| **How Content is Changed** | Direct application data writes | Indirectly via VFS syscalls (`mkdir`, `unlink`, `rename`, `link`) |
+| **Read System Call** | `read()` / `pread()` | `getdents64()` (used by `ls`, `find`) |
+
+#### Anatomy of a 4 KB Directory Data Block
+
+Inside an ext4 directory data block, the payload is an array of variable-length directory entries (`struct ext4_dir_entry_2`):
+
+```text
+ 0                        4096 Bytes
+ ┌──────────────────────────────────────────────────────────────┐
+ │ Record 1 │ Record 2 │   Record 3   │     Record 4 ...        │
+ └──────────────────────────────────────────────────────────────┘
+```
+
+Each record contains 5 specific fields:
+* **`inode` (4 bytes):** The 32-bit inode number pointing to the file's metadata.
+* **`rec_len` (2 bytes):** Offset to the next record in bytes.
+* **`name_len` (1 byte):** Length of the filename string.
+* **`file_type` (1 byte):** Type code (`1` = Regular, `2` = Directory, `7` = Symlink).
+* **`name` (variable):** Raw filename characters (e.g., `"market.dat"`).
+
+```text
+Offset    Sample Directory Block Payload (/var/log/):
+───────   ────────────────────────────────────────────────────────────────
+0x000     [ Inode: 144208 | rec_len: 12 | name_len: 1 | type: DIR | "."   ]
+0x00C     [ Inode: 144101 | rec_len: 12 | name_len: 2 | type: DIR | ".."  ]
+0x018     [ Inode: 144210 | rec_len: 24 | name_len: 10| type: REG | "market.dat" ]
+0x030     [ Inode: 144211 | rec_len: 4048|name_len: 9 | type: REG | "syslog.log" ... ]
+───────   ────────────────────────────────────────────────────────────────
+Total: 4096 bytes (Last entry's rec_len stretches to pad the 4 KB boundary)
+```
+
+#### Why Directory Deletion (`rm`) Never Wipes Bytes
+
+This directory block format explains two counter-intuitive Linux storage phenomena:
+
+```text
+Before Deletion:
+┌─────────────────────┬─────────────────────┬─────────────────────┐
+│ ".." (rec_len: 12)  │ "old.log" (len: 20) │ "new.log" (len: 24) │
+└─────────────────────┴─────────────────────┴─────────────────────┘
+
+After `rm old.log` (unlink):
+┌───────────────────────────────────────────┬─────────────────────┐
+│ ".." (rec_len: 12 + 20 = 32)              │ "new.log" (len: 24) │
+│       [ "old.log" bytes remain intact! ]  │                     │
+└───────────────────────────────────────────┴─────────────────────┘
+```
+
+1. **How `rm` actually works on disk:** When you run `rm old.log`, Linux does **not** zero out the filename or wipe the directory block. It merely adds `old.log`'s `rec_len` to the preceding entry's `rec_len` (`12 + 20 = 32`). When traversing the block, the kernel skips directly over `old.log`. The original filename and inode number remain intact in the block until overwritten, which is why forensics and undelete tools can recover unlinked files.
+2. **Why directory sizes never shrink:** If you create 1,000,000 files in `/tmp/scratch/`, the kernel allocates thousands of 4 KB directory data blocks (e.g., $32\,\text{MB}$ shown in `ls -ld`). If you delete all 1,000,000 files, the directory entries are skipped, but the **$32\,\text{MB}$ of directory data blocks remain allocated**. Linux ext4 does not automatically truncate directory blocks on deletion.
+
+#### Scaling to Millions of Files: ext4 HTree Indexing
+* **Small Directories (< ~50 files):** All entries fit in a single 4 KB data block. The kernel performs a linear scan.
+* **Large Directories (> thousands of files):** Linear scans would degrade `open()` latency to hundreds of milliseconds. When a directory exceeds a single block, ext4 converts its directory data blocks into an **HTree** (a specialized 2-level B-tree indexed by filename hash). The root 4 KB block stores 32-bit hashes pointing to leaf 4 KB directory blocks, keeping lookup complexity at $O(1)$ regardless of directory size.
+
 ---
 
-## 6. Mystery Solved: The Ghost File (`rm` Reclaims 0 Bytes)
+## 5. Mystery Solved: The Ghost File (`rm` Reclaims 0 Bytes)
 
 Why does running `rm huge.log` fail to reclaim disk space when a background process has the file open?
 
@@ -282,7 +277,7 @@ By truncating the file descriptor via `/proc/<pid>/fd/<fd>`, the kernel immediat
 
 ---
 
-## 7. Systems Tuning: Inode Latency Traps
+## 6. Systems Tuning: Inode Latency Traps
 
 In high-frequency trading and low-latency databases, several inode mechanics introduce severe tail-latency liabilities:
 
