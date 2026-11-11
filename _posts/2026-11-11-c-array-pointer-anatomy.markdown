@@ -46,30 +46,31 @@ When you declare a pointer:
 int x = 42;
 int *p = &x;
 ```
-The compiler allocates **$8\,\text{bytes}$ of physical storage** for `p` (on the stack, in a register, or in the data segment). That storage contains a $64\text{-bit}$ integer representing the memory address of `x`.
+The compiler allocates **$8\,\text{bytes}$ of physical storage** for `p` (on the stack, in a register, or in the data segment). That storage contains a $64\text{-bit}$ hardware memory address pointing to `x`. Notice that `p` is **not** an integer; it is a **pointer (`int *`)**:
 
 ```text
-POINTER IN MEMORY:
-Stack Address     Variable      Value Stored
-─────────────     ────────      ─────────────────────────
-0x7ffe0008        int *p        0x7ffe0004  (8-byte address)
-0x7ffe0004        int x         42          (4-byte integer)
+POINTER IN MEMORY (64-bit architecture):
+Byte Range        Variable      Size      Value Stored
+────────────────  ────────      ────      ───────────────────────────────────
+0x7ffe0008..000f  int *p        8 bytes   0x7ffe0000  (64-bit memory address)
+0x7ffe0004..0007  [padding]     4 bytes   (Stack alignment padding)
+0x7ffe0000..0003  int x         4 bytes   42          (32-bit integer value)
 ```
 
 Now, examine an array declaration:
 ```c
 int arr[4] = {10, 20, 30, 40};
 ```
-The compiler allocates **$16\,\text{bytes}$ of contiguous storage** for the elements. It does **not** allocate an extra $8\text{-byte}$ pointer variable to store the starting address of `arr`:
+Each element in `arr` is an `int` ($4\,\text{bytes}$). The compiler allocates **$16\,\text{bytes}$ of contiguous storage** ($4 \text{ elements} \times 4\,\text{bytes}$). It does **not** allocate an extra $8\text{-byte}$ pointer variable to store the starting address of `arr`:
 
 ```text
 ARRAY IN MEMORY:
-Stack Address     Element       Value Stored
-─────────────     ────────      ─────────────────────────
-0x7ffe000c        arr[3]        40  (4 bytes)
-0x7ffe0008        arr[2]        30  (4 bytes)
-0x7ffe0004        arr[1]        20  (4 bytes)
-0x7ffe0000        arr[0]        10  (4 bytes)
+Byte Range        Element       Size      Value Stored
+────────────────  ────────      ────      ───────────────────────────────────
+0x7ffe000c..000f  arr[3]        4 bytes   40  (32-bit integer value)
+0x7ffe0008..000b  arr[2]        4 bytes   30  (32-bit integer value)
+0x7ffe0004..0007  arr[1]        4 bytes   20  (32-bit integer value)
+0x7ffe0000..0003  arr[0]        4 bytes   10  (32-bit integer value)
 ```
 
 There is no variable holding `0x7ffe0000`. The identifier `arr` is purely a **compile-time label** (a symbol) that the compiler associates with the stack address offset `-16(%rbp)`.
