@@ -259,99 +259,196 @@ Imagine an HFT trading host with 64 GB of physical RAM:
 
 To prevent single-pass scans from destroying the operating working set, Linux splits page tracking into two lists governed by a **Two-Touch Policy**:
 
-<svg viewBox="0 0 880 440" width="100%" style="max-width:880px;display:block;margin:2em auto;" role="img" aria-label="Linux Dual LRU Active and Inactive List State Transitions">
+<svg viewBox="0 0 880 440" width="100%" style="max-width:880px;display:block;margin:2em auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;" role="img" aria-label="Linux Dual LRU Active and Inactive List State Transitions">
   <defs>
+    <style>
+      .lru-bg-card { fill: currentColor; fill-opacity: 0.04; stroke: currentColor; stroke-opacity: 0.28; stroke-width: 1.2; }
+      
+      /* Light Mode Defaults */
+      .lru-demote-card { fill: rgba(217, 119, 6, 0.1); stroke: #d97706; stroke-width: 1.2; }
+      .lru-promote-card { fill: rgba(5, 150, 105, 0.1); stroke: #059669; stroke-width: 1.2; }
+      .lru-evict-card { fill: rgba(220, 38, 38, 0.1); stroke: #dc2626; stroke-width: 1.2; }
+      .lru-protect-card { fill: rgba(5, 150, 105, 0.1); stroke: #059669; stroke-width: 1.2; }
+      
+      .lru-inact-head-card { fill: rgba(2, 132, 199, 0.1); stroke: #0284c7; stroke-width: 1.2; }
+      .lru-inact-tail-card { fill: rgba(220, 38, 38, 0.1); stroke: #dc2626; stroke-width: 1.2; }
+      .lru-act-head-card { fill: rgba(5, 150, 105, 0.1); stroke: #059669; stroke-width: 1.2; }
+      .lru-act-tail-card { fill: rgba(217, 119, 6, 0.1); stroke: #d97706; stroke-width: 1.2; }
+
+      .lru-txt-title { font-weight: 700; fill: currentColor; fill-opacity: 0.95; }
+      .lru-txt-sub { fill: currentColor; fill-opacity: 0.85; font-size: 12.0px; }
+      
+      .lru-txt-demote { fill: #b45309; font-weight: 600; font-size: 12.0px; }
+      .lru-txt-promote { fill: #047857; font-weight: 600; font-size: 12.0px; }
+      
+      .lru-txt-blue { fill: #0284c7; font-weight: 700; font-size: 13px; }
+      .lru-txt-red { fill: #dc2626; font-weight: 700; font-size: 13px; }
+      .lru-txt-green { fill: #059669; font-weight: 700; font-size: 13px; }
+      .lru-txt-orange { fill: #b45309; font-weight: 700; font-size: 13px; }
+      
+      .lru-txt-evict-title { fill: #dc2626; font-weight: 700; font-size: 12.5px; }
+      .lru-txt-protect-title { fill: #059669; font-weight: 700; font-size: 12.5px; }
+      
+      .lru-stroke-orange { stroke: #d97706; }
+      .lru-stroke-green { stroke: #059669; }
+      .lru-stroke-red { stroke: #dc2626; }
+      
+      .lru-marker-orange { fill: #d97706; }
+      .lru-marker-green { fill: #059669; }
+      .lru-marker-red { fill: #dc2626; }
+      .lru-marker-gray { fill: currentColor; fill-opacity: 0.6; }
+
+      /* Dark Mode Overrides */
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) .lru-demote-card { fill: rgba(245, 158, 11, 0.16); stroke: #f59e0b; }
+        :root:not([data-theme="light"]) .lru-promote-card { fill: rgba(16, 185, 129, 0.16); stroke: #10b981; }
+        :root:not([data-theme="light"]) .lru-evict-card { fill: rgba(239, 68, 68, 0.16); stroke: #ef4444; }
+        :root:not([data-theme="light"]) .lru-protect-card { fill: rgba(16, 185, 129, 0.16); stroke: #10b981; }
+        
+        :root:not([data-theme="light"]) .lru-inact-head-card { fill: rgba(56, 189, 248, 0.16); stroke: #38bdf8; }
+        :root:not([data-theme="light"]) .lru-inact-tail-card { fill: rgba(239, 68, 68, 0.16); stroke: #ef4444; }
+        :root:not([data-theme="light"]) .lru-act-head-card { fill: rgba(16, 185, 129, 0.16); stroke: #10b981; }
+        :root:not([data-theme="light"]) .lru-act-tail-card { fill: rgba(245, 158, 11, 0.16); stroke: #f59e0b; }
+
+        :root:not([data-theme="light"]) .lru-txt-demote { fill: #fbbf24; }
+        :root:not([data-theme="light"]) .lru-txt-promote { fill: #34d399; }
+        
+        :root:not([data-theme="light"]) .lru-txt-blue { fill: #38bdf8; }
+        :root:not([data-theme="light"]) .lru-txt-red { fill: #f87171; }
+        :root:not([data-theme="light"]) .lru-txt-green { fill: #34d399; }
+        :root:not([data-theme="light"]) .lru-txt-orange { fill: #fbbf24; }
+        
+        :root:not([data-theme="light"]) .lru-txt-evict-title { fill: #f87171; }
+        :root:not([data-theme="light"]) .lru-txt-protect-title { fill: #34d399; }
+        
+        :root:not([data-theme="light"]) .lru-stroke-orange { stroke: #f59e0b; }
+        :root:not([data-theme="light"]) .lru-stroke-green { stroke: #10b981; }
+        :root:not([data-theme="light"]) .lru-stroke-red { stroke: #ef4444; }
+        
+        :root:not([data-theme="light"]) .lru-marker-orange { fill: #f59e0b; }
+        :root:not([data-theme="light"]) .lru-marker-green { fill: #10b981; }
+        :root:not([data-theme="light"]) .lru-marker-red { fill: #ef4444; }
+      }
+
+      html[data-theme="dark"] .lru-demote-card { fill: rgba(245, 158, 11, 0.16); stroke: #f59e0b; }
+      html[data-theme="dark"] .lru-promote-card { fill: rgba(16, 185, 129, 0.16); stroke: #10b981; }
+      html[data-theme="dark"] .lru-evict-card { fill: rgba(239, 68, 68, 0.16); stroke: #ef4444; }
+      html[data-theme="dark"] .lru-protect-card { fill: rgba(16, 185, 129, 0.16); stroke: #10b981; }
+      
+      html[data-theme="dark"] .lru-inact-head-card { fill: rgba(56, 189, 248, 0.16); stroke: #38bdf8; }
+      html[data-theme="dark"] .lru-inact-tail-card { fill: rgba(239, 68, 68, 0.16); stroke: #ef4444; }
+      html[data-theme="dark"] .lru-act-head-card { fill: rgba(16, 185, 129, 0.16); stroke: #10b981; }
+      html[data-theme="dark"] .lru-act-tail-card { fill: rgba(245, 158, 11, 0.16); stroke: #f59e0b; }
+
+      html[data-theme="dark"] .lru-txt-demote { fill: #fbbf24; }
+      html[data-theme="dark"] .lru-txt-promote { fill: #34d399; }
+      
+      html[data-theme="dark"] .lru-txt-blue { fill: #38bdf8; }
+      html[data-theme="dark"] .lru-txt-red { fill: #f87171; }
+      html[data-theme="dark"] .lru-txt-green { fill: #34d399; }
+      html[data-theme="dark"] .lru-txt-orange { fill: #fbbf24; }
+      
+      html[data-theme="dark"] .lru-txt-evict-title { fill: #f87171; }
+      html[data-theme="dark"] .lru-txt-protect-title { fill: #34d399; }
+      
+      html[data-theme="dark"] .lru-stroke-orange { stroke: #f59e0b; }
+      html[data-theme="dark"] .lru-stroke-green { stroke: #10b981; }
+      html[data-theme="dark"] .lru-stroke-red { stroke: #ef4444; }
+      
+      html[data-theme="dark"] .lru-marker-orange { fill: #f59e0b; }
+      html[data-theme="dark"] .lru-marker-green { fill: #10b981; }
+      html[data-theme="dark"] .lru-marker-red { fill: #ef4444; }
+    </style>
     <marker id="lru-arrow-gray" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1 L 10 5 L 0 9 z" fill="currentColor" fill-opacity="0.5"/>
+      <path d="M 0 1 L 10 5 L 0 9 z" class="lru-marker-gray"/>
     </marker>
     <marker id="lru-arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1 L 10 5 L 0 9 z" fill="#10b981"/>
+      <path d="M 0 1 L 10 5 L 0 9 z" class="lru-marker-green"/>
     </marker>
     <marker id="lru-arrow-orange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1 L 10 5 L 0 9 z" fill="#f59e0b"/>
+      <path d="M 0 1 L 10 5 L 0 9 z" class="lru-marker-orange"/>
     </marker>
     <marker id="lru-arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1 L 10 5 L 0 9 z" fill="#ef4444"/>
+      <path d="M 0 1 L 10 5 L 0 9 z" class="lru-marker-red"/>
     </marker>
   </defs>
 
-  <!-- Top Demotion Flow: Truly segmented arrows entering & leaving Demotion Card with ZERO overlap -->
+  <!-- Top Demotion Flow: Segmented arrows entering & leaving Demotion Card with ZERO overlap -->
   <!-- Segment 1: from Active TAIL (x=770) up into right side of Demotion Card (45px clear of Active List title) -->
-  <path d="M 770 132 V 40 H 602" fill="none" stroke="#f59e0b" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#lru-arrow-orange)"/>
+  <path d="M 770 132 V 40 H 602" fill="none" class="lru-stroke-orange" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#lru-arrow-orange)"/>
   
-  <!-- Demotion Card (Sitting in clear open gap between x=280 and x=595; no line passes through it) -->
-  <rect x="280" y="26" width="315" height="28" rx="5" fill="#451a03" stroke="#f59e0b" stroke-opacity="0.8" stroke-width="1.2"/>
-  <text x="437" y="44" text-anchor="middle" font-size="12.0" font-weight="600" fill="#f59e0b">Demotion: Inactive deficit &middot; unreferenced page</text>
+  <!-- Demotion Card -->
+  <rect x="270" y="26" width="325" height="28" rx="5" class="lru-demote-card"/>
+  <text x="432" y="44" text-anchor="middle" class="lru-txt-demote">Demotion: Inactive deficit &middot; unreferenced page</text>
   
   <!-- Segment 2: from left side of Demotion Card down into Inactive HEAD at x=100 (52px clear of Inactive List title) -->
-  <path d="M 274 40 H 100 V 126" fill="none" stroke="#f59e0b" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#lru-arrow-orange)"/>
+  <path d="M 264 40 H 100 V 126" fill="none" class="lru-stroke-orange" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#lru-arrow-orange)"/>
 
   <!-- Inactive List Container (Left) -->
-  <rect x="25" y="70" width="400" height="275" rx="8" fill="currentColor" fill-opacity="0.04" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.2"/>
-  <!-- Container Header (Centered in open gap x=152..298, maintaining 52px of clear air to the vertical line at x=100) -->
-  <text x="225" y="96" text-anchor="middle" font-size="14.5" font-weight="700" fill="currentColor" fill-opacity="0.95">Inactive List</text>
-  <text x="225" y="114" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.6">Probationary Cold Candidates</text>
+  <rect x="25" y="70" width="400" height="275" rx="8" class="lru-bg-card"/>
+  <!-- Container Header -->
+  <text x="225" y="96" text-anchor="middle" font-size="14.5" class="lru-txt-title">Inactive List</text>
+  <text x="225" y="114" text-anchor="middle" class="lru-txt-sub">Probationary Cold Candidates</text>
 
   <!-- Head of Inactive List -->
-  <rect x="45" y="132" width="150" height="52" rx="5" fill="#38bdf8" fill-opacity="0.1" stroke="#0284c7" stroke-width="1.2"/>
-  <text x="120" y="154" text-anchor="middle" font-size="13" font-weight="700" fill="#38bdf8">HEAD</text>
-  <text x="120" y="172" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.75">New Page Enters</text>
+  <rect x="45" y="132" width="150" height="52" rx="5" class="lru-inact-head-card"/>
+  <text x="120" y="154" text-anchor="middle" class="lru-txt-blue">HEAD</text>
+  <text x="120" y="172" text-anchor="middle" class="lru-txt-sub">New Page Enters</text>
 
   <!-- Tail of Inactive List -->
-  <rect x="250" y="132" width="150" height="52" rx="5" fill="#ef4444" fill-opacity="0.12" stroke="#ef4444" stroke-width="1.2"/>
-  <text x="325" y="154" text-anchor="middle" font-size="13" font-weight="700" fill="#f87171">TAIL</text>
-  <text x="325" y="172" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.75">Eviction Target</text>
+  <rect x="250" y="132" width="150" height="52" rx="5" class="lru-inact-tail-card"/>
+  <text x="325" y="154" text-anchor="middle" class="lru-txt-red">TAIL</text>
+  <text x="325" y="172" text-anchor="middle" class="lru-txt-sub">Eviction Target</text>
 
-  <!-- Inactive Aging Arrow (Text cleanly separated 12px above line) -->
-  <text x="220" y="148" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">aging</text>
-  <line x1="195" y1="158" x2="242" y2="158" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.4" marker-end="url(#lru-arrow-gray)"/>
+  <!-- Inactive Aging Arrow -->
+  <text x="220" y="148" text-anchor="middle" font-size="12.0" font-weight="600" fill="currentColor" fill-opacity="0.85">aging</text>
+  <line x1="195" y1="158" x2="242" y2="158" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.4" marker-end="url(#lru-arrow-gray)"/>
 
-  <!-- Eviction Arrow out of Inactive Tail (terminates at top of EVICTED card) -->
-  <line x1="325" y1="184" x2="325" y2="218" stroke="#ef4444" stroke-width="1.6" marker-end="url(#lru-arrow-red)"/>
-  <rect x="235" y="224" width="180" height="54" rx="5" fill="#450a0a" stroke="#ef4444" stroke-opacity="0.8" stroke-width="1.2"/>
-  <text x="325" y="245" text-anchor="middle" font-size="12.5" font-weight="700" fill="#f87171">EVICTED / RECLAIMED</text>
-  <text x="325" y="265" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.75">Clean: Freed | Dirty: Writeback</text>
+  <!-- Eviction Arrow out of Inactive Tail -->
+  <line x1="325" y1="184" x2="325" y2="218" class="lru-stroke-red" stroke-width="1.6" marker-end="url(#lru-arrow-red)"/>
+  <rect x="235" y="224" width="180" height="54" rx="5" class="lru-evict-card"/>
+  <text x="325" y="245" text-anchor="middle" class="lru-txt-evict-title">EVICTED / RECLAIMED</text>
+  <text x="325" y="265" text-anchor="middle" class="lru-txt-sub">Clean: Freed | Dirty: Writeback</text>
 
   <!-- Active List Container (Right) -->
-  <rect x="455" y="70" width="400" height="275" rx="8" fill="currentColor" fill-opacity="0.04" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.2"/>
-  <!-- Container Header (Centered in open gap x=585..725, maintaining 45px of clear air to the vertical line at x=770) -->
-  <text x="655" y="96" text-anchor="middle" font-size="14.5" font-weight="700" fill="#10b981">Active List</text>
-  <text x="655" y="114" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.6">Protected Working Set</text>
+  <rect x="455" y="70" width="400" height="275" rx="8" class="lru-bg-card"/>
+  <!-- Container Header -->
+  <text x="655" y="96" text-anchor="middle" font-size="14.5" class="lru-txt-green">Active List</text>
+  <text x="655" y="114" text-anchor="middle" class="lru-txt-sub">Protected Working Set</text>
 
   <!-- Head of Active List -->
-  <rect x="475" y="132" width="150" height="52" rx="5" fill="#10b981" fill-opacity="0.12" stroke="#10b981" stroke-width="1.2"/>
-  <text x="550" y="154" text-anchor="middle" font-size="13" font-weight="700" fill="#10b981">HEAD</text>
-  <text x="550" y="172" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.75">Promoted Hot Pages</text>
+  <rect x="475" y="132" width="150" height="52" rx="5" class="lru-act-head-card"/>
+  <text x="550" y="154" text-anchor="middle" class="lru-txt-green">HEAD</text>
+  <text x="550" y="172" text-anchor="middle" class="lru-txt-sub">Promoted Hot Pages</text>
 
   <!-- Tail of Active List -->
-  <rect x="680" y="132" width="150" height="52" rx="5" fill="#f59e0b" fill-opacity="0.1" stroke="#f59e0b" stroke-width="1.2"/>
-  <text x="755" y="154" text-anchor="middle" font-size="13" font-weight="700" fill="#f59e0b">TAIL</text>
-  <text x="755" y="172" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.75">Demotion Candidate</text>
+  <rect x="680" y="132" width="150" height="52" rx="5" class="lru-act-tail-card"/>
+  <text x="755" y="154" text-anchor="middle" class="lru-txt-orange">TAIL</text>
+  <text x="755" y="172" text-anchor="middle" class="lru-txt-sub">Demotion Candidate</text>
 
-  <!-- Active Aging Arrow (Text cleanly separated 12px above line) -->
-  <text x="650" y="148" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.55">aging</text>
-  <line x1="625" y1="158" x2="672" y2="158" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.4" marker-end="url(#lru-arrow-gray)"/>
+  <!-- Active Aging Arrow -->
+  <text x="650" y="148" text-anchor="middle" font-size="12.0" font-weight="600" fill="currentColor" fill-opacity="0.85">aging</text>
+  <line x1="625" y1="158" x2="672" y2="158" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.4" marker-end="url(#lru-arrow-gray)"/>
 
-  <!-- Active Protection Status Card (Symmetric counterpart to EVICTED card) -->
-  <rect x="665" y="224" width="180" height="54" rx="5" fill="#064e3b" stroke="#10b981" stroke-opacity="0.8" stroke-width="1.2"/>
-  <text x="755" y="245" text-anchor="middle" font-size="12.5" font-weight="700" fill="#10b981">PROTECTED CACHE</text>
-  <text x="755" y="265" text-anchor="middle" font-size="12.0" fill="currentColor" fill-opacity="0.75">Shielded from normal reclaim</text>
+  <!-- Active Protection Status Card -->
+  <rect x="665" y="224" width="180" height="54" rx="5" class="lru-protect-card"/>
+  <text x="755" y="245" text-anchor="middle" class="lru-txt-protect-title">PROTECTED CACHE</text>
+  <text x="755" y="265" text-anchor="middle" class="lru-txt-sub">Shielded from normal reclaim</text>
 
-  <!-- Bottom Promotion Flow: Truly segmented arrows entering & leaving Promotion Card with ZERO overlap -->
-  <!-- Segment 1: from Inactive HEAD bottom into left side of Promotion Card -->
-  <path d="M 120 184 V 315 H 198" fill="none" stroke="#10b981" stroke-width="1.8" marker-end="url(#lru-arrow-green)"/>
+  <!-- Bottom Promotion Flow -->
+  <path d="M 120 184 V 315 H 198" fill="none" class="lru-stroke-green" stroke-width="1.8" marker-end="url(#lru-arrow-green)"/>
 
-  <!-- Promotion Card (Sitting in clear open gap between x=205 and x=485; no line passes through it) -->
-  <rect x="205" y="301" width="280" height="28" rx="5" fill="#064e3b" stroke="#10b981" stroke-opacity="0.8" stroke-width="1.2"/>
-  <text x="345" y="319" text-anchor="middle" font-size="12.0" font-weight="600" fill="#10b981">Promotion: 2nd Touch (PTE Accessed=1)</text>
+  <!-- Promotion Card -->
+  <rect x="205" y="301" width="280" height="28" rx="5" class="lru-promote-card"/>
+  <text x="345" y="319" text-anchor="middle" class="lru-txt-promote">Promotion: 2nd Touch (PTE Accessed=1)</text>
 
-  <!-- Segment 2: from right side of Promotion Card up into Active HEAD (90° turn at x=550 is 65px clear of card) -->
-  <path d="M 491 315 H 550 V 190" fill="none" stroke="#10b981" stroke-width="1.8" marker-end="url(#lru-arrow-green)"/>
+  <!-- Segment 2: from right side of Promotion Card up into Active HEAD -->
+  <path d="M 491 315 H 550 V 190" fill="none" class="lru-stroke-green" stroke-width="1.8" marker-end="url(#lru-arrow-green)"/>
 
   <!-- Bottom Summary Note -->
-  <rect x="25" y="365" width="830" height="56" rx="6" fill="currentColor" fill-opacity="0.04" stroke="currentColor" stroke-opacity="0.3" stroke-width="1"/>
-  <text x="440" y="388" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor" fill-opacity="0.9">Two-Touch Policy: A page must be referenced twice before gaining Active protection.</text>
-  <text x="440" y="409" text-anchor="middle" font-size="12" fill="currentColor" fill-opacity="0.65">Single-use sequential scans should enter Inactive, reach the tail, and be evicted without touching Active.</text>
+  <rect x="25" y="365" width="830" height="56" rx="6" class="lru-bg-card"/>
+  <text x="440" y="388" text-anchor="middle" font-size="13" class="lru-txt-title">Two-Touch Policy: A page must be referenced twice before gaining Active protection.</text>
+  <text x="440" y="409" text-anchor="middle" font-size="12" class="lru-txt-sub">Single-use sequential scans should enter Inactive, reach the tail, and be evicted without touching Active.</text>
 </svg>
 
 #### The Life Cycle of a Page
@@ -495,7 +592,7 @@ Because kernel heuristics cannot anticipate application-level intent, high-perfo
   <text x="727" y="52" text-anchor="middle" font-size="15" font-weight="700" fill="currentColor" fill-opacity="0.95">NVMe Flash Storage</text>
 
   <rect x="610" y="80" width="235" height="85" rx="5" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.2"/>
-  <text x="727" y="112" text-anchor="middle" font-size="14" font-weight="600" fill="#currentColor" fill-opacity="0.9">Historical Tick Lake</text>
+  <text x="727" y="112" text-anchor="middle" font-size="14" font-weight="600" fill="currentColor" fill-opacity="0.9">Historical Tick Lake</text>
   <text x="727" y="134" text-anchor="middle" font-size="12" fill="currentColor" fill-opacity="0.65">Parquet / Compressed Ticks</text>
   <text x="727" y="152" text-anchor="middle" font-size="12.0" fill="#10b981">Direct DMA Target</text>
 
@@ -506,8 +603,8 @@ Because kernel heuristics cannot anticipate application-level intent, high-perfo
   <!-- Connections -->
   <!-- 1. O_DIRECT Bypass line (top over kernel) -->
   <path d="M 270 100 C 400 15, 480 15, 608 115" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-dasharray="4,3" marker-end="url(#arch-arrow)"/>
-  <rect x="330" y="20" width="220" height="30" rx="4" fill="#0b0f16" stroke="#f59e0b" stroke-width="1"/>
-  <text x="440" y="40" text-anchor="middle" font-size="12.5" font-weight="700" fill="#f59e0b">O_DIRECT (Bypasses Page Cache!)</text>
+  <rect x="330" y="20" width="220" height="30" rx="4" fill="currentColor" fill-opacity="0.06" stroke="#f59e0b" stroke-width="1.2"/>
+  <text x="440" y="40" text-anchor="middle" font-size="12.5" font-weight="700" fill="currentColor" fill-opacity="0.95">O_DIRECT (Bypasses Page Cache!)</text>
 
   <!-- 2. Point query checks user cache -->
   <line x1="152" y1="205" x2="152" y2="218" stroke="#38bdf8" stroke-width="1.6" marker-end="url(#arch-arrow)"/>
