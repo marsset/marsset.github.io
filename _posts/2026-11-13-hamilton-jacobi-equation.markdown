@@ -40,6 +40,8 @@ In the calculus of variations, Hamilton's Principle states that a physical parti
 
 $$S = \int_{t_1}^{t_2} L(q(t), \dot{q}(t), t)\,dt$$
 
+> **Related Deep Dive:** [Why is the Lagrangian T - U and Not T + U?](/math/2026/11/13/why-lagrangian-t-minus-u.html) explores why action integrates $T - U$ instead of total energy $T + U$, and how Euler-Lagrange emerges from path optimization.
+
 Normally, we fix both endpoints $q_1$ and $q_2$ and vary the intermediate paths to derive the Euler-Lagrange equations.
 
 ### Shifting the Vantage Point
