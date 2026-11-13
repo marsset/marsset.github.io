@@ -176,19 +176,46 @@ $$\min_{q(t)} \int_{t_1}^{t_2} \Big( T(t) + \big( -U(t) \big) \Big)\,dt$$
 
 Consider what the physical terms represent:
 
-```text
-┌────────────────────────────────────────────────────────────────────────┐
-│               THE TUG-OF-WAR IN THE ACTION INTEGRAL                   │
-│                                                                        │
-│  TERM 1: + T (Kinetic Cost)       TERM 2: - U (Potential Incentive)   │
-│  • T = 0.5 * m * v^2              • High U = high altitude / tension   │
-│  • Penalty for high speed!        • Low U = deep gravitational valley  │
-│  • Nature wants to save speed.    • Nature wants to stay in low U.     │
-│                                                                        │
-│               OPTIMAL COMPROMISE: ACTION STATIONARITY                  │
-│       Balance kinetic rush against potential depth over time.          │
-└────────────────────────────────────────────────────────────────────────┘
-```
+<svg viewBox="0 0 760 270" width="100%" style="max-width: 760px; display: block; margin: 24px auto;" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="tugTGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0284c7" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.8"/>
+    </linearGradient>
+    <linearGradient id="tugUGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#d97706" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.8"/>
+    </linearGradient>
+    <linearGradient id="tugCompGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0284c7" stop-opacity="0.2"/>
+      <stop offset="50%" stop-color="#7c3aed" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#d97706" stop-opacity="0.2"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="2" y="2" width="756" height="266" rx="12" fill="#0b1120" stroke="#334155" stroke-width="1.5"/>
+
+  <text x="380" y="32" fill="#f8fafc" font-size="16px" font-weight="700" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">THE TUG-OF-WAR IN THE ACTION INTEGRAL</text>
+  <text x="380" y="52" fill="#94a3b8" font-size="13px" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">min ∫ (T − U) dt = min ∫ [ T + (−U) ] dt</text>
+
+  <rect x="24" y="68" width="344" height="125" rx="8" fill="url(#tugTGrad)" stroke="#0ea5e9" stroke-width="1.2"/>
+  <rect x="36" y="80" width="160" height="22" rx="4" fill="#0284c7" fill-opacity="0.3"/>
+  <text x="44" y="96" fill="#38bdf8" font-size="12px" font-weight="700" font-family="-apple-system, BlinkMacSystemFont, sans-serif">+T : KINETIC COST</text>
+  <text x="36" y="122" fill="#e2e8f0" font-size="13px" font-weight="600" font-family="-apple-system, BlinkMacSystemFont, sans-serif">• T = ½ m v² (Convex Velocity Cost)</text>
+  <text x="36" y="144" fill="#cbd5e1" font-size="12.5px" font-family="-apple-system, BlinkMacSystemFont, sans-serif">• Penalty for rushing and erratic speed</text>
+  <text x="36" y="166" fill="#94a3b8" font-size="12px" font-family="-apple-system, BlinkMacSystemFont, sans-serif">• Nature favors smooth, paced motion</text>
+
+  <rect x="392" y="68" width="344" height="125" rx="8" fill="url(#tugUGrad)" stroke="#f59e0b" stroke-width="1.2"/>
+  <rect x="404" y="80" width="190" height="22" rx="4" fill="#d97706" fill-opacity="0.3"/>
+  <text x="412" y="96" fill="#fbbf24" font-size="12px" font-weight="700" font-family="-apple-system, BlinkMacSystemFont, sans-serif">−U : POTENTIAL INCENTIVE</text>
+  <text x="404" y="122" fill="#e2e8f0" font-size="13px" font-weight="600" font-family="-apple-system, BlinkMacSystemFont, sans-serif">• −U(q) acts as a reward for high altitude</text>
+  <text x="404" y="144" fill="#cbd5e1" font-size="12.5px" font-family="-apple-system, BlinkMacSystemFont, sans-serif">• High U gives a large negative contribution</text>
+  <text x="404" y="166" fill="#94a3b8" font-size="12px" font-family="-apple-system, BlinkMacSystemFont, sans-serif">• Pulls trajectory toward high-potential zones</text>
+
+  <rect x="24" y="206" width="712" height="46" rx="8" fill="url(#tugCompGrad)" stroke="#8b5cf6" stroke-width="1.2"/>
+  <text x="380" y="225" fill="#e9d5ff" font-size="13px" font-weight="700" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">OPTIMAL COMPROMISE: ACTION STATIONARITY (δS = 0)</text>
+  <text x="380" y="243" fill="#cbd5e1" font-size="12px" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">The true path balances kinetic haste (+T) against potential harvest (−U) across the entire interval.</text>
+</svg>
 
 ### 1. Why Kinetic Energy $T$ Enters with a Positive Sign (+T)
 
@@ -218,11 +245,92 @@ We know from high school that the answer is a parabola: $y(t) = v_0 t - \frac{1}
 
 Let us compare three hypothetical paths:
 
-```text
-Path A: The Slacker Path (Stay on the ground y = 0 for 2 seconds)
-Path B: The True Parabola (Rise to 4.9 m, then fall smoothly)
-Path C: The High Rocket Path (Shoot up to 50 m instantly, hover, drop at t = 2)
-```
+<svg viewBox="0 0 760 360" width="100%" style="max-width: 760px; display: block; margin: 24px auto;" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="parabolaGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.0"/>
+    </linearGradient>
+    <filter id="glowCyan" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Container Box -->
+  <rect x="2" y="2" width="756" height="356" rx="12" fill="#0b1120" stroke="#334155" stroke-width="1.5"/>
+
+  <!-- Title -->
+  <text x="380" y="30" fill="#f8fafc" font-size="16px" font-weight="700" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">TOSSED BALL: ACTION COMPARISON OF CANDIDATE TRAJECTORIES</text>
+  <text x="380" y="50" fill="#94a3b8" font-size="13px" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">Throw from y = 0 at t = 0 to land at y = 0 at t = 2.0 s</text>
+
+  <!-- Grid Lines -->
+  <line x1="90" y1="240" x2="690" y2="240" stroke="#1e293b" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="90" y1="200" x2="690" y2="200" stroke="#1e293b" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="90" y1="160" x2="690" y2="160" stroke="#1e293b" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="90" y1="120" x2="690" y2="120" stroke="#1e293b" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="90" y1="80" x2="690" y2="80" stroke="#1e293b" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- Vertical Grid Lines -->
+  <line x1="240" y1="70" x2="240" y2="280" stroke="#1e293b" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="390" y1="70" x2="390" y2="280" stroke="#1e293b" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="540" y1="70" x2="540" y2="280" stroke="#1e293b" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- Axes -->
+  <line x1="90" y1="280" x2="710" y2="280" stroke="#64748b" stroke-width="1.8"/>
+  <line x1="90" y1="280" x2="90" y2="65" stroke="#64748b" stroke-width="1.8"/>
+
+  <!-- Axis Labels -->
+  <text x="715" y="284" fill="#94a3b8" font-size="12px" font-weight="600" font-family="-apple-system, BlinkMacSystemFont, sans-serif">t (s)</text>
+  <text x="85" y="58" fill="#94a3b8" font-size="12px" font-weight="600" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, sans-serif">Height y (m)</text>
+
+  <!-- Y Tick Labels -->
+  <text x="80" y="284" fill="#64748b" font-size="12px" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, sans-serif">0</text>
+  <text x="80" y="244" fill="#64748b" font-size="12px" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, sans-serif">1</text>
+  <text x="80" y="204" fill="#64748b" font-size="12px" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, sans-serif">2</text>
+  <text x="80" y="164" fill="#64748b" font-size="12px" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, sans-serif">3</text>
+  <text x="80" y="124" fill="#64748b" font-size="12px" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, sans-serif">4</text>
+  <text x="80" y="84" fill="#64748b" font-size="12px" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, sans-serif">5</text>
+
+  <!-- X Tick Labels -->
+  <text x="90" y="300" fill="#64748b" font-size="12px" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">0.0</text>
+  <text x="240" y="300" fill="#64748b" font-size="12px" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">0.5</text>
+  <text x="390" y="300" fill="#64748b" font-size="12px" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">1.0</text>
+  <text x="540" y="300" fill="#64748b" font-size="12px" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">1.5</text>
+  <text x="690" y="300" fill="#64748b" font-size="12px" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">2.0</text>
+
+  <!-- Path C: Hyperactive / Rocket (steep climb off scale) -->
+  <path d="M 90,280 Q 110,65 140,65 L 640,65 Q 670,65 690,280" fill="none" stroke="#f43f5e" stroke-width="2" stroke-dasharray="6,4"/>
+  <rect x="220" y="70" width="340" height="26" rx="6" fill="#1e1024" stroke="#f43f5e" stroke-width="1"/>
+  <text x="390" y="87" fill="#fda4af" font-size="12px" font-weight="600" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">Path C: Rocket (Shoot to 50m) | Huge T cost | Action S ≫ 0 (+1200m)</text>
+
+  <!-- Path B Area Fill & Parabola Curve -->
+  <path d="M 90,280 Q 390,-112 690,280 Z" fill="url(#parabolaGrad)"/>
+  <path d="M 90,280 Q 390,-112 690,280" fill="none" stroke="#38bdf8" stroke-width="3.5" filter="url(#glowCyan)"/>
+
+  <!-- Apex marker on Path B -->
+  <circle cx="390" cy="84" r="5" fill="#38bdf8"/>
+  <circle cx="390" cy="84" r="9" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-opacity="0.6"/>
+  <rect x="300" y="104" width="180" height="24" rx="4" fill="#032541" stroke="#38bdf8" stroke-width="1"/>
+  <text x="390" y="120" fill="#bae6fd" font-size="12px" font-weight="700" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">Apex: t = 1.0 s, y = 4.9 m</text>
+
+  <!-- Path B Label Banner -->
+  <rect x="180" y="148" width="420" height="34" rx="6" fill="#082f49" stroke="#38bdf8" stroke-width="1.4"/>
+  <text x="390" y="170" fill="#38bdf8" font-size="13px" font-weight="700" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">★ Path B: True Parabola  |  Action S = −32.0m  (OPTIMAL MINIMUM)</text>
+
+  <!-- Path A: The Slacker (y = 0) -->
+  <line x1="90" y1="280" x2="690" y2="280" stroke="#94a3b8" stroke-width="4"/>
+  <circle cx="90" cy="280" r="5" fill="#94a3b8"/>
+  <circle cx="690" cy="280" r="5" fill="#94a3b8"/>
+  <rect x="230" y="240" width="320" height="24" rx="4" fill="#1e293b" stroke="#64748b" stroke-width="1"/>
+  <text x="390" y="256" fill="#cbd5e1" font-size="12px" font-weight="600" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">Path A: Slacker (Stays at y = 0)  |  T = 0, U = 0  |  Action S = 0</text>
+
+  <!-- Bottom Explanatory Caption -->
+  <text x="380" y="340" fill="#94a3b8" font-size="12px" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">Path B wins because −U awards bonus reduction (−32m) that outweighs the kinetic penalty (+16m).</text>
+</svg>
 
 Let us compute the action $S = \int_0^2 (T - U)\,dt$ for each path, where $T = \frac{1}{2}m\dot{y}^2$ and $U = mgy$:
 
@@ -271,13 +379,53 @@ How does minimizing $S = \int (T - U)\,dt$ mathematically produce Newton's secon
 
 Let $q(t)$ be the true path. Now imagine wiggling the path by a tiny perturbation $\delta q(t)$, keeping endpoints fixed ($\delta q(t_1) = \delta q(t_2) = 0$):
 
-```text
-       q(t) + delta q(t) (Perturbed Path)
-         . - - - - - .
-       /               \
-     /   q(t) (True)     \
-   (t_1, q_1) ─────────► (t_2, q_2)
-```
+<svg viewBox="0 0 760 270" width="100%" style="max-width: 760px; display: block; margin: 24px auto;" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowUp" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+      <path d="M 1,7 L 4,1 L 7,7 Z" fill="#c084fc"/>
+    </marker>
+    <marker id="arrowDown" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+      <path d="M 1,1 L 4,7 L 7,1 Z" fill="#c084fc"/>
+    </marker>
+    <marker id="arrowRight" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+      <path d="M 1,1 L 7,4 L 1,7 Z" fill="#38bdf8"/>
+    </marker>
+  </defs>
+
+  <rect x="2" y="2" width="756" height="266" rx="12" fill="#0b1120" stroke="#334155" stroke-width="1.5"/>
+
+  <!-- Title -->
+  <text x="380" y="30" fill="#f8fafc" font-size="16px" font-weight="700" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">VARIATIONAL PERTURBATION: DERIVING EULER-LAGRANGE</text>
+
+  <!-- Perturbed Path (Dashed Purple Curve) -->
+  <path d="M 130,170 Q 380,40 630,170" fill="none" stroke="#c084fc" stroke-width="2.5" stroke-dasharray="6,4"/>
+  <rect x="270" y="52" width="220" height="24" rx="4" fill="#2e1065" stroke="#a855f7" stroke-width="1"/>
+  <text x="380" y="68" fill="#e9d5ff" font-size="12px" font-weight="600" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">Perturbed Path: q(t) + δq(t)</text>
+
+  <!-- True Physical Path (Solid Cyan Curve) -->
+  <path d="M 130,170 Q 380,120 630,170" fill="none" stroke="#38bdf8" stroke-width="3.5"/>
+  <rect x="310" y="145" width="140" height="22" rx="4" fill="#0c4a6e" stroke="#38bdf8" stroke-width="1"/>
+  <text x="380" y="160" fill="#38bdf8" font-size="12px" font-weight="700" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">True Path: q(t)</text>
+
+  <!-- Vertical Variation Indicator (double-ended arrow) -->
+  <line x1="380" y1="80" x2="380" y2="140" stroke="#c084fc" stroke-width="2" marker-start="url(#arrowUp)" marker-end="url(#arrowDown)"/>
+  <rect x="400" y="98" width="80" height="22" rx="4" fill="#1e1b4b" stroke="#8b5cf6" stroke-width="1"/>
+  <text x="440" y="113" fill="#d8b4fe" font-size="12px" font-weight="700" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">δq(t)</text>
+
+  <!-- Left Endpoint (Pinned) -->
+  <circle cx="130" cy="170" r="6" fill="#38bdf8"/>
+  <rect x="40" y="186" width="180" height="24" rx="4" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+  <text x="130" y="202" fill="#e2e8f0" font-size="12px" font-weight="600" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">Start: (t₁, q₁), δq(t₁) = 0</text>
+
+  <!-- Right Endpoint (Pinned) -->
+  <circle cx="630" cy="170" r="6" fill="#38bdf8"/>
+  <rect x="540" y="186" width="180" height="24" rx="4" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+  <text x="630" y="202" fill="#e2e8f0" font-size="12px" font-weight="600" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">End: (t₂, q₂), δq(t₂) = 0</text>
+
+  <!-- Bottom Stationarity Banner -->
+  <rect x="24" y="222" width="712" height="34" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <text x="380" y="244" fill="#94a3b8" font-size="12.5px" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">Stationary Action: δS = ∫ [ ∂L/∂q − d/dt(∂L/∂q̇) ] δq dt = 0  ⇒  d/dt(∂L/∂q̇) − ∂L/∂q = 0  (F = ma)</text>
+</svg>
 
 The first variation of the action must be zero:
 
@@ -314,18 +462,71 @@ Newton's Second Law was not an arbitrary postulate handed down on stone tablets.
 
 In Cartesian coordinates $(x, y, z)$, Newton's equations are manageable. But what happens in a double pendulum or a 7-degree-of-freedom robotic arm?
 
-```text
-A DOUBLE PENDULUM:
-           Joint 1 (Theta_1)
-             O
-            / \
-           /   \  Length L_1, Mass m_1
-          /     \
-         O Joint 2 (Theta_2)
-        /
-       / Length L_2, Mass m_2
-      ▼
-```
+<svg viewBox="0 0 760 330" width="100%" style="max-width: 760px; display: block; margin: 24px auto;" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="newtonGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.8"/>
+    </linearGradient>
+    <linearGradient id="lagrangeGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.8"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="2" y="2" width="756" height="326" rx="12" fill="#0b1120" stroke="#334155" stroke-width="1.5"/>
+
+  <!-- Title -->
+  <text x="380" y="30" fill="#f8fafc" font-size="16px" font-weight="700" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">WHY LAGRANGE WINS: THE DOUBLE PENDULUM CHALLENGE</text>
+
+  <!-- Left: Schematic Box -->
+  <rect x="24" y="52" width="280" height="258" rx="8" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <text x="164" y="74" fill="#94a3b8" font-size="12px" font-weight="700" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">SYSTEM GEOMETRY</text>
+
+  <!-- Ceiling pivot -->
+  <line x1="120" y1="90" x2="200" y2="90" stroke="#64748b" stroke-width="3"/>
+  <circle cx="160" cy="90" r="5" fill="#94a3b8"/>
+
+  <!-- Vertical dashed reference line from pivot -->
+  <line x1="160" y1="90" x2="160" y2="170" stroke="#475569" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- Rod 1 & Mass 1 -->
+  <line x1="160" y1="90" x2="215" y2="165" stroke="#38bdf8" stroke-width="3"/>
+  <!-- Angle theta 1 arc -->
+  <path d="M 160,125 A 35 35 0 0 0 177,114" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="183" y="130" fill="#f59e0b" font-size="12px" font-weight="700" font-family="-apple-system, BlinkMacSystemFont, sans-serif">θ₁</text>
+  <text x="170" y="145" fill="#38bdf8" font-size="12px" font-weight="600" font-family="-apple-system, BlinkMacSystemFont, sans-serif">L₁</text>
+  <circle cx="215" cy="165" r="9" fill="#0284c7" stroke="#38bdf8" stroke-width="2"/>
+  <text x="232" y="169" fill="#e2e8f0" font-size="12px" font-weight="700" font-family="-apple-system, BlinkMacSystemFont, sans-serif">m₁</text>
+
+  <!-- Vertical dashed reference line from Joint 1 -->
+  <line x1="215" y1="165" x2="215" y2="245" stroke="#475569" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- Rod 2 & Mass 2 -->
+  <line x1="215" y1="165" x2="180" y2="250" stroke="#38bdf8" stroke-width="3"/>
+  <!-- Angle theta 2 arc -->
+  <path d="M 215,200 A 35 35 0 0 1 202,196" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="222" y="210" fill="#f59e0b" font-size="12px" font-weight="700" font-family="-apple-system, BlinkMacSystemFont, sans-serif">θ₂</text>
+  <text x="182" y="210" fill="#38bdf8" font-size="12px" font-weight="600" font-family="-apple-system, BlinkMacSystemFont, sans-serif">L₂</text>
+  <circle cx="180" cy="250" r="11" fill="#0284c7" stroke="#38bdf8" stroke-width="2"/>
+  <text x="198" y="255" fill="#e2e8f0" font-size="12px" font-weight="700" font-family="-apple-system, BlinkMacSystemFont, sans-serif">m₂</text>
+
+  <!-- Right Top: Newton Box -->
+  <rect x="320" y="52" width="416" height="120" rx="8" fill="url(#newtonGrad)" stroke="#ef4444" stroke-width="1.2"/>
+  <rect x="332" y="62" width="160" height="22" rx="4" fill="#ef4444" fill-opacity="0.25"/>
+  <text x="340" y="77" fill="#fca5a5" font-size="12px" font-weight="700" font-family="-apple-system, BlinkMacSystemFont, sans-serif">NEWTONIAN APPROACH</text>
+  <text x="332" y="100" fill="#fecaca" font-size="12.5px" font-family="-apple-system, BlinkMacSystemFont, sans-serif">• Vector forces: Must solve unknown rod tensions T₁, T₂</text>
+  <text x="332" y="122" fill="#cbd5e1" font-size="12px" font-family="-apple-system, BlinkMacSystemFont, sans-serif">• Enforce non-linear constraints: x₂ = L₁ sin θ₁ + L₂ sin θ₂</text>
+  <text x="332" y="144" fill="#94a3b8" font-size="12px" font-family="-apple-system, BlinkMacSystemFont, sans-serif">• Constraint forces do zero work yet inflate vector equations</text>
+
+  <!-- Right Bottom: Lagrange Box -->
+  <rect x="320" y="188" width="416" height="122" rx="8" fill="url(#lagrangeGrad)" stroke="#10b981" stroke-width="1.2"/>
+  <rect x="332" y="198" width="180" height="22" rx="4" fill="#10b981" fill-opacity="0.25"/>
+  <text x="340" y="213" fill="#6ee7b7" font-size="12px" font-weight="700" font-family="-apple-system, BlinkMacSystemFont, sans-serif">LAGRANGIAN APPROACH</text>
+  <text x="332" y="236" fill="#a7f3d0" font-size="12.5px" font-weight="600" font-family="-apple-system, BlinkMacSystemFont, sans-serif">• Generalized coordinates: Directly pick angles (θ₁, θ₂)</text>
+  <text x="332" y="258" fill="#cbd5e1" font-size="12px" font-family="-apple-system, BlinkMacSystemFont, sans-serif">• Pure scalar energies: L(θ₁, θ₂, θ̇₁, θ̇₂) = T − U</text>
+  <text x="332" y="280" fill="#94a3b8" font-size="12px" font-family="-apple-system, BlinkMacSystemFont, sans-serif">• Constraint forces vanish automatically via Euler-Lagrange!</text>
+</svg>
 
 Under Newton's mechanics:
 * You must compute tension vector $\mathbf{T}_1$ and $\mathbf{T}_2$ in each rod.

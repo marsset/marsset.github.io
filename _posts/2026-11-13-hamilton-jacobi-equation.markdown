@@ -50,13 +50,54 @@ Now, change the perspective: **fix the starting point $(q_1, t_1)$, but treat th
 
 Let $S(q, t)$ be the numerical value of the action evaluated along the *true, physical path* that terminates at coordinate $q$ at time $t$:
 
-```text
-Starting Point (Fixed):
-(q_1, t_1) ───────────────────► Terminal Point (Variable): (q, t)
-          \   True Physical   /
-           \    Trajectory   /
-            \───────────────/
-```
+<svg viewBox="0 0 760 250" width="100%" style="max-width: 760px; display: block; margin: 24px auto;" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="hjPathGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+    <marker id="hjArrowBlue" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto">
+      <path d="M 1,1 L 7,4 L 1,7 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="hjArrowAmber" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto">
+      <path d="M 1,1 L 7,4 L 1,7 Z" fill="#f59e0b"/>
+    </marker>
+  </defs>
+
+  <rect x="2" y="2" width="756" height="246" rx="12" fill="#0b1120" stroke="#334155" stroke-width="1.5"/>
+
+  <!-- Title -->
+  <text x="380" y="30" fill="#f8fafc" font-size="16px" font-weight="700" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">HAMILTON'S PRINCIPAL FUNCTION: VARIABLE ENDPOINT VARIATION</text>
+
+  <!-- Physical Trajectory -->
+  <path d="M 140,150 Q 360,80 580,130" fill="none" stroke="url(#hjPathGrad)" stroke-width="3.5"/>
+
+  <!-- Origin Pin -->
+  <circle cx="140" cy="150" r="7" fill="#38bdf8"/>
+  <rect x="40" y="165" width="200" height="24" rx="4" fill="#0c4a6e" stroke="#38bdf8" stroke-width="1"/>
+  <text x="140" y="181" fill="#bae6fd" font-size="12px" font-weight="700" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">Fixed Origin: (q₁, t₁)</text>
+
+  <!-- Variable Terminal Point -->
+  <circle cx="580" cy="130" r="8" fill="#a855f7" stroke="#e9d5ff" stroke-width="2"/>
+  <rect x="500" y="70" width="220" height="26" rx="5" fill="#2e1065" stroke="#c084fc" stroke-width="1.2"/>
+  <text x="610" y="87" fill="#f3e8ff" font-size="12px" font-weight="700" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">Terminal Destination: (q, t)</text>
+
+  <!-- Displacement Vector dq (vertical) -->
+  <line x1="580" y1="130" x2="580" y2="105" stroke="#f59e0b" stroke-width="2" marker-end="url(#hjArrowAmber)"/>
+  <text x="595" y="118" fill="#fbbf24" font-size="12px" font-weight="700" font-family="-apple-system, BlinkMacSystemFont, sans-serif">+dq</text>
+
+  <!-- Displacement Vector dt (horizontal) -->
+  <line x1="580" y1="130" x2="625" y2="130" stroke="#38bdf8" stroke-width="2" marker-end="url(#hjArrowBlue)"/>
+  <text x="635" y="134" fill="#38bdf8" font-size="12px" font-weight="700" font-family="-apple-system, BlinkMacSystemFont, sans-serif">+dt</text>
+
+  <!-- Path label -->
+  <rect x="270" y="95" width="180" height="22" rx="4" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+  <text x="360" y="110" fill="#94a3b8" font-size="12px" font-weight="600" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">True Physical Path</text>
+
+  <!-- Bottom Banner -->
+  <rect x="24" y="202" width="712" height="34" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <text x="380" y="224" fill="#e2e8f0" font-size="12.5px" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">Total Differential:  dS(q, t) = p dq − H dt   ⇒   p = ∂S/∂q  (Momentum),   −H = ∂S/∂t  (Hamilton-Jacobi)</text>
+</svg>
 
 How does the total accumulated action $S(q, t)$ change if we slightly displace the destination coordinate by $dq$, or let the arrival time advance by $dt$?
 
@@ -108,14 +149,38 @@ $$\dot{P}_i = 0 \implies P_i = \alpha_i = \text{constant}$$
 
 In these new coordinates, **nothing moves!** The system is frozen in time. All coordinates and momenta are constants of motion.
 
-```text
-Original Coordinates (q, p): Complex Motion
-   dot(q) = dH/dp,  dot(p) = -dH/dq  (2n Coupled ODEs)
-               │
-               ▼  Canonical Transformation via Generating Function S(q, P, t)
-Transformed Coordinates (Q, P): Completely Trivial!
-   dot(Q) = 0,  dot(P) = 0  ──► Q = const, P = const (Motion is completely solved!)
-```
+<svg viewBox="0 0 760 230" width="100%" style="max-width: 760px; display: block; margin: 24px auto;" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="transGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0284c7" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.8"/>
+    </linearGradient>
+    <linearGradient id="trivGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.8"/>
+    </linearGradient>
+    <marker id="hjArrowDown" markerWidth="8" markerHeight="8" refX="4" refY="5" orient="auto">
+      <path d="M 1,1 L 4,7 L 7,1 Z" fill="#38bdf8"/>
+    </marker>
+  </defs>
+
+  <rect x="2" y="2" width="756" height="226" rx="12" fill="#0b1120" stroke="#334155" stroke-width="1.5"/>
+
+  <!-- Top Card: Original Coordinates (q, p) -->
+  <rect x="24" y="18" width="712" height="66" rx="8" fill="url(#transGrad)" stroke="#0ea5e9" stroke-width="1.2"/>
+  <text x="40" y="40" fill="#38bdf8" font-size="13px" font-weight="700" font-family="-apple-system, BlinkMacSystemFont, sans-serif">ORIGINAL COORDINATES (q, p) : Complex Coupled Dynamics</text>
+  <text x="40" y="66" fill="#cbd5e1" font-size="12.5px" font-family="-apple-system, BlinkMacSystemFont, sans-serif">q̇ = ∂H/∂p,   ṗ = −∂H/∂q   (2n coupled non-linear differential equations evolving over time)</text>
+
+  <!-- Middle Connector -->
+  <line x1="380" y1="86" x2="380" y2="132" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#hjArrowDown)"/>
+  <rect x="160" y="96" width="440" height="24" rx="4" fill="#082f49" stroke="#0284c7" stroke-width="1"/>
+  <text x="380" y="112" fill="#7dd3fc" font-size="12px" font-weight="700" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">Canonical Transformation via S(q, P, t)  such that K = H + ∂S/∂t ≡ 0</text>
+
+  <!-- Bottom Card: Transformed Coordinates (Q, P) -->
+  <rect x="24" y="144" width="712" height="68" rx="8" fill="url(#trivGrad)" stroke="#10b981" stroke-width="1.2"/>
+  <text x="40" y="168" fill="#34d399" font-size="13px" font-weight="700" font-family="-apple-system, BlinkMacSystemFont, sans-serif">TRANSFORMED COORDINATES (Q, P) : Completely Solved (Frozen State)</text>
+  <text x="40" y="194" fill="#cbd5e1" font-size="12.5px" font-family="-apple-system, BlinkMacSystemFont, sans-serif">Q̇ = ∂K/∂P = 0,   Ṗ = −∂K/∂Q = 0   ⇒   Q = β (constant),  P = α (constant). Motion is fully integrated!</text>
+</svg>
 
 ### The Generating Function Condition
 
@@ -137,15 +202,58 @@ The most illuminating property of the Hamilton-Jacobi equation is its geometric 
 
 In ordinary Newtonian mechanics, we picture particles as isolated point masses moving along 1D curves (rays). The Hamilton-Jacobi equation replaces this particle view with a **wavefront view**:
 
-```text
-           ACTION SURFACES (Wavefronts)
-          S(q, t) = S_0   S(q, t) = S_1   S(q, t) = S_2
-               │               │               │
-  Trajectory   │   p = grad S  │   p = grad S  │
- ──────────────┼───────────────┼───────────────┼────────► Ray (Particle Path)
-  (Normal Ray) │      ──►      │      ──►      │
-               │               │               │
-```
+<svg viewBox="0 0 760 260" width="100%" style="max-width: 760px; display: block; margin: 24px auto;" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="hjRayArrow" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto">
+      <path d="M 1,1 L 7,4 L 1,7 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="hjGradArrow" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto">
+      <path d="M 1,1 L 7,4 L 1,7 Z" fill="#f59e0b"/>
+    </marker>
+  </defs>
+
+  <rect x="2" y="2" width="756" height="256" rx="12" fill="#0b1120" stroke="#334155" stroke-width="1.5"/>
+
+  <!-- Title -->
+  <text x="380" y="30" fill="#f8fafc" font-size="16px" font-weight="700" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">GEOMETRIC OPTICS OF MECHANICS: ACTION SURFACES &amp; ORTHOGONAL RAYS</text>
+
+  <!-- Wavefront 1: S(q, t) = S0 -->
+  <path d="M 200,60 Q 230,140 200,220" fill="none" stroke="#a855f7" stroke-width="2.5" stroke-dasharray="5,4"/>
+  <rect x="130" y="70" width="120" height="22" rx="4" fill="#2e1065" stroke="#a855f7" stroke-width="1"/>
+  <text x="190" y="85" fill="#e9d5ff" font-size="12px" font-weight="600" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">S(q, t) = S₀</text>
+
+  <!-- Wavefront 2: S(q, t) = S1 -->
+  <path d="M 370,60 Q 400,140 370,220" fill="none" stroke="#a855f7" stroke-width="2.5" stroke-dasharray="5,4"/>
+  <rect x="300" y="70" width="120" height="22" rx="4" fill="#2e1065" stroke="#a855f7" stroke-width="1"/>
+  <text x="360" y="85" fill="#e9d5ff" font-size="12px" font-weight="600" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">S(q, t) = S₁</text>
+
+  <!-- Wavefront 3: S(q, t) = S2 -->
+  <path d="M 540,60 Q 570,140 540,220" fill="none" stroke="#a855f7" stroke-width="2.5" stroke-dasharray="5,4"/>
+  <rect x="470" y="70" width="120" height="22" rx="4" fill="#2e1065" stroke="#a855f7" stroke-width="1"/>
+  <text x="530" y="85" fill="#e9d5ff" font-size="12px" font-weight="600" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">S(q, t) = S₂</text>
+
+  <!-- Particle Ray (Orthogonal Trajectory) -->
+  <line x1="60" y1="140" x2="680" y2="140" stroke="#38bdf8" stroke-width="3" marker-end="url(#hjRayArrow)"/>
+  <rect x="60" y="152" width="170" height="22" rx="4" fill="#082f49" stroke="#0284c7" stroke-width="1"/>
+  <text x="145" y="167" fill="#38bdf8" font-size="12px" font-weight="700" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">Particle Trajectory (Ray)</text>
+
+  <!-- Momentum Vector p = grad S at Wavefront 1 -->
+  <line x1="222" y1="140" x2="280" y2="140" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#hjGradArrow)"/>
+  <text x="250" y="128" fill="#fbbf24" font-size="12px" font-weight="700" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">p = ∇S</text>
+
+  <!-- Momentum Vector p = grad S at Wavefront 2 -->
+  <line x1="392" y1="140" x2="450" y2="140" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#hjGradArrow)"/>
+  <text x="420" y="128" fill="#fbbf24" font-size="12px" font-weight="700" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">p = ∇S</text>
+
+  <!-- Right angle symbols -->
+  <path d="M 215,130 L 225,130 L 225,140" fill="none" stroke="#e2e8f0" stroke-width="1.2"/>
+  <path d="M 385,130 L 395,130 L 395,140" fill="none" stroke="#e2e8f0" stroke-width="1.2"/>
+  <path d="M 555,130 L 565,130 L 565,140" fill="none" stroke="#e2e8f0" stroke-width="1.2"/>
+
+  <!-- Bottom Explanatory Caption -->
+  <rect x="24" y="210" width="712" height="34" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <text x="380" y="232" fill="#cbd5e1" font-size="12px" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">Trajectories are orthogonal rays to propagating action wavefronts, exactly as light rays are normal to optical wave surfaces.</text>
+</svg>
 
 1. **Surfaces of Constant Action:** At any time $t$, consider the level surfaces of action in configuration space:
    $$\Sigma_c = \{ q \mid S(q, t) = c \}$$
@@ -158,12 +266,63 @@ In ordinary Newtonian mechanics, we picture particles as isolated point masses m
 
 This geometric optical duality directly inspired Erwin Schrödinger in 1926. Schrödinger observed that the relationship between wave optics (Maxwell) and ray optics (geometric optics) is mathematically identical to the relationship between wave mechanics and classical mechanics:
 
-```text
-WAVE OPTICS (Maxwell / Wave Equation)  ───► Limit: lambda -> 0 ───► GEOMETRIC OPTICS (Fermat's Principle)
-                    │                                                               │
-                    ▼                                                               ▼
-WAVE MECHANICS (Schrödinger Equation) ───► Limit: hbar -> 0   ───► CLASSICAL MECHANICS (Hamilton-Jacobi)
-```
+<svg viewBox="0 0 760 250" width="100%" style="max-width: 760px; display: block; margin: 24px auto;" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="optGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0284c7" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.8"/>
+    </linearGradient>
+    <linearGradient id="qmGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.8"/>
+    </linearGradient>
+    <marker id="hjArrowRt" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto">
+      <path d="M 1,1 L 7,4 L 1,7 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="hjArrowDn" markerWidth="8" markerHeight="8" refX="4" refY="5" orient="auto">
+      <path d="M 1,1 L 4,7 L 7,1 Z" fill="#c084fc"/>
+    </marker>
+  </defs>
+
+  <rect x="2" y="2" width="756" height="246" rx="12" fill="#0b1120" stroke="#334155" stroke-width="1.5"/>
+
+  <!-- Title -->
+  <text x="380" y="30" fill="#f8fafc" font-size="16px" font-weight="700" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">THE OPTICS-MECHANICS DUALITY (SCHRÖDINGER, 1926)</text>
+
+  <!-- Row 1: Optics -->
+  <!-- Box Top-Left: Wave Optics -->
+  <rect x="24" y="50" width="280" height="65" rx="8" fill="url(#optGrad)" stroke="#0ea5e9" stroke-width="1.2"/>
+  <text x="36" y="74" fill="#38bdf8" font-size="13px" font-weight="700" font-family="-apple-system, BlinkMacSystemFont, sans-serif">WAVE OPTICS (Maxwell)</text>
+  <text x="36" y="98" fill="#cbd5e1" font-size="12px" font-family="-apple-system, BlinkMacSystemFont, sans-serif">Wave Equation ∇²E − (1/v²) ∂²E/∂t² = 0</text>
+
+  <!-- Arrow Top: limit lambda -> 0 -->
+  <line x1="310" y1="82" x2="435" y2="82" stroke="#38bdf8" stroke-width="2" marker-end="url(#hjArrowRt)"/>
+  <text x="375" y="74" fill="#7dd3fc" font-size="12px" font-weight="600" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">Limit: λ → 0</text>
+
+  <!-- Box Top-Right: Geometric Optics -->
+  <rect x="450" y="50" width="286" height="65" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="1.2"/>
+  <text x="462" y="74" fill="#38bdf8" font-size="13px" font-weight="700" font-family="-apple-system, BlinkMacSystemFont, sans-serif">GEOMETRIC OPTICS</text>
+  <text x="462" y="98" fill="#cbd5e1" font-size="12px" font-family="-apple-system, BlinkMacSystemFont, sans-serif">Fermat's Principle of Least Time: δ ∫ n ds = 0</text>
+
+  <!-- Vertical Connections (Duality) -->
+  <line x1="164" y1="120" x2="164" y2="150" stroke="#c084fc" stroke-width="2" marker-end="url(#hjArrowDn)"/>
+  <line x1="593" y1="120" x2="593" y2="150" stroke="#c084fc" stroke-width="2" marker-end="url(#hjArrowDn)"/>
+
+  <!-- Row 2: Mechanics -->
+  <!-- Box Bottom-Left: Wave Mechanics -->
+  <rect x="24" y="160" width="280" height="65" rx="8" fill="url(#qmGrad)" stroke="#a855f7" stroke-width="1.2"/>
+  <text x="36" y="184" fill="#c084fc" font-size="13px" font-weight="700" font-family="-apple-system, BlinkMacSystemFont, sans-serif">WAVE MECHANICS (Schrödinger)</text>
+  <text x="36" y="208" fill="#cbd5e1" font-size="12px" font-family="-apple-system, BlinkMacSystemFont, sans-serif">Schrödinger Eq: iℏ ∂ψ/∂t = Ĥ ψ</text>
+
+  <!-- Arrow Bottom: limit hbar -> 0 -->
+  <line x1="310" y1="192" x2="435" y2="192" stroke="#c084fc" stroke-width="2" marker-end="url(#hjArrowRt)"/>
+  <text x="375" y="184" fill="#d8b4fe" font-size="12px" font-weight="600" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">Limit: ℏ → 0</text>
+
+  <!-- Box Bottom-Right: Classical Mechanics -->
+  <rect x="450" y="160" width="286" height="65" rx="8" fill="#0f172a" stroke="#a855f7" stroke-width="1.2"/>
+  <text x="462" y="184" fill="#c084fc" font-size="13px" font-weight="700" font-family="-apple-system, BlinkMacSystemFont, sans-serif">CLASSICAL MECHANICS (H-J)</text>
+  <text x="462" y="208" fill="#cbd5e1" font-size="12px" font-family="-apple-system, BlinkMacSystemFont, sans-serif">Hamilton-Jacobi Equation: ∂S/∂t + H(q, ∇S) = 0</text>
+</svg>
 
 If we substitute the polar ansatz $\psi(q, t) = A(q, t) e^{i S(q, t) / \hbar}$ into the time-dependent Schrödinger equation:
 
@@ -259,19 +418,45 @@ The physical harmonic trajectory $q(t)$ has emerged purely from algebraic manipu
 
 To see the modern connection to quantitative finance, robotics, and reinforcement learning, compare the classical Hamilton-Jacobi equation with the continuous-time dynamic programming equation:
 
-```text
-CLASSICAL HAMILTON-JACOBI (Deterministic Physics)
-   Action S(q, t) minimizes physical cost:
-   dS/dt + H(q, grad S) = 0
+<svg viewBox="0 0 760 310" width="100%" style="max-width: 760px; display: block; margin: 24px auto;" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="cardHj" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0284c7" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.8"/>
+    </linearGradient>
+    <linearGradient id="cardBellman" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#d97706" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.8"/>
+    </linearGradient>
+    <linearGradient id="cardHjb" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.8"/>
+    </linearGradient>
+  </defs>
 
-OPTIMAL CONTROL & REINFORCEMENT LEARNING (Bellman)
-   Value function V(x, t) minimizes deterministic control cost:
-   dV/dt + min_u { f(x, u) + grad V * mu(x, u) } = 0
+  <rect x="2" y="2" width="756" height="306" rx="12" fill="#0b1120" stroke="#334155" stroke-width="1.5"/>
 
-STOCHASTIC HAMILTON-JACOBI-BELLMAN (Quantitative Finance / Robotics)
-   Value function V(x, t) under Brownian noise dW_t:
-   dV/dt + min_u { f(x, u) + grad V * mu(x, u) + 1/2 * sigma^2 * laplacian(V) } = 0
-```
+  <!-- Title -->
+  <text x="380" y="30" fill="#f8fafc" font-size="16px" font-weight="700" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">THE LINEAGE: HAMILTON-JACOBI TO BELLMAN &amp; MODERN STOCHASTIC HJB</text>
+
+  <!-- Tier 1: Classical Hamilton-Jacobi -->
+  <rect x="24" y="48" width="712" height="72" rx="8" fill="url(#cardHj)" stroke="#0ea5e9" stroke-width="1.2"/>
+  <rect x="36" y="58" width="220" height="22" rx="4" fill="#0284c7" fill-opacity="0.3"/>
+  <text x="44" y="73" fill="#38bdf8" font-size="12px" font-weight="700" font-family="-apple-system, BlinkMacSystemFont, sans-serif">CLASSICAL HJ (Deterministic Physics)</text>
+  <text x="36" y="102" fill="#e2e8f0" font-size="12.5px" font-weight="600" font-family="-apple-system, BlinkMacSystemFont, sans-serif">∂S/∂t + H(q, ∇S) = 0   [Nature passively minimizes physical action S(q, t)]</text>
+
+  <!-- Tier 2: Deterministic Optimal Control (Bellman) -->
+  <rect x="24" y="128" width="712" height="76" rx="8" fill="url(#cardBellman)" stroke="#f59e0b" stroke-width="1.2"/>
+  <rect x="36" y="138" width="260" height="22" rx="4" fill="#d97706" fill-opacity="0.3"/>
+  <text x="44" y="153" fill="#fbbf24" font-size="12px" font-weight="700" font-family="-apple-system, BlinkMacSystemFont, sans-serif">OPTIMAL CONTROL / RL (Bellman)</text>
+  <text x="36" y="182" fill="#e2e8f0" font-size="12.5px" font-weight="600" font-family="-apple-system, BlinkMacSystemFont, sans-serif">∂V/∂t + min_u { f(x, u) + ∇V · μ(x, u) } = 0   [Active agent chooses control u(t)]</text>
+
+  <!-- Tier 3: Stochastic HJB -->
+  <rect x="24" y="212" width="712" height="80" rx="8" fill="url(#cardHjb)" stroke="#10b981" stroke-width="1.2"/>
+  <rect x="36" y="222" width="290" height="22" rx="4" fill="#10b981" fill-opacity="0.3"/>
+  <text x="44" y="237" fill="#34d399" font-size="12px" font-weight="700" font-family="-apple-system, BlinkMacSystemFont, sans-serif">STOCHASTIC HJB (Quant Finance &amp; Robotics)</text>
+  <text x="36" y="266" fill="#e2e8f0" font-size="12.5px" font-weight="600" font-family="-apple-system, BlinkMacSystemFont, sans-serif">∂V/∂t + min_u { f(x, u) + ∇V · μ(x, u) + ½ σ² ΔV } = 0   [Itô diffusion under noise dW_t]</text>
+</svg>
 
 1. **Deterministic Physics ($H(q, p)$):** Nature chooses trajectories that minimize action. The Hamiltonian $H$ is determined by kinetic and potential energy.
 2. **Deterministic Control:** An engineer or agent actively chooses control $u$ to minimize running costs: $H(x, p) = \max_u \{ f(x, u) + p \cdot \mu(x, u) \}$.
