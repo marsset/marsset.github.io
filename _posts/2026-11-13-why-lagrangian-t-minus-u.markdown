@@ -39,7 +39,7 @@ Before confronting kinetic and potential energies, let us step away from physics
 
 Imagine you are a lifeguard stationed on the sand at coordinate $A$. You see a swimmer struggling in the ocean at coordinate $B$:
 
-<svg viewBox="0 0 760 380" width="100%" style="max-width: 760px; display: block; margin: 24px auto;" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 760 400" width="100%" style="max-width: 760px; display: block; margin: 24px auto;" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <!-- Arrow marker for Path 1 (Straight line) -->
     <marker id="arrow-gray" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -52,60 +52,61 @@ Imagine you are a lifeguard stationed on the sand at coordinate $A$. You see a s
   </defs>
 
   <!-- Region 1: Beach / Sand (Top) -->
-  <rect x="0" y="0" width="760" height="190" fill="#f59e0b" fill-opacity="0.08" stroke="currentColor" stroke-opacity="0.15" stroke-width="1"/>
+  <rect x="0" y="0" width="760" height="200" fill="#f59e0b" fill-opacity="0.08" stroke="currentColor" stroke-opacity="0.15" stroke-width="1"/>
   <!-- Region 2: Ocean / Water (Bottom) -->
-  <rect x="0" y="190" width="760" height="190" fill="#0284c7" fill-opacity="0.08" stroke="currentColor" stroke-opacity="0.15" stroke-width="1"/>
+  <rect x="0" y="200" width="760" height="200" fill="#0284c7" fill-opacity="0.08" stroke="currentColor" stroke-opacity="0.15" stroke-width="1"/>
 
-  <!-- Shoreline (Boundary Interface) -->
-  <line x1="0" y1="190" x2="760" y2="190" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="8,5"/>
-  <rect x="20" y="174" width="165" height="28" rx="4" fill="#0f172a" stroke="#f59e0b" stroke-width="1.2"/>
-  <text x="102" y="193" text-anchor="middle" font-size="12.0" font-weight="700" fill="#f59e0b">SHORELINE (Boundary)</text>
+  <!-- Shoreline (Boundary Interface at y = 200) -->
+  <line x1="0" y1="200" x2="760" y2="200" stroke="#f59e0b" stroke-width="2" stroke-dasharray="8,5"/>
+  <rect x="15" y="184" width="155" height="28" rx="4" fill="#0f172a" stroke="#f59e0b" stroke-width="1.2"/>
+  <text x="92" y="203" text-anchor="middle" font-size="12.0" font-weight="700" fill="#f59e0b">SHORELINE (Interface)</text>
 
   <!-- Environment Badges -->
-  <rect x="20" y="20" width="310" height="34" rx="6" fill="#f59e0b" fill-opacity="0.15" stroke="#f59e0b" stroke-opacity="0.4" stroke-width="1"/>
-  <text x="35" y="42" font-size="13.0" font-weight="700" fill="#d97706">BEACH (Fast Running: v_sand = 6.0 m/s)</text>
+  <rect x="15" y="15" width="250" height="30" rx="5" fill="#f59e0b" fill-opacity="0.15" stroke="#f59e0b" stroke-opacity="0.4" stroke-width="1"/>
+  <text x="28" y="35" font-size="12.0" font-weight="700" fill="#d97706">BEACH: Fast Running (6.0 m/s)</text>
 
-  <rect x="20" y="326" width="320" height="34" rx="6" fill="#0284c7" fill-opacity="0.15" stroke="#0284c7" stroke-opacity="0.4" stroke-width="1"/>
-  <text x="35" y="348" font-size="13.0" font-weight="700" fill="#0284c7">OCEAN (Slow Swimming: v_water = 1.5 m/s)</text>
+  <rect x="15" y="355" width="250" height="30" rx="5" fill="#0284c7" fill-opacity="0.15" stroke="#0284c7" stroke-opacity="0.4" stroke-width="1"/>
+  <text x="28" y="375" font-size="12.0" font-weight="700" fill="#0284c7">OCEAN: Slow Swimming (1.5 m/s)</text>
 
-  <!-- Lifeguard (A) at (90, 80) -->
-  <circle cx="90" cy="80" r="8" fill="#ef4444" stroke="#ffffff" stroke-width="2"/>
-  <rect x="35" y="96" width="110" height="26" rx="4" fill="#ef4444" fill-opacity="0.15" stroke="#ef4444" stroke-width="1"/>
-  <text x="90" y="114" text-anchor="middle" font-size="12.0" font-weight="700" fill="#ef4444">Lifeguard (A)</text>
+  <!-- Lifeguard (A) at (80, 90) -->
+  <circle cx="80" cy="90" r="8" fill="#ef4444" stroke="#ffffff" stroke-width="2"/>
+  <rect x="30" y="50" width="100" height="26" rx="4" fill="#ef4444" fill-opacity="0.15" stroke="#ef4444" stroke-width="1"/>
+  <text x="80" y="68" text-anchor="middle" font-size="12.0" font-weight="700" fill="#ef4444">Lifeguard (A)</text>
 
-  <!-- Swimmer (B) at (670, 300) -->
-  <circle cx="670" cy="300" r="8" fill="#38bdf8" stroke="#ffffff" stroke-width="2"/>
-  <rect x="615" y="258" width="110" height="26" rx="4" fill="#0284c7" fill-opacity="0.15" stroke="#38bdf8" stroke-width="1"/>
-  <text x="670" y="276" text-anchor="middle" font-size="12.0" font-weight="700" fill="#38bdf8">Swimmer (B)</text>
+  <!-- Swimmer (B) at (680, 320) -->
+  <circle cx="680" cy="320" r="8" fill="#38bdf8" stroke="#ffffff" stroke-width="2"/>
+  <rect x="630" y="342" width="100" height="26" rx="4" fill="#0284c7" fill-opacity="0.15" stroke="#38bdf8" stroke-width="1"/>
+  <text x="680" y="360" text-anchor="middle" font-size="12.0" font-weight="700" fill="#38bdf8">Swimmer (B)</text>
 
   <!-- PATH 1: Straight Line (Suboptimal Euclidean path) -->
-  <!-- Crosses shoreline at x = 380 -->
-  <line x1="90" y1="80" x2="380" y2="190" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,4"/>
-  <line x1="380" y1="190" x2="665" y2="298" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow-gray)"/>
-  <circle cx="380" cy="190" r="5" fill="#94a3b8"/>
-  <rect x="250" y="125" width="230" height="24" rx="4" fill="#1e293b" fill-opacity="0.85" stroke="#94a3b8" stroke-width="0.8"/>
-  <text x="365" y="141" text-anchor="middle" font-size="12.0" fill="#cbd5e1">Path 1: Straight Line (Slow in water!)</text>
+  <line x1="80" y1="90" x2="380" y2="200" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,4"/>
+  <line x1="380" y1="200" x2="675" y2="318" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow-gray)"/>
+  <circle cx="380" cy="200" r="5" fill="#94a3b8"/>
+
+  <!-- Path 1 Badge (Placed cleanly in open water zone without line crossings) -->
+  <rect x="210" y="260" width="270" height="38" rx="6" fill="#1e293b" stroke="#94a3b8" stroke-width="1"/>
+  <text x="345" y="277" text-anchor="middle" font-size="12.0" font-weight="600" fill="#cbd5e1">Path 1: Straight Line (Shortest distance)</text>
+  <text x="345" y="291" text-anchor="middle" font-size="12.0" fill="#94a3b8">Spends too much time in slow water!</text>
 
   <!-- PATH 2: Optimal Refraction Path -->
-  <!-- Crosses shoreline at x = 540 -->
-  <!-- Normal line at x = 540 -->
-  <line x1="540" y1="120" x2="540" y2="260" stroke="#64748b" stroke-width="1.2" stroke-dasharray="3,3"/>
-  <text x="548" y="136" font-size="12.0" fill="#64748b">Normal</text>
+  <!-- Running on sand: (80, 90) -> (560, 200) -->
+  <line x1="80" y1="90" x2="560" y2="200" stroke="#10b981" stroke-width="3"/>
+  <!-- Swimming in ocean: (560, 200) -> (675" y2="315) -->
+  <line x1="560" y1="200" x2="675" y2="315" stroke="#10b981" stroke-width="3" marker-end="url(#arrow-green)"/>
+  <circle cx="560" cy="200" r="6" fill="#10b981" stroke="#ffffff" stroke-width="1.5"/>
 
-  <!-- Running on sand: (90, 80) -> (540, 190) -->
-  <line x1="90" y1="80" x2="540" y2="190" stroke="#10b981" stroke-width="3.2"/>
-  <!-- Swimming in ocean: (540, 190) -> (670, 300) -->
-  <line x1="540" y1="190" x2="665" y2="296" stroke="#10b981" stroke-width="3.2" marker-end="url(#arrow-green)"/>
-  <circle cx="540" cy="190" r="6" fill="#10b981" stroke="#ffffff" stroke-width="1.5"/>
+  <!-- Path 2 Badge (Placed cleanly in open sand zone without line crossings) -->
+  <rect x="290" y="22" width="290" height="42" rx="6" fill="#064e3b" stroke="#10b981" stroke-width="1.2"/>
+  <text x="435" y="40" text-anchor="middle" font-size="12.0" font-weight="700" fill="#34d399">Path 2: Optimal Refraction (Snell's Law)</text>
+  <text x="435" y="56" text-anchor="middle" font-size="12.0" fill="#a7f3d0">Runs further on sand, minimizes swimming</text>
 
-  <!-- Angle annotations -->
-  <text x="508" y="175" font-size="13.0" font-weight="700" fill="#10b981">&theta;_sand</text>
-  <text x="555" y="215" font-size="13.0" font-weight="700" fill="#10b981">&theta;_water</text>
+  <!-- Normal Line at Entry Point (x = 560, stops before crossing Path 1) -->
+  <line x1="560" y1="150" x2="560" y2="245" stroke="#64748b" stroke-width="1.2" stroke-dasharray="3,3"/>
+  <text x="568" y="145" font-size="12.0" fill="#64748b">Normal</text>
 
-  <!-- Path 2 Badge -->
-  <rect x="360" y="65" width="270" height="42" rx="6" fill="#064e3b" fill-opacity="0.85" stroke="#10b981" stroke-width="1.2"/>
-  <text x="495" y="84" text-anchor="middle" font-size="12.0" font-weight="700" fill="#34d399">Path 2: Optimal Path (Snell's Law)</text>
-  <text x="495" y="100" text-anchor="middle" font-size="12.0" fill="#a7f3d0">Runs further on sand, swims less distance</text>
+  <!-- Angle annotations (Carefully placed in clear zones) -->
+  <text x="495" y="170" font-size="12.0" font-weight="700" fill="#10b981">&theta;_sand</text>
+  <text x="600" y="222" font-size="12.0" font-weight="700" fill="#10b981">&theta;_water</text>
 </svg>
 
 You can run on the sand at a rapid pace ($v_{\text{sand}} = 6\,\text{m/s}$), but in the ocean, water resistance slows your swimming speed dramatically ($v_{\text{water}} = 1.5\,\text{m/s}$).
