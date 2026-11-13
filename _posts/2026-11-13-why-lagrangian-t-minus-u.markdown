@@ -427,6 +427,13 @@ Let $q(t)$ be the true path. Now imagine wiggling the path by a tiny perturbatio
   <text x="380" y="244" fill="#94a3b8" font-size="12.5px" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif">Stationary Action: δS = ∫ [ ∂L/∂q − d/dt(∂L/∂q̇) ] δq dt = 0  ⇒  d/dt(∂L/∂q̇) − ∂L/∂q = 0  (F = ma)</text>
 </svg>
 
+> **Formal Definition of $\delta S = 0$ (The First Variation):**  
+> The condition $\delta S = 0$ is the functional equivalent of $f'(x^*) = 0$ in ordinary calculus. For any test perturbation $\eta(t)$ with $\eta(t_1) = \eta(t_2) = 0$, the first variation is formally defined as the directional Gâteaux derivative:  
+> 
+> $$\delta S \equiv \lim_{\epsilon \to 0} \frac{S[q + \epsilon \eta] - S[q]}{\epsilon} = \left. \frac{d}{d\epsilon} S[q(t) + \epsilon \eta(t)] \right|_{\epsilon = 0} = 0$$  
+> 
+> Stationarity means that to first order in $\epsilon$, small wiggles in the path produce **zero linear change** in the action.
+
 The first variation of the action must be zero:
 
 $$\delta S = \int_{t_1}^{t_2} \left( \frac{\partial L}{\partial q}\delta q + \frac{\partial L}{\partial \dot{q}}\delta \dot{q} \right) dt = 0$$
