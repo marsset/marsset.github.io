@@ -108,21 +108,6 @@ Imagine you are a lifeguard stationed on the sand at coordinate $A$. You see a s
   <text x="495" y="100" text-anchor="middle" font-size="12.0" fill="#a7f3d0">Runs further on sand, swims less distance</text>
 </svg>
 
-```text
-BEACH (Sand: Fast Running, v_sand = 6.0 m/s)
-Lifeguard (A)
-   ●══════════════════════════════════════════════╗ (Path 2: Runs further on sand)
-    \                                             ║
-     \ - - - - - [ Path 1: Straight Line ]        ▼
-      \            (Spends too long in water!)   Entry Point (x*)
-───────*──────────────────────────────────────────●────────────── Shoreline
-        \                                          \
-         \                                          \ (Path 2: Short swim in water)
-          \                                          ▼
-           - - - - - - - - - - - - - - - - - - - - - ● Swimmer (B)
-OCEAN (Water: Slow Swimming, v_water = 1.5 m/s)
-```
-
 You can run on the sand at a rapid pace ($v_{\text{sand}} = 6\,\text{m/s}$), but in the ocean, water resistance slows your swimming speed dramatically ($v_{\text{water}} = 1.5\,\text{m/s}$).
 
 Which route gets you to the swimmer in the **minimum total time**?
